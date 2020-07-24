@@ -7,6 +7,7 @@ import { AppLogger } from './shared/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useLogger(new AppLogger);
   app.use(RequestIdMiddleware);
 

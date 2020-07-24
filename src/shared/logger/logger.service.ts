@@ -7,14 +7,17 @@ import { createLogger, Logger, transports } from 'winston';
 })
 export class AppLogger implements LoggerService {
 
-  private context?: string
-  private winstonLogger: Logger
+  private context?: string;
+
+  private winstonLogger: Logger;
 
   public setContext(context: string) {
-    this.context = context
+    this.context = context;
   }
 
   constructor() {
+    // TODO: configurable transport
+    // TODO: env based log level
     this.winstonLogger = createLogger({
       transports: [new transports.Console()],
     })
