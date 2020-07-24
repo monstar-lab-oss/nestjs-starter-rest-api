@@ -9,6 +9,6 @@ export const configModuleOptions: ConfigModuleOptions = {
     APP_ENV: Joi.string()
       .valid('development', 'production', 'test')
       .default('development'),
-    PORT: Joi.number().required(),
+    APP_PORT: Joi.number().required(),
   }),
 }
