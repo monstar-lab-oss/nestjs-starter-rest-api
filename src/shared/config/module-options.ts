@@ -10,5 +10,10 @@ export const configModuleOptions: ConfigModuleOptions = {
       .valid('development', 'production', 'test')
       .default('development'),
     APP_PORT: Joi.number().required(),
+    DB_HOST: Joi.string().required(),
+    DB_PORT: Joi.number().optional(),
+    DB_NAME: Joi.string().required(),
+    DB_USER: Joi.string().required(),
+    DB_PASS: Joi.string().required(),
   }),
 }

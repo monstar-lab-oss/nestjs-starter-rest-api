@@ -31,6 +31,9 @@
     "rxjs": "^6.5.5",
     "swagger-ui-express": "^4.1.4",
     "@types/uuid": "^8.0.0",
+    "@nestjs/typeorm": "^7.1.0",
+    "mysql": "^2.18.1",
+    "typeorm": "^0.2.25",
     "uuid": "^8.2.0",
     "winston": "^3.3.3"
   },

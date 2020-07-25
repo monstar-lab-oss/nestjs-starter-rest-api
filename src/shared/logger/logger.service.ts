@@ -11,7 +11,7 @@ export class AppLogger implements LoggerService {
 
   private winstonLogger: Logger;
 
-  public setContext(context: string) {
+  public setContext(context: string): void {
     this.context = context;
   }
 
@@ -23,7 +23,7 @@ export class AppLogger implements LoggerService {
     })
   }
 
-  log(message: any, context?: string) {
+  log(message: any, context?: string): any {
     return this.winstonLogger.info(message, { context: context || this.context })
   }
 
