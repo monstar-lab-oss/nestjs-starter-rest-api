@@ -1,9 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { RequestIdMiddleware } from './shared/middleware/request-id/request-id.middleware';
+import { AppLogger } from './shared/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.useLogger(new AppLogger);
+  app.use(RequestIdMiddleware);
 
   /** Swagger configuration*/
   const options = new DocumentBuilder()
@@ -14,6 +20,10 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
+
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('port');
+  await app.listen(port);
+
 }
 bootstrap();
