@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
 
 import { LoggerModule } from './logger/logger.module';
 import { configModuleOptions } from './config/module-options';
 import { LoggingInterceptor } from './interceptor/logging.interceptor';
+import { AllExceptionsFilter } from './filter/all-exceptions.filter';
 
 @Module({
   imports: [
@@ -25,15 +26,18 @@ import { LoggingInterceptor } from './interceptor/logging.interceptor';
         debug: configService.get<string>('env') === 'development',
       }),
     }),
-    LoggerModule
+    LoggerModule,
   ],
-  exports: [
-    ConfigModule,
-    LoggerModule
+  exports: [ConfigModule, LoggerModule],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
   ],
-  providers: [{
-    provide: APP_INTERCEPTOR,
-    useClass: LoggingInterceptor
-  }]
 })
-export class SharedModule { }
+export class SharedModule {}
