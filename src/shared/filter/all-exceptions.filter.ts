@@ -6,8 +6,9 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { REQUEST_ID_TOKEN_HEADER } from '../constant';
 import { ConfigService } from '@nestjs/config';
+
+import { REQUEST_ID_TOKEN_HEADER } from '../constant';
 import { AppLogger } from '../logger/logger.service';
 
 @Catch()
@@ -35,7 +36,7 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
-      message = (exception.getResponse() as HttpException).message;
+      message = exception.getResponse();
     } else if (exception instanceof Error) {
       message = exception.message;
       stack = exception.stack;
@@ -47,9 +48,9 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
     const error = {
       requestId,
       status,
+      path,
       message,
       timestamp,
-      path,
     };
     this.logger.warn({ error, stack });
 
