@@ -29,7 +29,7 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
 
     let stack: any;
     let status: HttpStatus;
-    let message: string;
+    let message: string | object;
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
