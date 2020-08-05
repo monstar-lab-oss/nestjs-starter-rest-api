@@ -22,9 +22,11 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
 
   catch(exception: T, host: ArgumentsHost): any {
     const ctx = host.switchToHttp();
-    const timestamp = new Date().toISOString();
     const req: Request = ctx.getRequest<Request>();
     const res: Response = ctx.getResponse<Response>();
+
+    const path = req.url;
+    const timestamp = new Date().toISOString();
     const requestId = req.headers[REQUEST_ID_TOKEN_HEADER];
 
     let stack: any;
@@ -47,6 +49,7 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
       status,
       message,
       timestamp,
+      path,
     };
     this.logger.warn({ error, stack });
 
@@ -55,6 +58,7 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
     if (isProMood && status === HttpStatus.INTERNAL_SERVER_ERROR) {
       error.message = 'Internal server error';
     }
+
     res.status(status).json({ error });
   }
 }
