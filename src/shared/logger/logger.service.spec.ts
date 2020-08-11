@@ -8,8 +8,7 @@ describe('AppLogger', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [AppLogger],
     }).compile();
-
-    service = module.get<AppLogger>(AppLogger);
+    service = await module.resolve(AppLogger);
   });
 
   it('should be defined', () => {
