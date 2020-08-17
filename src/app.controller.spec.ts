@@ -10,7 +10,10 @@ describe('AppController', () => {
     app = await Test.createTestingModule({
       controllers: [AppController],
       providers: [AppService, PinoLogger],
-    }).compile();
+    })
+      .overrideProvider(PinoLogger)
+      .useValue(new PinoLogger({}))
+      .compile();
   });
 
   describe('getHello', () => {

@@ -1,11 +1,11 @@
 import { AllExceptionsFilter } from './all-exceptions.filter';
-import { AppLogger } from '../logger/logger.service';
 import { ConfigService } from '@nestjs/config';
+import { PinoLogger } from 'nestjs-pino';
 
 describe('AllExceptionsFilter', () => {
   it('should be defined', () => {
     expect(
-      new AllExceptionsFilter(new AppLogger(), new ConfigService()),
+      new AllExceptionsFilter(new ConfigService(), new PinoLogger({})),
     ).toBeDefined();
   });
 });

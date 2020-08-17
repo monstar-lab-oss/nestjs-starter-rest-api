@@ -15,7 +15,6 @@ export class AppController {
   getHello(): string {
     this.logger.info('Hello world from App controller');
 
-    throw new Error('test error');
     return this.appService.getHello();
   }
 }
