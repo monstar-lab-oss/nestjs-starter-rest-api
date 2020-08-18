@@ -7,13 +7,16 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { REQUEST_ID_TOKEN_HEADER } from '../constant';
-import { AppLogger } from '../logger/logger.service';
 import { ConfigService } from '@nestjs/config';
+import { PinoLogger } from 'nestjs-pino';
 
 @Catch()
 export class AllExceptionsFilter<T> implements ExceptionFilter {
   /** set logger context */
-  constructor(private logger: AppLogger, private config: ConfigService) {
+  constructor(
+    private config: ConfigService,
+    private readonly logger: PinoLogger,
+  ) {
     this.logger.setContext(AllExceptionsFilter.name);
   }
 
@@ -30,7 +33,7 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
-      message = exception.getResponse().toString();
+      message = (exception.getResponse() as HttpException).message;
     } else if (exception instanceof Error) {
       message = exception.message;
       stack = exception.stack;

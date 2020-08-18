@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
+import { APP_FILTER } from '@nestjs/core';
 
-import { LoggerModule } from './logger/logger.module';
+import { AppLoggerModule } from './logger/logger.module';
+
 import { configModuleOptions } from './config/module-options';
-import { LoggingInterceptor } from './interceptor/logging.interceptor';
 import { AllExceptionsFilter } from './filter/all-exceptions.filter';
 
 @Module({
@@ -26,14 +26,10 @@ import { AllExceptionsFilter } from './filter/all-exceptions.filter';
         debug: configService.get<string>('env') === 'development',
       }),
     }),
-    LoggerModule,
+    AppLoggerModule,
   ],
-  exports: [ConfigModule, LoggerModule],
+  exports: [AppLoggerModule, ConfigModule],
   providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: LoggingInterceptor,
-    },
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AppLogger } from './shared/logger/logger.service';
+import { PinoLogger } from 'nestjs-pino';
 
 describe('AppController', () => {
   let app: TestingModule;
@@ -9,8 +9,11 @@ describe('AppController', () => {
   beforeAll(async () => {
     app = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService, AppLogger],
-    }).compile();
+      providers: [AppService, PinoLogger],
+    })
+      .overrideProvider(PinoLogger)
+      .useValue(new PinoLogger({}))
+      .compile();
   });
 
   describe('getHello', () => {
