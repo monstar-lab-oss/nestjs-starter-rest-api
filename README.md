@@ -17,6 +17,25 @@ To view sample implementations based on this starter-kit, please visit the [nest
 $ npm install
 ```
 
+Create a _.env_ file from the template _.env.template_.
+
+Generate public and private key pair for jwt authentication:
+
+```bash
+$ ssh-keygen -t rsa -b 2048 -m PEM -f jwtRS256.key
+# Don't add passphrase
+$ openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
+```
+
+You may save these key files in _./local_ directory as it is ignored in git.
+
+Must enter the location of the key files in _.env_.
+
+```bash
+JWT_PUBLIC_KEY=./local/jwtRS256.key.pub
+JWT_PRIVATE_KEY=./local/jwtRS256.key
+```
+
 ## Running the app
 
 ```bash
@@ -41,6 +60,19 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+```
+
+## Migrations
+
+```bash
+# generate migration (replace CreateUsers with name of the migration)
+$ npm run migration:generate -- -n CreateUsers
+
+# run migration
+$ npm run migration:run
+
+# revert migration
+$ npm run migration:revert
 ```
 
 ## Docker
