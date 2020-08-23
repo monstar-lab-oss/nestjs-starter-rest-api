@@ -7,38 +7,33 @@ import { Logger } from 'nestjs-pino';
 export class AppLogger implements LoggerService {
   private context?: string;
 
-  private logger: Logger;
-
   public setContext(context: string): void {
     this.context = context;
   }
 
-  constructor() {
-    // TODO: configurable transport
-    // TODO: env based log level
-  }
+  constructor(private logger: Logger) {}
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  log(message: any, context?: string, ...args: any[]): any {
+  log(message: any, context?: string, ...args: any[]): void {
     return this.logger.log(message, context || this.context, ...args);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  error(message: any, trace?: string, context?: string, ...args: any[]): any {
+  error(message: any, trace?: string, context?: string, ...args: any[]): void {
     return this.logger.error(message, trace, context || this.context, ...args);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  warn(message: any, context?: string, ...args: any[]): any {
+  warn(message: any, context?: string, ...args: any[]): void {
     return this.logger.warn(message, context || this.context, ...args);
   }
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  debug(message: any, context?: string, ...args: any[]): any {
+  debug(message: any, context?: string, ...args: any[]): void {
     return this.logger.debug(message, context || this.context, ...args);
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  verbose(message: any, context?: string, ...args: any[]): any {
+  verbose(message: any, context?: string, ...args: any[]): void {
     return this.logger.verbose(message, context || this.context, ...args);
   }
 }
