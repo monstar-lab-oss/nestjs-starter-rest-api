@@ -3,12 +3,13 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { RequestIdMiddleware } from './shared/middleware/request-id/request-id.middleware';
+import { AppLogger } from './shared/logger/logger.service';
 import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useLogger(app.get(Logger));
+  app.useLogger(new AppLogger(app.get(Logger)));
   app.use(RequestIdMiddleware);
 
   /** Swagger configuration*/

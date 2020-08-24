@@ -8,19 +8,19 @@ import {
 import { Request, Response } from 'express';
 import { REQUEST_ID_TOKEN_HEADER } from '../constant';
 import { ConfigService } from '@nestjs/config';
-import { PinoLogger } from 'nestjs-pino';
+import { AppLogger } from '../logger/logger.service';
 
 @Catch()
 export class AllExceptionsFilter<T> implements ExceptionFilter {
   /** set logger context */
   constructor(
     private config: ConfigService,
-    private readonly logger: PinoLogger,
+    private readonly logger: AppLogger,
   ) {
     this.logger.setContext(AllExceptionsFilter.name);
   }
 
-  catch(exception: T, host: ArgumentsHost) {
+  catch(exception: T, host: ArgumentsHost): any {
     const ctx = host.switchToHttp();
     const timestamp = new Date().toISOString();
     const req: Request = ctx.getRequest<Request>();

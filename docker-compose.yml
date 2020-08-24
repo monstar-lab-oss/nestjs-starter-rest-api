@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   app:
@@ -19,6 +19,7 @@ services:
       - mysqldata:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: example_db
 
   adminer:
     image: adminer
