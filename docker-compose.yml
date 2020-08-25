@@ -1,14 +1,28 @@
-version: '3'
+version: "3.8"
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        - APP_ENV
     command: npm run start:dev
     ports:
       - 3000:3000
     volumes:
-      - node_modules:/usr/src/app/node_modules
-      - .:/usr/src/app
+      - ./:/usr/src/app
+      - node_modules:/usr/src/app/node_modules/
+    environment:
+      APP_ENV: ${APP_ENV}
+      APP_PORT: ${APP_PORT}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY}
+      JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY}
 
   db:
     image: mysql:8

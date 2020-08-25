@@ -1,6 +1,6 @@
 import configuration from './configuration';
 import { ConfigModuleOptions } from '@nestjs/config/dist/interfaces';
-import * as Joi from '@hapi/joi'
+import * as Joi from '@hapi/joi';
 
 export const configModuleOptions: ConfigModuleOptions = {
   envFilePath: '.env',
@@ -15,5 +15,7 @@ export const configModuleOptions: ConfigModuleOptions = {
     DB_NAME: Joi.string().required(),
     DB_USER: Joi.string().required(),
     DB_PASS: Joi.string().required(),
+    JWT_PUBLIC_KEY: Joi.string().required(),
+    JWT_PRIVATE_KEY: Joi.string().required(),
   }),
-}
+};
