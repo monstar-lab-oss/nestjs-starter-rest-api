@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
+import * as fs from 'fs';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { RequestIdMiddleware } from './shared/middleware/request-id/request-id.middleware';
 import { AppLogger } from './shared/logger/logger.service';
@@ -20,6 +21,8 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
+  fs.writeFileSync('./swagger.json', JSON.stringify(document, null, 2));
+
   SwaggerModule.setup('api', app, document);
 
   const configService = app.get(ConfigService);
