@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { hash } from 'bcrypt';
 
 import { User } from './entities/user.entity';
-import { AddUserInput } from './dto/add-user.dto';
+import { AddUserInput, AddUserOutput } from './dto/add-user.dto';
 
 @Injectable()
 export class UserService {
@@ -14,13 +14,19 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async add(input: AddUserInput): Promise<void> {
+  async add(input: AddUserInput): Promise<AddUserOutput> {
     const user = new User();
     user.email = input.email;
     user.name = input.name;
     user.password = await hash(input.password, 10);
 
-    await this.userRepository.insert(user);
+    const insertedUser = await this.userRepository.save(user);
+
+    const output = new AddUserOutput();
+    output.id = insertedUser.id;
+    output.email = insertedUser.email;
+    output.name = insertedUser.name;
+    return output;
   }
 
   async findByEmail(email: string): Promise<User> {

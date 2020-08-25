@@ -10,3 +10,9 @@ export class AddUserInput {
   @IsNotEmpty()
   password: string;
 }
+
+export class AddUserOutput {
+  id: number;
+  name: string;
+  email: string;
+}

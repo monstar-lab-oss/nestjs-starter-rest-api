@@ -10,3 +10,9 @@ export class RegisterInput {
   @IsNotEmpty()
   password: string;
 }
+
+export class RegisterOutput {
+  id: number;
+  name: string;
+  email: string;
+}
