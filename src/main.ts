@@ -11,6 +11,7 @@ async function bootstrap() {
 
   app.useLogger(new AppLogger(app.get(Logger)));
   app.use(RequestIdMiddleware);
+  app.enableCors();
 
   /** Swagger configuration*/
   const options = new DocumentBuilder()
@@ -20,7 +21,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('swagger', app, document);
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('port');
