@@ -8,7 +8,7 @@ import { AppLogger } from '../logger/logger.service';
 
 const mockMessage1 = 'mock exception string';
 const mockMessage2 = { hello: 'world', hi: 'joe' };
-const mockMessage3 = 'Somethingn is very wrong';
+const mockMessage3 = 'Something is very wrong';
 
 const mockException1 = new HttpException(mockMessage1, HttpStatus.NOT_FOUND);
 const mockException2 = new HttpException(mockMessage2, HttpStatus.BAD_REQUEST);
@@ -19,10 +19,10 @@ describe('AllExceptionsFilter', () => {
   let mockRequest: any;
   let mockResponse: any;
 
-  let mockConfigService = {
+  const mockConfigService = {
     get: (key) => 'development',
   };
-  let mockedLogger = {
+  const mockedLogger = {
     warn: jest.fn().mockReturnThis(),
     setContext: jest.fn().mockReturnThis(),
   };
@@ -173,7 +173,7 @@ describe('AllExceptionsFilter', () => {
     );
   });
 
-  it('should containe timestamp in response', async () => {
+  it('should contain timestamp in response', async () => {
     const mockDate = new Date();
 
     const dateSpy = jest

@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 
-import { SharedModule } from 'src/shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
-import { User } from 'src/user/entities/user.entity';
+import { User } from '../user/entities/user.entity';
 
-import { JwtStrategy } from 'src/auth/strategies/jwt.strategy';
+import { JwtStrategy } from '../auth/strategies/jwt.strategy';
 
 @Module({
   imports: [

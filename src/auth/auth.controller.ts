@@ -14,7 +14,7 @@ import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterInput } from './dto/register.dto';
 import { LoginOutput } from './dto/login.dto';
-import { User } from 'src/user/entities/user.entity';
+import { User } from '../user/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
