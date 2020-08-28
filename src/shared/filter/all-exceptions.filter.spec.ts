@@ -22,7 +22,7 @@ describe('AllExceptionsFilter', () => {
   let mockConfigService = {
     get: (key) => 'development',
   };
-  let mockAppLogger = {
+  let mockedLogger = {
     warn: jest.fn().mockReturnThis(),
     setContext: jest.fn().mockReturnThis(),
   };
@@ -54,7 +54,7 @@ describe('AllExceptionsFilter', () => {
       providers: [
         AllExceptionsFilter,
         { provide: ConfigService, useValue: mockConfigService },
-        { provide: AppLogger, useValue: mockAppLogger },
+        { provide: AppLogger, useValue: mockedLogger },
       ],
     }).compile();
 
