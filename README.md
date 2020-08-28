@@ -17,7 +17,7 @@ To view sample implementations based on this starter-kit, please visit the [nest
 $ npm install
 ```
 
-Create a _.env_ file from the template _.env.template_.
+Create a `.env` file from the template `.env.template`.
 
 Generate public and private key pair for jwt authentication:
 
@@ -27,9 +27,9 @@ $ ssh-keygen -t rsa -b 2048 -m PEM -f jwtRS256.key
 $ openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
 ```
 
-You may save these key files in _./local_ directory as it is ignored in git.
+You may save these key files in `./local` directory as it is ignored in git.
 
-Must enter the location of the key files in _.env_.
+Must enter the location of the key files in `.env`.
 
 ```bash
 JWT_PUBLIC_KEY=./local/jwtRS256.key.pub
@@ -81,11 +81,11 @@ $ npm run migration:revert
 # build image
 $ docker build -t my-app .
 
-# run conntainer from image
-$ docker run -p 3000:3000 -e JWT_SECRET=secret my-app
+# run container from image
+$ docker run -p 3000:3000 --volume `pwd`:/usr/src/app --env-file .env my-app
 
 # run using docker compose
 $ docker-compose up
 ```
 
-Learn more about Docker conventions [here](https://github.com/monstar-lab-group/nodejs-backend/blob/master/architecture/docker-ready.md).
+Learn more about Docker conventions [here](https://github.com/monstar-lab-group/nodejs-backend/blob/master/architecture/docker-ready.md). (WIP - Currently this is an internal org link.)
