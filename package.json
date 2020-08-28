@@ -20,7 +20,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "migration:generate": "ts-node node_modules/.bin/typeorm migration:generate",
     "migration:run": "ts-node node_modules/.bin/typeorm migration:run",
-    "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert"
+    "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert",
+    "doc:serve": "npx compodoc -p tsconfig.json -w -s -r 8001",
+    "doc:generate": "npx compodoc -p tsconfig.json"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -49,6 +51,7 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.11",
     "@nestjs/cli": "^7.5.1",
     "@nestjs/schematics": "^7.1.1",
     "@nestjs/testing": "^7.4.2",
