@@ -1,29 +1,41 @@
 import {
-  Controller,
   Req,
   Post,
-  UseGuards,
   Body,
+  UseGuards,
+  Controller,
+  HttpStatus,
   UseInterceptors,
   ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-
 import { Request } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
-import { RegisterInput, RegisterOutput } from './dto/register.dto';
-import { LoginOutput } from './dto/login.dto';
 import { User } from '../user/entities/user.entity';
+import { LoginOutput, LoginInput } from './dto/login.dto';
+import { RegisterInput, RegisterOutput } from './dto/register.dto';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Post('login')
+  @ApiOperation({
+    summary: 'User login API',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: LoginOutput,
+  })
   @UseGuards(AuthGuard('local'))
-  async login(@Req() req: Request): Promise<LoginOutput> {
+  @UseInterceptors(ClassSerializerInterceptor)
+  async login(
+    @Req() req: Request,
+    @Body() credential: LoginInput,
+  ): Promise<LoginOutput> {
     return this.authService.login(req.user as User);
   }
 
