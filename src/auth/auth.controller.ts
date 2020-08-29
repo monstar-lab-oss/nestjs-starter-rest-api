@@ -40,6 +40,9 @@ export class AuthController {
   }
 
   @Post('register')
+  @ApiOperation({
+    summary: 'User registration API',
+  })
   async registerLocal(@Body() input: RegisterInput): Promise<RegisterOutput> {
     return this.authService.register(input);
   }
