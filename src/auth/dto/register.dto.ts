@@ -19,7 +19,10 @@ export class RegisterInput {
 }
 
 export class RegisterOutput {
+  @ApiProperty()
   id: number;
+  @ApiProperty()
   name: string;
+  @ApiProperty()
   email: string;
 }

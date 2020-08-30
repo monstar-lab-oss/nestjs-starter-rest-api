@@ -43,6 +43,10 @@ export class AuthController {
   @ApiOperation({
     summary: 'User registration API',
   })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: RegisterOutput,
+  })
   async registerLocal(@Body() input: RegisterInput): Promise<RegisterOutput> {
     return this.authService.register(input);
   }
