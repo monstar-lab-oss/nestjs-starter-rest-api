@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-
 import { compare } from 'bcrypt';
 
 import { UserService } from '../user/user.service';
-
 import { User } from '../user/entities/user.entity';
-import { RegisterInput } from './dto/register.dto';
+import { RegisterInput, RegisterOutput } from './dto/register.dto';
 import { LoginOutput } from './dto/login.dto';
 
 @Injectable()
@@ -35,7 +33,7 @@ export class AuthService {
     };
   }
 
-  async register(input: RegisterInput): Promise<void> {
-    await this.userService.add(input);
+  async register(input: RegisterInput): Promise<RegisterOutput> {
+    return this.userService.add(input);
   }
 }
