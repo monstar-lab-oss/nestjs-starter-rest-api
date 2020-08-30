@@ -16,6 +16,7 @@ import { AuthService } from './auth.service';
 import { User } from '../user/entities/user.entity';
 import { LoginOutput, LoginInput } from './dto/login.dto';
 import { RegisterInput, RegisterOutput } from './dto/register.dto';
+import { RefreshTokenInput } from './dto/refresh-token.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -49,5 +50,17 @@ export class AuthController {
   })
   async registerLocal(@Body() input: RegisterInput): Promise<RegisterOutput> {
     return this.authService.register(input);
+  }
+
+  @Post('token')
+  @ApiOperation({
+    summary: 'Refresh JWT token API',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: LoginOutput,
+  })
+  async refreshToken(@Body() input: RefreshTokenInput): Promise<LoginOutput> {
+    return this.authService.refreshToken(input);
   }
 }

@@ -6,6 +6,7 @@ import { UserService } from '../user/user.service';
 import { User } from '../user/entities/user.entity';
 import { RegisterInput, RegisterOutput } from './dto/register.dto';
 import { LoginOutput } from './dto/login.dto';
+import { RefreshTokenInput } from './dto/refresh-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,12 +29,30 @@ export class AuthService {
 
   login(user: User): LoginOutput {
     const payload = { email: user.email, sub: user.id };
+
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload),
+      refreshToken: this.jwtService.sign({ sub: user.id }),
     };
   }
 
   async register(input: RegisterInput): Promise<RegisterOutput> {
     return this.userService.add(input);
+  }
+
+  async refreshToken(input: RefreshTokenInput): Promise<LoginOutput> {
+    const { refreshToken } = input;
+    const tokenObj = await this.jwtService.decode(refreshToken);
+
+    // ToDo: token type check
+    // ToDo: User activation status check
+    const userId = tokenObj.sub;
+    const user = await this.userService.findById(userId);
+    const payload = { email: user.email, sub: user.id };
+
+    return {
+      accessToken: this.jwtService.sign(payload),
+      refreshToken: this.jwtService.sign({ sub: user.id }),
+    };
   }
 }

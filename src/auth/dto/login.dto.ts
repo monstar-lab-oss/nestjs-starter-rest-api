@@ -14,5 +14,8 @@ export class LoginInput {
 
 export class LoginOutput {
   @ApiResponseProperty()
-  access_token: string;
+  accessToken: string;
+
+  @ApiResponseProperty()
+  refreshToken: string;
 }

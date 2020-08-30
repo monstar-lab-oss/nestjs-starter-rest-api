@@ -7,7 +7,6 @@ import {
   ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-
 import { Request } from 'express';
 
 import { UserService } from './user.service';

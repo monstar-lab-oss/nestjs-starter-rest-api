@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Entity,
+  Column,
+  Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 @Entity('users')
@@ -16,4 +23,15 @@ export class User {
   @Unique('email', ['email'])
   @Column({ length: 200 })
   email: string;
+
+  @Column({ default: true })
+  isActive: boolean;
+
+  @CreateDateColumn()
+  @Exclude()
+  createdAt;
+
+  @UpdateDateColumn()
+  @Exclude()
+  updatedAt;
 }
