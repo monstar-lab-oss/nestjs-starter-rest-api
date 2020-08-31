@@ -22,7 +22,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         publicKey: configService.get<string>('jwt.publicKey'),
         privateKey: configService.get<string>('jwt.privateKey'),
         signOptions: {
-          expiresIn: configService.get<string>('JWT_EXPIRES_IN'),
+          expiresIn: configService.get<number>('jwt.expiresIn'),
           algorithm: 'RS256',
         },
       }),

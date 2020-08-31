@@ -13,5 +13,6 @@ export default (): any => ({
   jwt: {
     publicKey: readFileSync(process.env.JWT_PUBLIC_KEY, 'utf8'),
     privateKey: readFileSync(process.env.JWT_PRIVATE_KEY, 'utf8'),
+    expiresIn: parseInt(process.env.JWT_EXPIRES_IN, 10),
   },
 });
