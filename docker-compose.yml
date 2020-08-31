@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   app:
@@ -15,7 +15,7 @@ services:
     environment:
       APP_ENV: ${APP_ENV}
       APP_PORT: ${APP_PORT}
-      DB_HOST: ${DB_HOST}
+      DB_HOST: mysqldb
       DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
@@ -23,8 +23,10 @@ services:
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
       JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY}
       JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY}
+    depends_on:
+      - mysqldb
 
-  db:
+  mysqldb:
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -39,6 +41,8 @@ services:
     image: adminer
     ports:
       - 8080:8080
+    depends_on:
+      - mysqldb
 
 volumes:
   node_modules:
