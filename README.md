@@ -11,6 +11,18 @@ This is a Github Template Repository, so it can be easily [used as a starter tem
 
 To view sample implementations based on this starter-kit, please visit the [nestjs-sample-solutions](https://github.com/monstar-lab-oss/nestjs-sample-solutions) repository.
 
+## Starter-kit Features
+
+| Feature                  | Info            | Progress |
+| ------------------------ | --------------- | -------- |
+| Authentication           | JWT             | Done     |
+| ORM Integration          | TypeORM         | Done     |
+| DB Migrations            | TypeORM         | Done     |
+| Logging                  | nestjs-pino     | Done     |
+| Request Validation       | class-validator | Done     |
+| Auto-generated OpenAPI   | -               | Done     |
+| Auto-generated ChangeLog | -               | WIP      |
+
 ## Installation
 
 ```bash
