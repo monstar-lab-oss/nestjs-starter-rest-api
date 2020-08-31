@@ -20,6 +20,7 @@ To view sample implementations based on this starter-kit, please visit the [nest
 | DB Migrations            | TypeORM         | Done     |
 | Logging                  | nestjs-pino     | Done     |
 | Request Validation       | class-validator | Done     |
+| Docker Ready             | Dockerfile      | Done     |
 | Auto-generated OpenAPI   | -               | Done     |
 | Auto-generated ChangeLog | -               | WIP      |
 
