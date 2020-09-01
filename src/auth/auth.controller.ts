@@ -9,13 +9,13 @@ import {
   ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 
 import { AuthService } from './auth.service';
 import { User } from '../user/entities/user.entity';
 import { LoginOutput, LoginInput } from './dto/login.dto';
 import { RegisterInput, RegisterOutput } from './dto/register.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -30,7 +30,7 @@ export class AuthController {
     status: HttpStatus.OK,
     type: LoginOutput,
   })
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async login(
     @Req() req: Request,

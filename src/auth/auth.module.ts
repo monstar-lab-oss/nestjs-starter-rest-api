@@ -15,7 +15,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 @Module({
   imports: [
     SharedModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule.register({ defaultStrategy: 'jwtauth' }),
     JwtModule.registerAsync({
       imports: [SharedModule],
       useFactory: async (configService: ConfigService) => ({
