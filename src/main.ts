@@ -10,11 +10,12 @@ import { RequestIdMiddleware } from './shared/middleware/request-id/request-id.m
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api/v1');
+
   app.useLogger(new AppLogger(app.get(Logger)));
   app.useGlobalPipes(new ValidationPipe());
   app.use(RequestIdMiddleware);
   app.enableCors();
-
 
   /** Swagger configuration*/
   const options = new DocumentBuilder()
