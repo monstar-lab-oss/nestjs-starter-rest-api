@@ -7,6 +7,10 @@ on:
 jobs:
   test_pull_request:
     runs-on: ubuntu-latest
+    env:
+      APP_ENV: test
+      APP_PORT: ${{ secrets.APP_PORT }}
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -18,3 +22,7 @@ jobs:
         run: docker-compose -f docker-compose.yml up -d
       - name: Check running containers
         run: docker ps -a
+      - name: Check logs
+        run: docker logs app
+      - name: Run test suite
+        run: docker exec app npm run test
