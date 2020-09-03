@@ -34,7 +34,6 @@ jobs:
         run: |
           touch jwtRS256.key.pub
           echo ${{ secrets.JWT_PUBLIC_KEY }} >> jwtRS256.key.pub
-          echo '---'
           cat jwtRS256.key.pub
       - name: Run test suite
         run: npm run test:e2e
