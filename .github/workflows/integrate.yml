@@ -10,7 +10,7 @@ jobs:
     env:
       APP_ENV: test
       APP_PORT: 3000
-      DB_HOST: mysqldb
+      DB_HOST: localhost
       DB_PORT: 3306
       DB_NAME: example_db
       DB_USER: root
@@ -40,5 +40,8 @@ jobs:
         shell: bash
         env:
           PRIVATE_KEY: ${{secrets.JWT_PRIVATE_KEY}}
+      - name: Sleep for 10 seconds
+        run: sleep 10
+        shell: bash
       - name: Run test suite
         run: npm run test:e2e
