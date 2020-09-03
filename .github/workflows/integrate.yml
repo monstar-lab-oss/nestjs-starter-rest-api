@@ -14,3 +14,8 @@ jobs:
           node-version: 12
       - run: npm ci
       - run: npm test
+      - name: Create env file
+        run: |
+          touch .env
+          echo API_ENDPOINT="example.com" >> .env
+          cat .env
