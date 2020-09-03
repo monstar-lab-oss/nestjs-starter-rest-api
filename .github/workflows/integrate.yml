@@ -10,7 +10,7 @@ jobs:
     env:
       APP_ENV: test
       APP_PORT: 3000
-      DB_HOST: localhost
+      DB_HOST: mysqldb
       DB_PORT: 3306
       DB_NAME: example_db
       DB_USER: root
