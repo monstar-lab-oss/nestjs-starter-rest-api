@@ -19,7 +19,7 @@ jobs:
       - run: npm ci
       - run: npm test
       - name: Build the docker-compose stack
-        run: docker-compose -f docker-compose.yml up mysqldb -d
+        run: docker-compose -f docker-compose.yml up -d mysqldb
       - name: Check running containers
         run: docker ps -a
       - name: Run test suite
