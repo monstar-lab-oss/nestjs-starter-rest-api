@@ -11,8 +11,8 @@ export default (): any => ({
     pass: process.env.DB_PASS,
   },
   jwt: {
-    publicKey: readFileSync(process.env.JWT_PUBLIC_KEY, 'utf8'),
-    privateKey: readFileSync(process.env.JWT_PRIVATE_KEY, 'utf8'),
+    publicKey: readFileSync(process.env.JWT_PUBLIC_KEY_PATH, 'utf8'),
+    privateKey: readFileSync(process.env.JWT_PRIVATE_KEY_PATH, 'utf8'),
     expiresInSeconds: parseInt(process.env.JWT_EXPIRES_IN_SECONDS, 10),
   },
 });
