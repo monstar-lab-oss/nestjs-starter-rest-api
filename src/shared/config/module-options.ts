@@ -3,7 +3,7 @@ import { ConfigModuleOptions } from '@nestjs/config/dist/interfaces';
 import * as Joi from '@hapi/joi';
 
 export const configModuleOptions: ConfigModuleOptions = {
-  envFilePath: '.env',
+  envFilePath: envFilePath(),
   load: [configuration],
   validationSchema: Joi.object({
     APP_ENV: Joi.string()
@@ -20,3 +20,19 @@ export const configModuleOptions: ConfigModuleOptions = {
     JWT_EXPIRES_IN_SECONDS: Joi.number().required(),
   }),
 };
+
+function envFilePath() {
+  const nodeEnv = process.env.NODE_ENV || 'development';
+
+  switch (nodeEnv) {
+    case 'development':
+      return `.env.${nodeEnv}`;
+    case 'test':
+      return `test/secrets/.env.${nodeEnv}`;
+    case 'production':
+      return `.env.${nodeEnv}`;
+
+    default:
+      throw new Error(`Could not find matching NODE_ENV value for: ${nodeEnv}`);
+  }
+}

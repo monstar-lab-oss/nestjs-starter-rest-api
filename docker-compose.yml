@@ -12,17 +12,10 @@ services:
     volumes:
       - ./:/usr/src/app
       - node_modules:/usr/src/app/node_modules/
+    env_file:
+      - .env.development
     environment:
-      APP_ENV: ${APP_ENV}
-      APP_PORT: ${APP_PORT}
       DB_HOST: mysqldb
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASS: ${DB_PASS}
-      JWT_EXPIRES_IN_SECONDS: ${JWT_EXPIRES_IN_SECONDS}
-      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY}
-      JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY}
     depends_on:
       - mysqldb
 
