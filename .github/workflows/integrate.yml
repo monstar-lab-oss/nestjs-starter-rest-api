@@ -30,11 +30,6 @@ jobs:
         run: docker-compose -f docker-compose.yml up -d mysqldb
       - name: Check running containers
         run: docker ps -a
-      # - name: Create public key
-      #   run: |
-      #     touch jwtRS256.key.pub
-      #     echo ${{ secrets.JWT_PUBLIC_KEY }} >> jwtRS256.key.pub
-      #     cat jwtRS256.key.pub
       - name: Create JWT Public Key
         run: 'echo "$PUBLIC_KEY" > jwtRS256.key.pub'
         shell: bash
