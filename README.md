@@ -45,8 +45,8 @@ You may save these key files in `./local` directory as it is ignored in git.
 Must enter the location of the key files in `.env`.
 
 ```bash
-JWT_PUBLIC_KEY=./local/jwtRS256.key.pub
-JWT_PRIVATE_KEY=./local/jwtRS256.key
+JWT_PUBLIC_KEY_PATH=./local/jwtRS256.key.pub
+JWT_PRIVATE_KEY_PATH=./local/jwtRS256.key
 ```
 
 ## Running the app
