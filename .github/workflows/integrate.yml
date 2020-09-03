@@ -16,7 +16,7 @@ jobs:
       DB_USER: root
       DB_PASS: example
       JWT_EXPIRES_IN_SECONDS: 3600
-      JWT_PUBLIC_KEY: ${{ secrets.JWT_PUBLIC_KEY }}
+      JWT_PUBLIC_KEY: './jwtRS256.key.pub'
       JWT_PRIVATE_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
 
     steps:
@@ -30,5 +30,11 @@ jobs:
         run: docker-compose -f docker-compose.yml up -d mysqldb
       - name: Check running containers
         run: docker ps -a
+      - name: Create public key
+        run: |
+          touch jwtRS256.key.pub
+          echo ${{ secrets.JWT_PUBLIC_KEY }} >> jwtRS256.key.pub
+          echo '---'
+          cat jwtRS256.key.pub
       - name: Run test suite
         run: npm run test:e2e
