@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
-describe('User Controller', () => {
+describe('UserController', () => {
   let controller: UserController;
   const mockedUserService = { setContext: jest.fn(), log: jest.fn() };
 

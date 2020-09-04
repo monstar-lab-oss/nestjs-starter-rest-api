@@ -7,7 +7,7 @@ describe('AppController', () => {
   let moduleRef: TestingModule;
   const mockedLogger = { setContext: jest.fn(), log: jest.fn() };
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     moduleRef = await Test.createTestingModule({
       controllers: [AppController],
       providers: [AppService, AppLogger],
