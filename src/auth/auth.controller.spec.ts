@@ -7,12 +7,12 @@ describe('Auth Controller', () => {
   const mockedAuthService = { setContext: jest.fn(), log: jest.fn() };
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [{ provide: AuthService, useValue: mockedAuthService }],
     }).compile();
 
-    controller = module.get<AuthController>(AuthController);
+    controller = moduleRef.get<AuthController>(AuthController);
   });
 
   it('should be defined', () => {

@@ -9,14 +9,14 @@ describe('UserService', () => {
   let service: UserService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
         UserService,
         { provide: getRepositoryToken(User), useValue: {} },
       ],
     }).compile();
 
-    service = module.get<UserService>(UserService);
+    service = moduleRef.get<UserService>(UserService);
   });
 
   it('should be defined', () => {
