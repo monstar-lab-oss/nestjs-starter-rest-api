@@ -33,3 +33,22 @@ jobs:
         run: docker ps -a
       - name: Run e2e tests
         run: sleep 5 && npm run test:e2e
+
+name: Build_Workflow
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  test_pull_request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: npm ci
+      - name: Run build step
+        run: npm run build
