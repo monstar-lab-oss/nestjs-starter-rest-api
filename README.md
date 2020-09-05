@@ -1,6 +1,7 @@
 ## NestJS Starter-Kit [WIP]
 
 ![Tests Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/Tests_Workflow/badge.svg)
+![Build Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/Build_Workflow/badge.svg)
 
 This starter kit has the following outline:
 
