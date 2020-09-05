@@ -1,5 +1,3 @@
-import { readFileSync } from 'fs';
-
 export default (): any => ({
   env: process.env.APP_ENV,
   port: process.env.APP_PORT,
@@ -11,8 +9,13 @@ export default (): any => ({
     pass: process.env.DB_PASS,
   },
   jwt: {
-    publicKey: readFileSync(process.env.JWT_PUBLIC_KEY_PATH, 'utf8'),
-    privateKey: readFileSync(process.env.JWT_PRIVATE_KEY_PATH, 'utf8'),
+    publicKey: new Buffer(process.env.JWT_PUBLIC_KEY_BASE64, 'base64').toString(
+      'utf8',
+    ),
+    privateKey: new Buffer(
+      process.env.JWT_PRIVATE_KEY_BASE64,
+      'base64',
+    ).toString('utf8'),
     expiresInSeconds: parseInt(process.env.JWT_EXPIRES_IN_SECONDS, 10),
   },
 });

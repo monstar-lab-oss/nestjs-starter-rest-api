@@ -42,11 +42,19 @@ $ openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
 
 You may save these key files in `./local` directory as it is ignored in git.
 
-Must enter the location of the key files in `.env`.
+Encode keys to base64:
 
 ```bash
-JWT_PUBLIC_KEY_PATH=./local/jwtRS256.key.pub
-JWT_PRIVATE_KEY_PATH=./local/jwtRS256.key
+$ base64 -i local/jwtRS256.key
+
+$ base64 -i local/jwtRS256.key.pub
+```
+
+Must enter the base64 of the key files in `.env`:
+
+```bash
+JWT_PUBLIC_KEY_BASE64=BASE64_OF_JWT_PUBLIC_KEY
+JWT_PRIVATE_KEY_BASE64=BASE64_OF_JWT_PRIVATE_KEY
 ```
 
 ## Running the app
