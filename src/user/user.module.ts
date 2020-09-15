@@ -6,12 +6,12 @@ import { SharedModule } from '../shared/shared.module';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
-import { User } from '../user/entities/user.entity';
+import { UserRepository } from './user.repository';
 
 import { JwtStrategy } from '../auth/strategies/jwt.strategy';
 
 @Module({
-  imports: [SharedModule, TypeOrmModule.forFeature([User])],
+  imports: [SharedModule, TypeOrmModule.forFeature([UserRepository])],
   providers: [UserService, JwtStrategy],
   controllers: [UserController],
   exports: [UserService],
