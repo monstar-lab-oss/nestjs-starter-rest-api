@@ -10,10 +10,7 @@ import { AddUserInput, AddUserOutput } from './dto/add-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User)
-    private userRepository: UserRepository,
-  ) {}
+  constructor(private userRepository: UserRepository) {}
 
   async add(input: AddUserInput): Promise<AddUserOutput> {
     const user = new User();
