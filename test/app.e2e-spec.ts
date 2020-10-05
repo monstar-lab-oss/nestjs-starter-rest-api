@@ -2,11 +2,19 @@ import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from './../src/app.module';
 import { INestApplication } from '@nestjs/common';
+import {
+  closeDBAfterTest,
+  createDBEntities,
+  resetDBBeforeTest,
+} from './test-utils';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
+    await resetDBBeforeTest();
+    await createDBEntities();
+
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -25,5 +33,6 @@ describe('AppController (e2e)', () => {
 
   afterAll(async () => {
     await app.close();
+    await closeDBAfterTest();
   });
 });
