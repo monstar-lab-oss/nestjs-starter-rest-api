@@ -28,14 +28,6 @@ describe('AuthController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', (done) => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!')
-      .end(() => done());
-  });
-
   describe('register a new user', () => {
     const registerInput: RegisterInput = {
       name: 'e2etester',
