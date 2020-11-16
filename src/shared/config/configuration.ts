@@ -9,10 +9,11 @@ export default (): any => ({
     pass: process.env.DB_PASS,
   },
   jwt: {
-    publicKey: new Buffer(process.env.JWT_PUBLIC_KEY_BASE64, 'base64').toString(
-      'utf8',
-    ),
-    privateKey: new Buffer(
+    publicKey: Buffer.from(
+      process.env.JWT_PUBLIC_KEY_BASE64,
+      'base64',
+    ).toString('utf8'),
+    privateKey: Buffer.from(
       process.env.JWT_PRIVATE_KEY_BASE64,
       'base64',
     ).toString('utf8'),

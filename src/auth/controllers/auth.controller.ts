@@ -11,11 +11,11 @@ import {
 import { Request } from 'express';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 
-import { AuthService } from './auth.service';
-import { User } from '../user/entities/user.entity';
-import { LoginOutput, LoginInput } from './dto/login.dto';
-import { RegisterInput, RegisterOutput } from './dto/register.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard';
+import { AuthService } from '../services/auth.service';
+import { User } from '../../user/entities/user.entity';
+import { LoginOutput, LoginInput } from '../dto/login.dto';
+import { RegisterInput, RegisterOutput } from '../dto/register.dto';
+import { LocalAuthGuard } from '../guards/local-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
