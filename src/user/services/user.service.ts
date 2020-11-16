@@ -5,7 +5,7 @@ import { hash } from 'bcrypt';
 import { UserRepository } from '../repositories/user.repository';
 
 import { User } from '../entities/user.entity';
-import { AddUserInput, AddUserOutput } from '../dto/add-user.dto';
+import { AddUserInput, AddUserOutput } from '../dtos/add-user.dto';
 
 @Injectable()
 export class UserService {

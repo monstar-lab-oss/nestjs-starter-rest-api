@@ -5,8 +5,8 @@ import { APP_FILTER } from '@nestjs/core';
 
 import { AppLoggerModule } from './logger/logger.module';
 
-import { configModuleOptions } from './config/module-options';
-import { AllExceptionsFilter } from './filter/all-exceptions.filter';
+import { configModuleOptions } from './configs/module-options';
+import { AllExceptionsFilter } from './filters/all-exceptions.filter';
 
 @Module({
   imports: [

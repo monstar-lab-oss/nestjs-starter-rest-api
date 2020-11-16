@@ -10,7 +10,7 @@ import {
 import {
   RegisterInput,
   RegisterOutput,
-} from './../../src/auth/dto/register.dto';
+} from '../../src/auth/dtos/register.dto';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;

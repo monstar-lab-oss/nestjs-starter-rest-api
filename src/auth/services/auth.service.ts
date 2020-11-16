@@ -4,8 +4,8 @@ import { compare } from 'bcrypt';
 
 import { UserService } from '../../user/services/user.service';
 import { User } from '../../user/entities/user.entity';
-import { RegisterInput, RegisterOutput } from '../dto/register.dto';
-import { LoginOutput } from '../dto/login.dto';
+import { RegisterInput, RegisterOutput } from '../dtos/register.dto';
+import { LoginOutput } from '../dtos/login.dto';
 
 @Injectable()
 export class AuthService {

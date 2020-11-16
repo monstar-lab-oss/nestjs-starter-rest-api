@@ -13,8 +13,8 @@ import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 
 import { AuthService } from '../services/auth.service';
 import { User } from '../../user/entities/user.entity';
-import { LoginOutput, LoginInput } from '../dto/login.dto';
-import { RegisterInput, RegisterOutput } from '../dto/register.dto';
+import { LoginOutput, LoginInput } from '../dtos/login.dto';
+import { RegisterInput, RegisterOutput } from '../dtos/register.dto';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 
 @ApiTags('Auth')

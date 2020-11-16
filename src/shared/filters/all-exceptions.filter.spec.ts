@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AllExceptionsFilter } from './all-exceptions.filter';
 import { ConfigService } from '@nestjs/config';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { REQUEST_ID_TOKEN_HEADER } from '../constant';
+import { REQUEST_ID_TOKEN_HEADER } from '../constants';
 import { v4 as uuidv4 } from 'uuid';
 import { AppLogger } from '../logger/logger.service';
 

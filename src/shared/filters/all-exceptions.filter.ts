@@ -8,7 +8,7 @@ import {
 import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 
-import { REQUEST_ID_TOKEN_HEADER } from '../constant';
+import { REQUEST_ID_TOKEN_HEADER } from '../constants';
 import { AppLogger } from '../logger/logger.service';
 
 @Catch()

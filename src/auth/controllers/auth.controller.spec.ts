@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from '../services/auth.service';
 import { validateOrReject } from 'class-validator';
-import { RegisterInput } from '../dto/register.dto';
-import { LoginInput } from '../dto/login.dto';
+import { RegisterInput } from '../dtos/register.dto';
+import { LoginInput } from '../dtos/login.dto';
 
 describe('AuthController', () => {
   let moduleRef: TestingModule;
