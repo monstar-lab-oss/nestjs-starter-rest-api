@@ -17,6 +17,7 @@ export const configModuleOptions: ConfigModuleOptions = {
     DB_PASS: Joi.string().required(),
     JWT_PUBLIC_KEY_BASE64: Joi.string().required(),
     JWT_PRIVATE_KEY_BASE64: Joi.string().required(),
-    JWT_EXPIRES_IN_SECONDS: Joi.number().required(),
+    JWT_ACCESS_TOKEN_EXP_IN_SEC: Joi.number().required(),
+    JWT_REFRESH_TOKEN_EXP_IN_SEC: Joi.number().required(),
   }),
 };
