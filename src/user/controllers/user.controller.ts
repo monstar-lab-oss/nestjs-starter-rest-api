@@ -9,9 +9,9 @@ import {
 
 import { Request } from 'express';
 
-import { UserService } from './user.service';
-import { GetMeOutput } from './dto/me.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { UserService } from '../services/user.service';
+import { GetMeOutput } from '../dtos/me.dto';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 
 @Controller('users')
 export class UserController {

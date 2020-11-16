@@ -6,7 +6,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 import { AppLogger } from './shared/logger/logger.service';
-import { RequestIdMiddleware } from './shared/middleware/request-id/request-id.middleware';
+import { RequestIdMiddleware } from './shared/middlewares/request-id/request-id.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
