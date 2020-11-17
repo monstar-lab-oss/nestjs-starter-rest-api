@@ -13,7 +13,7 @@ export class User {
   @Exclude()
   password: string;
 
-  @Unique('email', ['email'])
+  @Unique('username', ['username'])
   @Column({ length: 200 })
-  email: string;
+  username: string;
 }

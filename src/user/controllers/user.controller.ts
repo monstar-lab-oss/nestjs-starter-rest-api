@@ -5,13 +5,15 @@ import {
   UseGuards,
   UseInterceptors,
   ClassSerializerInterceptor,
+  HttpStatus,
 } from '@nestjs/common';
 
 import { Request } from 'express';
 
 import { UserService } from '../services/user.service';
-import { GetMeOutput } from '../dtos/me.dto';
+import { UserOutput } from '../dtos/user-output.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Controller('users')
 export class UserController {
@@ -20,7 +22,9 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('me')
-  getMyProfile(@Req() req: Request): Promise<GetMeOutput> {
+  @ApiOperation({ summary: 'Get user me API' })
+  @ApiResponse({ status: HttpStatus.OK, type: UserOutput })
+  getMyProfile(@Req() req: Request): Promise<UserOutput> {
     return this.userService.findById(req.user['id']);
   }
 }
