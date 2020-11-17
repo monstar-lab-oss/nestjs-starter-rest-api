@@ -8,7 +8,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 
 import { UserService } from '../services/user.service';
 import { UserOutput } from '../dtos/user-output.dto';
@@ -24,6 +24,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('me')
   @ApiOperation({
