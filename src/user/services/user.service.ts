@@ -1,36 +1,50 @@
-import { Injectable } from '@nestjs/common';
-
-import { hash } from 'bcrypt';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { compare, hash } from 'bcrypt';
 
 import { UserRepository } from '../repositories/user.repository';
 
 import { User } from '../entities/user.entity';
-import { AddUserInput, AddUserOutput } from '../dtos/add-user.dto';
+import { CreateUserInput } from '../dtos/user-create-input.dto';
+import { UserOutput } from '../dtos/user-output.dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
-  async add(input: AddUserInput): Promise<AddUserOutput> {
+  async createUser(input: CreateUserInput): Promise<UserOutput> {
     const user = new User();
-    user.email = input.email;
+    user.username = input.username;
     user.name = input.name;
     user.password = await hash(input.password, 10);
 
-    const insertedUser = await this.userRepository.save(user);
+    const savedUser = await this.userRepository.save(user);
 
-    const output = new AddUserOutput();
-    output.id = insertedUser.id;
-    output.email = insertedUser.email;
-    output.name = insertedUser.name;
-    return output;
+    return plainToClass(UserOutput, savedUser, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  async findByEmail(email: string): Promise<User> {
-    return this.userRepository.findOne({ email });
+  async validateUsernamePassword(
+    username: string,
+    pass: string,
+  ): Promise<UserOutput> {
+    const user = await this.userRepository.findOne({ username });
+    if (!user) throw new UnauthorizedException();
+
+    const match = await compare(pass, user.password);
+    if (!match) throw new UnauthorizedException();
+
+    return plainToClass(UserOutput, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
-  async findById(id: number): Promise<User> {
-    return this.userRepository.findOne(id);
+  async findById(id: number): Promise<UserOutput> {
+    const user = await this.userRepository.findOne(id);
+
+    return plainToClass(UserOutput, user, {
+      excludeExtraneousValues: true,
+    });
   }
 }

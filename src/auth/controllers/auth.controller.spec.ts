@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from '../services/auth.service';
 import { validateOrReject } from 'class-validator';
-import { RegisterInput } from '../dtos/register.dto';
-import { LoginInput } from '../dtos/login.dto';
+import { RegisterInput } from '../dtos/auth-register-input.dto';
+import { LoginInput } from '../dtos/auth-login-input.dto';
 
 describe('AuthController', () => {
   let moduleRef: TestingModule;
@@ -30,7 +30,7 @@ describe('AuthController', () => {
     it('should register new user', async () => {
       const registerInputDto = new RegisterInput();
       registerInputDto.name = 'John Doe';
-      registerInputDto.email = 'john@example.com';
+      registerInputDto.username = 'john@example.com';
       registerInputDto.password = '123123';
       await validateOrReject(registerInputDto);
 
@@ -45,7 +45,7 @@ describe('AuthController', () => {
   describe('login', () => {
     it('should login user', async () => {
       const loginInputDto = new LoginInput();
-      loginInputDto.email = 'john@example.com';
+      loginInputDto.username = 'john@example.com';
       loginInputDto.password = '123123';
       await validateOrReject(loginInputDto);
 
