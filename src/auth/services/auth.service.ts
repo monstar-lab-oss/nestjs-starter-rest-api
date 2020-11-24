@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 import { UserService } from '../../user/services/user.service';
 import { User } from '../../user/entities/user.entity';
@@ -8,6 +8,8 @@ import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { RegisterOutput } from '../dtos/auth-register-output.dto';
 import { LoginOutput } from '../dtos/auth-login-output.dto';
 import { AuthToken } from '../dtos/token.dto';
+import { TokenUserIdentity } from '../dtos/token.dto';
+import { RefreshTokenOutput } from '../dtos/auth-refresh-token-output.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,14 +30,25 @@ export class AuthService {
   }
 
   login(user: User): LoginOutput {
-    return this.getAuthToken(user);
+    return <LoginOutput>this.getAuthToken(user);
   }
 
   async register(input: RegisterInput): Promise<RegisterOutput> {
     return this.userService.createUser(input);
   }
 
-  getAuthToken(user: User): AuthToken {
+  async refreshToken(
+    tokenUser: TokenUserIdentity,
+  ): Promise<RefreshTokenOutput> {
+    const user = await this.userService.findById(tokenUser.id);
+    if (!user) {
+      throw new NotFoundException('Invalid user id');
+    }
+
+    return <RefreshTokenOutput>this.getAuthToken(user);
+  }
+
+  getAuthToken(user: { username: string; id: number }): AuthToken {
     const subject = { sub: user.id };
     const payload = { username: user.username, sub: user.id };
 

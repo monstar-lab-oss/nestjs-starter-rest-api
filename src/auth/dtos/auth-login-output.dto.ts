@@ -1,6 +1,3 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { AuthToken } from './token.dto';
 
-export class LoginOutput {
-  @ApiResponseProperty()
-  access_token: string;
-}
+export class LoginOutput extends AuthToken {}

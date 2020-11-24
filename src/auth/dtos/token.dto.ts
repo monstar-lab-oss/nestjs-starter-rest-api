@@ -1,5 +1,12 @@
-import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
-import { IsNotEmpty, MaxLength } from 'class-validator';
+import { ApiResponseProperty } from '@nestjs/swagger';
+
+export class TokenUserIdentity {
+  id: number;
+}
+
+export class TokenUser extends TokenUserIdentity {
+  email: string;
+}
 
 export class AuthToken {
   @ApiResponseProperty()
@@ -8,11 +15,3 @@ export class AuthToken {
   @ApiResponseProperty()
   refresh_token?: string;
 }
-
-export class RefreshTokenInput {
-  @IsNotEmpty()
-  @ApiProperty()
-  refresh_token: string;
-}
-
-export class RefreshTokenOutput extends AuthToken {}
