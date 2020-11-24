@@ -15,7 +15,8 @@ jobs:
       DB_NAME: example_db
       DB_USER: root
       DB_PASS: example
-      JWT_EXPIRES_IN_SECONDS: 3600
+      JWT_ACCESS_TOKEN_EXP_IN_SEC: 3600
+      JWT_REFRESH_TOKEN_EXP_IN_SEC: 7200
       JWT_PUBLIC_KEY_BASE64: ${{secrets.JWT_PUBLIC_KEY_BASE64}}
       JWT_PRIVATE_KEY_BASE64: ${{secrets.JWT_PRIVATE_KEY_BASE64}}
 

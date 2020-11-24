@@ -17,6 +17,13 @@ export default (): any => ({
       process.env.JWT_PRIVATE_KEY_BASE64,
       'base64',
     ).toString('utf8'),
-    expiresInSeconds: parseInt(process.env.JWT_EXPIRES_IN_SECONDS, 10),
+    accessTokenExpiresInSec: parseInt(
+      process.env.JWT_ACCESS_TOKEN_EXP_IN_SEC,
+      10,
+    ),
+    refreshTokenExpiresInSec: parseInt(
+      process.env.JWT_REFRESH_TOKEN_EXP_IN_SEC,
+      10,
+    ),
   },
 });

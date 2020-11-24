@@ -10,19 +10,19 @@ import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 
 import { LocalStrategy } from './strategies/local.strategy';
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { JwtAuthStrategy } from './strategies/jwt-auth.strategy';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [
     SharedModule,
-    PassportModule.register({ defaultStrategy: 'jwtauth' }),
+    PassportModule.register({ defaultStrategy: 'jwt-auth' }),
     JwtModule.registerAsync({
       imports: [SharedModule],
       useFactory: async (configService: ConfigService) => ({
         publicKey: configService.get<string>('jwt.publicKey'),
         privateKey: configService.get<string>('jwt.privateKey'),
         signOptions: {
-          expiresIn: configService.get<number>('jwt.expiresInSeconds'),
           algorithm: 'RS256',
         },
       }),
@@ -31,6 +31,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     UserModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtAuthStrategy, JwtRefreshStrategy],
 })
 export class AuthModule {}

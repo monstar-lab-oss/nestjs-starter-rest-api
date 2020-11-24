@@ -3,11 +3,13 @@ import { JwtService } from '@nestjs/jwt';
 
 import { AuthService } from './auth.service';
 import { UserService } from '../../user/services/user.service';
+import { ConfigService } from '@nestjs/config';
 
 describe('AuthService', () => {
   let service: AuthService;
   const mockedUserService = { setContext: jest.fn(), log: jest.fn() };
   const mockedJwtService = { setContext: jest.fn(), log: jest.fn() };
+  const mockConfigService = {};
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -15,6 +17,7 @@ describe('AuthService', () => {
         AuthService,
         { provide: UserService, useValue: mockedUserService },
         { provide: JwtService, useValue: mockedJwtService },
+        { provide: ConfigService, useValue: mockConfigService },
       ],
     }).compile();
 
