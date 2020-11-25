@@ -4,6 +4,9 @@ import { AuthService } from '../services/auth.service';
 import { validateOrReject } from 'class-validator';
 import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { LoginInput } from '../dtos/auth-login-input.dto';
+import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
+import { plainToClass } from 'class-transformer';
+import { AuthToken, TokenUserIdentity } from '../dtos/token.dto';
 
 describe('AuthController', () => {
   let moduleRef: TestingModule;
@@ -11,6 +14,7 @@ describe('AuthController', () => {
   const mockedAuthService = {
     register: jest.fn(),
     login: jest.fn(),
+    refreshToken: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -56,6 +60,35 @@ describe('AuthController', () => {
         .mockImplementation(async () => null);
 
       expect(await authController.login(reqObject, loginInputDto)).toBe(null);
+    });
+  });
+
+  describe('refreshToken', () => {
+    it('should generate refresh token', async () => {
+      const mockTokenUser: TokenUserIdentity = { id: 1 };
+      const mockRefreshTokenInputDto = plainToClass(RefreshTokenInput, {
+        refresh_token: 'mock_refrsh_token',
+      });
+      const mockAuthToken: AuthToken = {
+        access_token: 'new_access_token',
+        refresh_token: 'new_refresh_token',
+      };
+      const mockRequest: any = {
+        user: mockTokenUser,
+      };
+
+      jest
+        .spyOn(mockedAuthService, 'refreshToken')
+        .mockImplementation(async () => mockAuthToken);
+
+      await validateOrReject(mockRefreshTokenInputDto);
+      const response = await authController.refreshToken(
+        mockRequest,
+        mockRefreshTokenInputDto,
+      );
+
+      expect(mockedAuthService.refreshToken).toBeCalledWith(mockTokenUser);
+      expect(response).toEqual(mockAuthToken);
     });
   });
 });
