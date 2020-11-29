@@ -64,23 +64,30 @@ describe('AuthController', () => {
   });
 
   describe('refreshToken', () => {
-    it('should generate refresh token', async () => {
-      const mockTokenUser: TokenUserIdentity = { id: 1 };
-      const mockRefreshTokenInputDto = plainToClass(RefreshTokenInput, {
+    let mockTokenUser: TokenUserIdentity;
+    let mockRefreshTokenInputDto: RefreshTokenInput;
+    let mockAuthToken: AuthToken;
+    let mockRequest: any;
+
+    beforeEach(() => {
+      mockTokenUser = { id: 1 };
+      mockRefreshTokenInputDto = plainToClass(RefreshTokenInput, {
         refresh_token: 'mock_refrsh_token',
       });
-      const mockAuthToken: AuthToken = {
+      mockAuthToken = {
         access_token: 'new_access_token',
         refresh_token: 'new_refresh_token',
       };
-      const mockRequest: any = {
+      mockRequest = {
         user: mockTokenUser,
       };
 
       jest
         .spyOn(mockedAuthService, 'refreshToken')
         .mockImplementation(async () => mockAuthToken);
+    });
 
+    it('should generate refresh token', async () => {
       await validateOrReject(mockRefreshTokenInputDto);
       const response = await authController.refreshToken(
         mockRequest,
@@ -89,6 +96,10 @@ describe('AuthController', () => {
 
       expect(mockedAuthService.refreshToken).toBeCalledWith(mockTokenUser);
       expect(response).toEqual(mockAuthToken);
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
     });
   });
 });
