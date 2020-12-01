@@ -10,17 +10,16 @@ import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private repository: UserRepository) {}
 
   async createUser(input: CreateUserInput): Promise<UserOutput> {
-    const user = new User();
-    user.username = input.username;
-    user.name = input.name;
+    const user = plainToClass(User, input);
+
     user.password = await hash(input.password, 10);
 
-    const savedUser = await this.userRepository.save(user);
+    await this.repository.save(user);
 
-    return plainToClass(UserOutput, savedUser, {
+    return plainToClass(UserOutput, user, {
       excludeExtraneousValues: true,
     });
   }
@@ -29,7 +28,7 @@ export class UserService {
     username: string,
     pass: string,
   ): Promise<UserOutput> {
-    const user = await this.userRepository.findOne({ username });
+    const user = await this.repository.findOne({ username });
     if (!user) throw new UnauthorizedException();
 
     const match = await compare(pass, user.password);
@@ -41,7 +40,7 @@ export class UserService {
   }
 
   async findById(id: number): Promise<UserOutput> {
-    const user = await this.userRepository.findOne(id);
+    const user = await this.repository.findOne(id);
 
     return plainToClass(UserOutput, user, {
       excludeExtraneousValues: true,
