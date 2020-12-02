@@ -7,7 +7,12 @@ import { ConfigService } from '@nestjs/config';
 
 describe('AuthService', () => {
   let service: AuthService;
-  const mockedUserService = { setContext: jest.fn(), log: jest.fn() };
+
+  const mockedUserService = {
+    setContext: jest.fn(),
+    log: jest.fn(),
+    findById: jest.fn(),
+  };
   const mockedJwtService = {
     setContext: jest.fn(),
     log: jest.fn(),
@@ -30,6 +35,49 @@ describe('AuthService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('refreshToken', () => {
+    const mockedUserIdentity = { id: 6 };
+    const mockedUser = {
+      username: 'jhon',
+      name: 'Jhon doe',
+      ...mockedUserIdentity,
+    };
+
+    const mockedAuthToken = {
+      access_token: 'mock_access_token',
+      refresh_token: 'mock_access_token',
+    };
+
+    it('should generate auth token', async () => {
+      jest
+        .spyOn(mockedUserService, 'findById')
+        .mockImplementation(async () => mockedUser);
+
+      jest
+        .spyOn(service, 'getAuthToken')
+        .mockImplementation(() => mockedAuthToken);
+
+      const authToken = await service.refreshToken(mockedUserIdentity);
+
+      expect(service.getAuthToken).toBeCalledWith(mockedUser);
+      expect(authToken).toMatchObject(mockedAuthToken);
+    });
+
+    it('should throw exception when user is not valid', async () => {
+      jest
+        .spyOn(mockedUserService, 'findById')
+        .mockImplementation(async () => null);
+
+      await expect(
+        service.refreshToken(mockedUserIdentity),
+      ).rejects.toThrowError('Invalid user id');
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
   });
 
   describe('getAuthToken', () => {
