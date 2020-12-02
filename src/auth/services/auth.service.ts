@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
@@ -40,7 +40,7 @@ export class AuthService {
   async refreshToken(tokenUser: TokenUserIdentity): Promise<AuthTokenOutput> {
     const user = await this.userService.findById(tokenUser.id);
     if (!user) {
-      throw new NotFoundException('Invalid user id');
+      throw new UnauthorizedException('Invalid user id');
     }
 
     return this.getAuthToken(user);
