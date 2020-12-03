@@ -4,5 +4,5 @@ import { IsNotEmpty } from 'class-validator';
 export class RefreshTokenInput {
   @IsNotEmpty()
   @ApiProperty()
-  refresh_token: string;
+  refreshToken: string;
 }
