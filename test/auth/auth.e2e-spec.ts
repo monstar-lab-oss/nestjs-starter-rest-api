@@ -10,6 +10,7 @@ import {
 } from './../test-utils';
 import { RegisterInput } from 'src/auth/dtos/auth-register-input.dto';
 import { RegisterOutput } from 'src/auth/dtos/auth-register-output.dto';
+import { LoginInput } from 'src/auth/dtos/auth-login-input.dto';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -65,6 +66,32 @@ describe('AuthController (e2e)', () => {
             'username must be a string',
           );
         });
+    });
+  });
+
+  describe('login the registered user', () => {
+    const loginInput: LoginInput = {
+      username: 'e2etester@random.com',
+      password: '12345678',
+    };
+
+    it('should succesfully login the user', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send(loginInput)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          const token = res.body;
+          expect(token).toHaveProperty('access_token');
+          expect(token).toHaveProperty('refresh_token');
+        });
+    });
+
+    it('should failed to login with wrong credential', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ ...loginInput, password: 'wrong-passs' })
+        .expect(HttpStatus.UNAUTHORIZED);
     });
   });
 

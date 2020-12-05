@@ -7,6 +7,7 @@ import {
   HttpStatus,
   UseInterceptors,
   ClassSerializerInterceptor,
+  HttpCode,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
@@ -37,6 +38,7 @@ export class AuthController {
     status: HttpStatus.OK,
     type: AuthTokenOutput,
   })
+  @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async login(
@@ -66,6 +68,7 @@ export class AuthController {
     status: HttpStatus.OK,
     type: AuthTokenOutput,
   })
+  @HttpCode(HttpStatus.OK)
   @UseGuards(JwtRefreshGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async refreshToken(
