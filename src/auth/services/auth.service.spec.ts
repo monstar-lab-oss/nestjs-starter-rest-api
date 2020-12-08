@@ -1,34 +1,34 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { UnauthorizedException } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 import { UserService } from '../../user/services/user.service';
-import { ConfigService } from '@nestjs/config';
-import { UnauthorizedException } from '@nestjs/common';
+
 import { User } from 'src/user/entities/user.entity';
-import { LoginOutput } from '../dtos/auth-login-output.dto';
 import { UserOutput } from 'src/user/dtos/user-output.dto';
-import { AuthToken } from '../dtos/token.dto';
+import { AuthTokenOutput } from '../dtos/auth-token-output.dto';
 
 describe('AuthService', () => {
   let service: AuthService;
 
-  const mockedUserIdentity = { id: 6 };
-  const mockedUserInput = {
+  const userIdentity = { id: 6 };
+  const userInput = {
     username: 'jhon',
     name: 'Jhon doe',
     password: 'any password',
   };
 
-  const mockedUser = {
+  const user = {
     username: 'jhon',
     name: 'Jhon doe',
-    ...mockedUserIdentity,
+    ...userIdentity,
   };
 
-  const mockedAuthToken = {
-    access_token: 'mock_access_token',
-    refresh_token: 'mock_access_token',
+  const authToken: AuthTokenOutput = {
+    accessToken: 'access_token',
+    refreshToken: 'refresh_token',
   };
 
   const mockedUserService = {
@@ -43,7 +43,7 @@ describe('AuthService', () => {
     log: jest.fn(),
     sign: jest.fn(),
   };
-  const mockConfigService = { get: jest.fn() };
+  const mockedConfigService = { get: jest.fn() };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -51,7 +51,7 @@ describe('AuthService', () => {
         AuthService,
         { provide: UserService, useValue: mockedUserService },
         { provide: JwtService, useValue: mockedJwtService },
-        { provide: ConfigService, useValue: mockConfigService },
+        { provide: ConfigService, useValue: mockedConfigService },
       ],
     }).compile();
 
@@ -66,11 +66,9 @@ describe('AuthService', () => {
     it('should success when username/ password valid', async () => {
       jest
         .spyOn(mockedUserService, 'validateUsernamePassword')
-        .mockImplementation(() => <UserOutput>mockedUser);
+        .mockImplementation(() => <UserOutput>user);
 
-      expect(await service.validateUser('jhon', 'somepass')).toEqual(
-        mockedUser,
-      );
+      expect(await service.validateUser('jhon', 'somepass')).toEqual(user);
       expect(mockedUserService.validateUsernamePassword).toBeCalledWith(
         'jhon',
         'somepass',
@@ -92,14 +90,12 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('should return auth token for valid user', async () => {
-      jest
-        .spyOn(service, 'getAuthToken')
-        .mockImplementation(() => <LoginOutput>mockedAuthToken);
+      jest.spyOn(service, 'getAuthToken').mockImplementation(() => authToken);
 
-      const authToken = await service.login(<User>mockedUser);
+      const result = await service.login(<User>user);
 
-      expect(service.getAuthToken).toBeCalledWith(mockedUser);
-      expect(authToken).toEqual(mockedAuthToken);
+      expect(service.getAuthToken).toBeCalledWith(user);
+      expect(result).toEqual(authToken);
     });
   });
 
@@ -107,12 +103,12 @@ describe('AuthService', () => {
     it('should register new user', async () => {
       jest
         .spyOn(mockedUserService, 'createUser')
-        .mockImplementation(() => mockedUser);
+        .mockImplementation(() => user);
 
-      const user = await service.register(mockedUserInput);
+      const result = await service.register(userInput);
 
-      expect(mockedUserService.createUser).toBeCalledWith(mockedUserInput);
-      expect(user).toEqual(mockedUser);
+      expect(mockedUserService.createUser).toBeCalledWith(userInput);
+      expect(result).toEqual(user);
     });
   });
 
@@ -120,16 +116,14 @@ describe('AuthService', () => {
     it('should generate auth token', async () => {
       jest
         .spyOn(mockedUserService, 'findById')
-        .mockImplementation(async () => <UserOutput>mockedUser);
+        .mockImplementation(async () => <UserOutput>user);
 
-      jest
-        .spyOn(service, 'getAuthToken')
-        .mockImplementation(() => <AuthToken>mockedAuthToken);
+      jest.spyOn(service, 'getAuthToken').mockImplementation(() => authToken);
 
-      const authToken = await service.refreshToken(mockedUserIdentity);
+      const result = await service.refreshToken(userIdentity);
 
-      expect(service.getAuthToken).toBeCalledWith(mockedUser);
-      expect(authToken).toMatchObject(mockedAuthToken);
+      expect(service.getAuthToken).toBeCalledWith(user);
+      expect(result).toMatchObject(authToken);
     });
 
     it('should throw exception when user is not valid', async () => {
@@ -137,9 +131,9 @@ describe('AuthService', () => {
         .spyOn(mockedUserService, 'findById')
         .mockImplementation(async () => null);
 
-      await expect(
-        service.refreshToken(mockedUserIdentity),
-      ).rejects.toThrowError('Invalid user id');
+      await expect(service.refreshToken(userIdentity)).rejects.toThrowError(
+        'Invalid user id',
+      );
     });
 
     afterEach(() => {
@@ -148,22 +142,22 @@ describe('AuthService', () => {
   });
 
   describe('getAuthToken', () => {
-    const mockedAccessTokenExpiry = 100;
-    const mockedRefreshTokenExpiry = 200;
-    const mockedUser = { id: 5, username: 'username' };
+    const accessTokenExpiry = 100;
+    const refreshTokenExpiry = 200;
+    const user = { id: 5, username: 'username' };
 
-    const subject = { sub: mockedUser.id };
-    const payload = { username: mockedUser.username, sub: mockedUser.id };
+    const subject = { sub: user.id };
+    const payload = { username: user.username, sub: user.id };
 
     beforeEach(() => {
-      jest.spyOn(mockConfigService, 'get').mockImplementation((key) => {
+      jest.spyOn(mockedConfigService, 'get').mockImplementation((key) => {
         let value = null;
         switch (key) {
           case 'jwt.accessTokenExpiresInSec':
-            value = mockedAccessTokenExpiry;
+            value = accessTokenExpiry;
             break;
           case 'jwt.refreshTokenExpiresInSec':
-            value = mockedRefreshTokenExpiry;
+            value = refreshTokenExpiry;
             break;
         }
         return value;
@@ -171,31 +165,31 @@ describe('AuthService', () => {
 
       jest
         .spyOn(mockedJwtService, 'sign')
-        .mockImplementation(() => 'mocked-signed-response');
+        .mockImplementation(() => 'signed-response');
     });
 
     it('should generate access token with payload', () => {
-      const authToken = service.getAuthToken(mockedUser);
+      const result = service.getAuthToken(user);
 
       expect(mockedJwtService.sign).toBeCalledWith(
         { ...payload, ...subject },
-        { expiresIn: mockedAccessTokenExpiry },
+        { expiresIn: accessTokenExpiry },
       );
 
-      expect(authToken).toMatchObject({
-        access_token: 'mocked-signed-response',
+      expect(result).toMatchObject({
+        accessToken: 'signed-response',
       });
     });
 
-    it('should generate refresh toekn with subject', () => {
-      const authToken = service.getAuthToken(mockedUser);
+    it('should generate refresh token with subject', () => {
+      const result = service.getAuthToken(user);
 
       expect(mockedJwtService.sign).toBeCalledWith(subject, {
-        expiresIn: mockedRefreshTokenExpiry,
+        expiresIn: refreshTokenExpiry,
       });
 
-      expect(authToken).toMatchObject({
-        refresh_token: 'mocked-signed-response',
+      expect(result).toMatchObject({
+        refreshToken: 'signed-response',
       });
     });
 

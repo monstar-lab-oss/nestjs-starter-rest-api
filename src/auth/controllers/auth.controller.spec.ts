@@ -1,16 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { validateOrReject } from 'class-validator';
+
 import { AuthController } from './auth.controller';
 import { AuthService } from '../services/auth.service';
-import { validateOrReject } from 'class-validator';
 import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { LoginInput } from '../dtos/auth-login-input.dto';
 import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
-import { plainToClass } from 'class-transformer';
-import { AuthToken, TokenUserIdentity } from '../dtos/token.dto';
+import {
+  AuthTokenOutput,
+  TokenUserIdentity,
+} from '../dtos/auth-token-output.dto';
 
 describe('AuthController', () => {
   let moduleRef: TestingModule;
   let authController: AuthController;
+
   const mockedAuthService = {
     register: jest.fn(),
     login: jest.fn(),
@@ -64,38 +68,38 @@ describe('AuthController', () => {
   });
 
   describe('refreshToken', () => {
-    let mockTokenUser: TokenUserIdentity;
-    let mockRefreshTokenInputDto: RefreshTokenInput;
-    let mockAuthToken: AuthToken;
-    let mockRequest: any;
+    let tokenUser: TokenUserIdentity;
+    let refreshTokenInputDto: RefreshTokenInput;
+    let authToken: AuthTokenOutput;
+    let request: any;
 
     beforeEach(() => {
-      mockTokenUser = { id: 1 };
-      mockRefreshTokenInputDto = plainToClass(RefreshTokenInput, {
-        refresh_token: 'mock_refrsh_token',
-      });
-      mockAuthToken = {
-        access_token: 'new_access_token',
-        refresh_token: 'new_refresh_token',
+      tokenUser = { id: 1 };
+      refreshTokenInputDto = {
+        refreshToken: 'refresh_token',
       };
-      mockRequest = {
-        user: mockTokenUser,
+      authToken = {
+        accessToken: 'new_access_token',
+        refreshToken: 'new_refresh_token',
+      };
+      request = {
+        user: tokenUser,
       };
 
       jest
         .spyOn(mockedAuthService, 'refreshToken')
-        .mockImplementation(async () => mockAuthToken);
+        .mockImplementation(async () => authToken);
     });
 
     it('should generate refresh token', async () => {
-      await validateOrReject(mockRefreshTokenInputDto);
+      await validateOrReject(refreshTokenInputDto);
       const response = await authController.refreshToken(
-        mockRequest,
-        mockRefreshTokenInputDto,
+        request,
+        refreshTokenInputDto,
       );
 
-      expect(mockedAuthService.refreshToken).toBeCalledWith(mockTokenUser);
-      expect(response).toEqual(mockAuthToken);
+      expect(mockedAuthService.refreshToken).toBeCalledWith(tokenUser);
+      expect(response).toEqual(authToken);
     });
 
     afterEach(() => {

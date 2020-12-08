@@ -12,7 +12,7 @@ import { RegisterInput } from 'src/auth/dtos/auth-register-input.dto';
 import { RegisterOutput } from 'src/auth/dtos/auth-register-output.dto';
 import { LoginInput } from 'src/auth/dtos/auth-login-input.dto';
 import { RefreshTokenInput } from 'src/auth/dtos/auth-refresh-token-input.dto';
-import { LoginOutput } from 'src/auth/dtos/auth-login-output.dto';
+import { AuthTokenOutput } from 'src/auth/dtos/auth-token-output.dto';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -84,34 +84,8 @@ describe('AuthController (e2e)', () => {
         .expect(HttpStatus.OK)
         .expect((res) => {
           const token = res.body;
-          expect(token).toHaveProperty('access_token');
-          expect(token).toHaveProperty('refresh_token');
-        });
-    });
-
-    it('should failed to login with wrong credential', () => {
-      return request(app.getHttpServer())
-        .post('/auth/login')
-        .send({ ...loginInput, password: 'wrong-passs' })
-        .expect(HttpStatus.UNAUTHORIZED);
-    });
-  });
-
-  describe('login the registered user', () => {
-    const loginInput: LoginInput = {
-      username: 'e2etester@random.com',
-      password: '12345678',
-    };
-
-    it('should succesfully login the user', () => {
-      return request(app.getHttpServer())
-        .post('/auth/login')
-        .send(loginInput)
-        .expect(HttpStatus.OK)
-        .expect((res) => {
-          const token = res.body;
-          expect(token).toHaveProperty('access_token');
-          expect(token).toHaveProperty('refresh_token');
+          expect(token).toHaveProperty('accessToken');
+          expect(token).toHaveProperty('refreshToken');
         });
     });
 
@@ -129,25 +103,24 @@ describe('AuthController (e2e)', () => {
       password: '12345678',
     };
 
-    it('should succesfully get new auth token using refresh token', () => {
-      return request(app.getHttpServer())
+    it('should succesfully get new auth token using refresh token', async () => {
+      const loginResponse = await request(app.getHttpServer())
         .post('/auth/login')
-        .send(loginInput)
-        .then((res) => {
-          const token: LoginOutput = res.body;
-          const refreshTokenInput: RefreshTokenInput = {
-            refresh_token: token.refresh_token,
-          };
+        .send(loginInput);
 
-          return request(app.getHttpServer())
-            .post('/auth/refresh-token')
-            .send(refreshTokenInput)
-            .expect(HttpStatus.OK)
-            .expect((res) => {
-              const token = res.body;
-              expect(token).toHaveProperty('access_token');
-              expect(token).toHaveProperty('refresh_token');
-            });
+      const token: AuthTokenOutput = loginResponse.body;
+      const refreshTokenInput: RefreshTokenInput = {
+        refreshToken: token.refreshToken,
+      };
+
+      return request(app.getHttpServer())
+        .post('/auth/refresh-token')
+        .send(refreshTokenInput)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          const token = res.body;
+          expect(token).toHaveProperty('accessToken');
+          expect(token).toHaveProperty('refreshToken');
         });
     });
   });
