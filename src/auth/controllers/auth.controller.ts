@@ -18,7 +18,10 @@ import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { RegisterOutput } from '../dtos/auth-register-output.dto';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
-import { AuthToken, TokenUserIdentity } from '../dtos/auth-token-output.dto';
+import {
+  AuthTokenOutput,
+  TokenUserIdentity,
+} from '../dtos/auth-token-output.dto';
 import { JwtRefreshGuard } from '../guards/jwt-refresh.guard';
 
 @ApiTags('Auth')
@@ -32,14 +35,14 @@ export class AuthController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: AuthToken,
+    type: AuthTokenOutput,
   })
   @UseGuards(LocalAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async login(
     @Req() req: Request,
     @Body() credential: LoginInput,
-  ): Promise<AuthToken> {
+  ): Promise<AuthTokenOutput> {
     return this.authService.login(req.user as User);
   }
 
@@ -61,14 +64,14 @@ export class AuthController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: AuthToken,
+    type: AuthTokenOutput,
   })
   @UseGuards(JwtRefreshGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async refreshToken(
     @Req() req: Request,
     @Body() credential: RefreshTokenInput,
-  ): Promise<AuthToken> {
+  ): Promise<AuthTokenOutput> {
     return this.authService.refreshToken(req.user as TokenUserIdentity);
   }
 }
