@@ -14,13 +14,14 @@ import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { AuthService } from '../services/auth.service';
 import { User } from '../../user/entities/user.entity';
 import { LoginInput } from '../dtos/auth-login-input.dto';
-import { LoginOutput } from '../dtos/auth-login-output.dto';
 import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { RegisterOutput } from '../dtos/auth-register-output.dto';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
-import { RefreshTokenOutput } from '../dtos/auth-refresh-token-output.dto';
-import { TokenUserIdentity } from '../dtos/token.dto';
+import {
+  AuthTokenOutput,
+  TokenUserIdentity,
+} from '../dtos/auth-token-output.dto';
 import { JwtRefreshGuard } from '../guards/jwt-refresh.guard';
 
 @ApiTags('Auth')
@@ -34,14 +35,14 @@ export class AuthController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: LoginOutput,
+    type: AuthTokenOutput,
   })
   @UseGuards(LocalAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async login(
     @Req() req: Request,
     @Body() credential: LoginInput,
-  ): Promise<LoginOutput> {
+  ): Promise<AuthTokenOutput> {
     return this.authService.login(req.user as User);
   }
 
@@ -63,14 +64,14 @@ export class AuthController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: RefreshTokenOutput,
+    type: AuthTokenOutput,
   })
   @UseGuards(JwtRefreshGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async refreshToken(
     @Req() req: Request,
     @Body() credential: RefreshTokenInput,
-  ): Promise<RefreshTokenOutput> {
+  ): Promise<AuthTokenOutput> {
     return this.authService.refreshToken(req.user as TokenUserIdentity);
   }
 }
