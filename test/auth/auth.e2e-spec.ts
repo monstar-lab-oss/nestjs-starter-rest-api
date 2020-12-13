@@ -10,6 +10,9 @@ import {
 } from './../test-utils';
 import { RegisterInput } from 'src/auth/dtos/auth-register-input.dto';
 import { RegisterOutput } from 'src/auth/dtos/auth-register-output.dto';
+import { LoginInput } from 'src/auth/dtos/auth-login-input.dto';
+import { RefreshTokenInput } from 'src/auth/dtos/auth-refresh-token-input.dto';
+import { AuthTokenOutput } from 'src/auth/dtos/auth-token-output.dto';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -64,6 +67,60 @@ describe('AuthController (e2e)', () => {
           expect(resp.error.message.message).toContain(
             'username must be a string',
           );
+        });
+    });
+  });
+
+  describe('login the registered user', () => {
+    const loginInput: LoginInput = {
+      username: 'e2etester@random.com',
+      password: '12345678',
+    };
+
+    it('should succesfully login the user', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send(loginInput)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          const token = res.body;
+          expect(token).toHaveProperty('accessToken');
+          expect(token).toHaveProperty('refreshToken');
+        });
+    });
+
+    it('should failed to login with wrong credential', () => {
+      return request(app.getHttpServer())
+        .post('/auth/login')
+        .send({ ...loginInput, password: 'wrong-passs' })
+        .expect(HttpStatus.UNAUTHORIZED);
+    });
+  });
+
+  describe('refreshing jwt token', () => {
+    const loginInput: LoginInput = {
+      username: 'e2etester@random.com',
+      password: '12345678',
+    };
+
+    it('should succesfully get new auth token using refresh token', async () => {
+      const loginResponse = await request(app.getHttpServer())
+        .post('/auth/login')
+        .send(loginInput);
+
+      const token: AuthTokenOutput = loginResponse.body;
+      const refreshTokenInput: RefreshTokenInput = {
+        refreshToken: token.refreshToken,
+      };
+
+      return request(app.getHttpServer())
+        .post('/auth/refresh-token')
+        .send(refreshTokenInput)
+        .expect(HttpStatus.OK)
+        .expect((res) => {
+          const token = res.body;
+          expect(token).toHaveProperty('accessToken');
+          expect(token).toHaveProperty('refreshToken');
         });
     });
   });

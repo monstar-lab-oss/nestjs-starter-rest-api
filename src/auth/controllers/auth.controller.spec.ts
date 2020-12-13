@@ -1,16 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { validateOrReject } from 'class-validator';
+
 import { AuthController } from './auth.controller';
 import { AuthService } from '../services/auth.service';
-import { validateOrReject } from 'class-validator';
 import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { LoginInput } from '../dtos/auth-login-input.dto';
+import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
+import {
+  AuthTokenOutput,
+  TokenUserIdentity,
+} from '../dtos/auth-token-output.dto';
 
 describe('AuthController', () => {
   let moduleRef: TestingModule;
   let authController: AuthController;
+
   const mockedAuthService = {
     register: jest.fn(),
     login: jest.fn(),
+    refreshToken: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -56,6 +64,46 @@ describe('AuthController', () => {
         .mockImplementation(async () => null);
 
       expect(await authController.login(reqObject, loginInputDto)).toBe(null);
+    });
+  });
+
+  describe('refreshToken', () => {
+    let tokenUser: TokenUserIdentity;
+    let refreshTokenInputDto: RefreshTokenInput;
+    let authToken: AuthTokenOutput;
+    let request: any;
+
+    beforeEach(() => {
+      tokenUser = { id: 1 };
+      refreshTokenInputDto = {
+        refreshToken: 'refresh_token',
+      };
+      authToken = {
+        accessToken: 'new_access_token',
+        refreshToken: 'new_refresh_token',
+      };
+      request = {
+        user: tokenUser,
+      };
+
+      jest
+        .spyOn(mockedAuthService, 'refreshToken')
+        .mockImplementation(async () => authToken);
+    });
+
+    it('should generate refresh token', async () => {
+      await validateOrReject(refreshTokenInputDto);
+      const response = await authController.refreshToken(
+        request,
+        refreshTokenInputDto,
+      );
+
+      expect(mockedAuthService.refreshToken).toBeCalledWith(tokenUser);
+      expect(response).toEqual(authToken);
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
     });
   });
 });
