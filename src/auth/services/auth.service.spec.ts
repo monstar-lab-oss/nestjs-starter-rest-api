@@ -144,10 +144,14 @@ describe('AuthService', () => {
   describe('getAuthToken', () => {
     const accessTokenExpiry = 100;
     const refreshTokenExpiry = 200;
-    const user = { id: 5, username: 'username' };
+    const user = { id: 5, username: 'username', roles: [ROLE.USER] };
 
     const subject = { sub: user.id };
-    const payload = { username: user.username, sub: user.id };
+    const payload = {
+      username: user.username,
+      sub: user.id,
+      roles: [ROLE.USER],
+    };
 
     beforeEach(() => {
       jest.spyOn(mockedConfigService, 'get').mockImplementation((key) => {
