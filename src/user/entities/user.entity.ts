@@ -15,6 +15,6 @@ export class User {
   @Column({ length: 200 })
   username: string;
 
-  @Column('simple-array', { nullable: true })
+  @Column('simple-array')
   roles: string[];
 }

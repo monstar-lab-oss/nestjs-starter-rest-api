@@ -13,4 +13,8 @@ export class UserOutput {
   @Expose()
   @ApiProperty()
   username: string;
+
+  @Expose()
+  @ApiProperty()
+  roles: string[];
 }

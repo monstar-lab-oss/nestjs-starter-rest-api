@@ -11,4 +11,8 @@ export class CreateUserInput {
   @IsNotEmpty()
   @IsString()
   password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  roles: string[];
 }
