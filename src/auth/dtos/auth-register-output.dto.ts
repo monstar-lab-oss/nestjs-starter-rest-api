@@ -7,4 +7,6 @@ export class RegisterOutput {
   name: string;
   @ApiProperty()
   username: string;
+  @ApiProperty()
+  roles: string[];
 }

@@ -8,11 +8,12 @@ import {
   createDBEntities,
   resetDBBeforeTest,
 } from './../test-utils';
-import { RegisterInput } from 'src/auth/dtos/auth-register-input.dto';
-import { RegisterOutput } from 'src/auth/dtos/auth-register-output.dto';
-import { LoginInput } from 'src/auth/dtos/auth-login-input.dto';
-import { RefreshTokenInput } from 'src/auth/dtos/auth-refresh-token-input.dto';
-import { AuthTokenOutput } from 'src/auth/dtos/auth-token-output.dto';
+import { RegisterInput } from '../../src/auth/dtos/auth-register-input.dto';
+import { RegisterOutput } from '../../src/auth/dtos/auth-register-output.dto';
+import { LoginInput } from '../../src/auth/dtos/auth-login-input.dto';
+import { RefreshTokenInput } from '../../src/auth/dtos/auth-refresh-token-input.dto';
+import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
+import { ROLE } from '../../src/auth/constants/role.constant';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -35,14 +36,16 @@ describe('AuthController (e2e)', () => {
       name: 'e2etester',
       username: 'e2etester@random.com',
       password: '12345678',
+      roles: [ROLE.USER],
     };
     const registerOutput: RegisterOutput = {
       id: 1,
       name: 'e2etester',
       username: 'e2etester@random.com',
+      roles: [ROLE.USER],
     };
 
-    it('succesfully register a new user', () => {
+    it('successfully register a new user', () => {
       return request(app.getHttpServer())
         .post('/auth/register')
         .send(registerInput)
@@ -77,7 +80,7 @@ describe('AuthController (e2e)', () => {
       password: '12345678',
     };
 
-    it('should succesfully login the user', () => {
+    it('should successfully login the user', () => {
       return request(app.getHttpServer())
         .post('/auth/login')
         .send(loginInput)
@@ -103,7 +106,7 @@ describe('AuthController (e2e)', () => {
       password: '12345678',
     };
 
-    it('should succesfully get new auth token using refresh token', async () => {
+    it('should successfully get new auth token using refresh token', async () => {
       const loginResponse = await request(app.getHttpServer())
         .post('/auth/login')
         .send(loginInput);

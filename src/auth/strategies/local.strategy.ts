@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { AuthService } from '../services/auth.service';
 import { STRATEGY_LOCAL } from '../constants/strategy.constant';
+import { UserAccessTokenClaims } from '../dtos/auth-token-output.dto';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, STRATEGY_LOCAL) {
@@ -14,7 +15,10 @@ export class LocalStrategy extends PassportStrategy(Strategy, STRATEGY_LOCAL) {
     });
   }
 
-  async validate(username: string, password: string): Promise<any> {
+  async validate(
+    username: string,
+    password: string,
+  ): Promise<UserAccessTokenClaims> {
     const user = await this.authService.validateUser(username, password);
 
     // Passport automatically creates a user object, based on the value we return from the validate() method,

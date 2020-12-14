@@ -6,9 +6,10 @@ import { UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserService } from '../../user/services/user.service';
 
-import { User } from 'src/user/entities/user.entity';
-import { UserOutput } from 'src/user/dtos/user-output.dto';
+import { User } from '../../user/entities/user.entity';
+import { UserOutput } from '../../user/dtos/user-output.dto';
 import { AuthTokenOutput } from '../dtos/auth-token-output.dto';
+import { ROLE } from '../constants/role.constant';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -18,6 +19,7 @@ describe('AuthService', () => {
     username: 'jhon',
     name: 'Jhon doe',
     password: 'any password',
+    roles: [ROLE.USER],
   };
 
   const user = {

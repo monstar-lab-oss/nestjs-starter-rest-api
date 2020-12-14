@@ -8,6 +8,12 @@ export class AuthTokenOutput {
   refreshToken: string;
 }
 
-export class TokenUserIdentity {
+export class UserAccessTokenClaims {
+  id: number;
+  username: string;
+  roles: string[];
+}
+
+export class UserRefreshTokenClaims {
   id: number;
 }

@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 
 import { UserService } from './user.service';
 import { User } from '../entities/user.entity';
+import { ROLE } from '../../auth/constants/role.constant';
 
 describe('UserService', () => {
   let service: UserService;
@@ -55,6 +56,7 @@ describe('UserService', () => {
         name: user.name,
         username: user.username,
         password: 'plain-password',
+        roles: [ROLE.USER],
       };
 
       await service.createUser(userInput);
@@ -66,6 +68,7 @@ describe('UserService', () => {
         name: user.name,
         username: user.username,
         password: 'plain-password',
+        roles: [ROLE.USER],
       };
 
       await service.createUser(userInput);
@@ -74,6 +77,7 @@ describe('UserService', () => {
         name: user.name,
         username: user.username,
         password: 'hashed-password',
+        roles: [ROLE.USER],
       });
     });
 
@@ -89,6 +93,7 @@ describe('UserService', () => {
         name: user.name,
         username: user.username,
         password: 'plain-password',
+        roles: [ROLE.USER],
       };
 
       const result = await service.createUser(userInput);
@@ -97,6 +102,7 @@ describe('UserService', () => {
         id: user.id,
         name: userInput.name,
         username: userInput.username,
+        roles: [ROLE.USER],
       });
       expect(result).not.toHaveProperty('password');
     });

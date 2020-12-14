@@ -65,7 +65,7 @@ export class UserController {
     type: BaseApiErrorResponse,
   })
   @UseGuards(RolesGuard)
-  @Roles(ROLE.ADMIN)
+  @Roles(ROLE.ADMIN, ROLE.USER)
   @UseGuards(JwtAuthGuard)
   async getUsers(
     @Query() query: PaginationParamsDto,
