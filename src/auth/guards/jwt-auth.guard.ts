@@ -15,6 +15,8 @@ export class JwtAuthGuard extends AuthGuard(STRATEGY_JWT_AUTH) {
   ): boolean | Promise<boolean> | Observable<boolean> {
     // Add your custom authentication logic here
     // for example, call super.logIn(request) to establish a session.
+    console.log('------- JWT AUTH');
+
     return super.canActivate(context);
   }
 
