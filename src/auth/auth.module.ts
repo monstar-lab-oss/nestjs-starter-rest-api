@@ -12,11 +12,12 @@ import { AuthService } from './services/auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtAuthStrategy } from './strategies/jwt-auth.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { STRATEGY_JWT_AUTH } from './constants/strategy.constant';
 
 @Module({
   imports: [
     SharedModule,
-    PassportModule.register({ defaultStrategy: 'jwt-auth' }),
+    PassportModule.register({ defaultStrategy: STRATEGY_JWT_AUTH }),
     JwtModule.registerAsync({
       imports: [SharedModule],
       useFactory: async (configService: ConfigService) => ({
