@@ -39,6 +39,23 @@ export class UserService {
     });
   }
 
+  async getUsers(
+    limit: number,
+    offset: number,
+  ): Promise<{ users: UserOutput[]; count: number }> {
+    const [users, count] = await this.repository.findAndCount({
+      where: {},
+      take: limit,
+      skip: offset,
+    });
+
+    const usersOutput = plainToClass(UserOutput, users, {
+      excludeExtraneousValues: true,
+    });
+
+    return { users: usersOutput, count };
+  }
+
   async findById(id: number): Promise<UserOutput> {
     const user = await this.repository.findOne(id);
 

@@ -12,6 +12,7 @@ describe('UserService', () => {
   const mockedUserRepository = {
     save: jest.fn(),
     findOne: jest.fn(),
+    findAndCount: jest.fn(),
   };
 
   const user = {
@@ -169,6 +170,16 @@ describe('UserService', () => {
         name: user.name,
         username: user.username,
       });
+    });
+  });
+
+  describe('getUsers', () => {
+    it('gets users as a list', async () => {
+      const offset = 0;
+      const limit = 0;
+      mockedUserRepository.findAndCount.mockResolvedValue([[user], 1]);
+      await service.getUsers(limit, offset);
+      expect(mockedUserRepository.findAndCount).toHaveBeenCalled();
     });
   });
 });

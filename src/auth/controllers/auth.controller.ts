@@ -18,12 +18,17 @@ import { LoginInput } from '../dtos/auth-login-input.dto';
 import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { RegisterOutput } from '../dtos/auth-register-output.dto';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
-import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
 import {
   AuthTokenOutput,
   TokenUserIdentity,
 } from '../dtos/auth-token-output.dto';
+import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
 import { JwtRefreshGuard } from '../guards/jwt-refresh.guard';
+import {
+  BaseApiErrorResponse,
+  BaseApiResponse,
+  SwaggerBaseApiResponse,
+} from '../../shared/dtos/base-api-response.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -36,16 +41,22 @@ export class AuthController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: AuthTokenOutput,
+    type: SwaggerBaseApiResponse(AuthTokenOutput),
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: BaseApiErrorResponse,
   })
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async login(
     @Req() req: Request,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: LoginInput,
-  ): Promise<AuthTokenOutput> {
-    return this.authService.login(req.user as User);
+  ): Promise<BaseApiResponse<AuthTokenOutput>> {
+    const authToken = await this.authService.login(req.user as User);
+    return { data: authToken, meta: {} };
   }
 
   @Post('register')
@@ -54,27 +65,38 @@ export class AuthController {
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: RegisterOutput,
+    type: SwaggerBaseApiResponse(RegisterOutput),
   })
-  async registerLocal(@Body() input: RegisterInput): Promise<RegisterOutput> {
-    return this.authService.register(input);
+  async registerLocal(
+    @Body() input: RegisterInput,
+  ): Promise<BaseApiResponse<RegisterOutput>> {
+    const registeredUser = await this.authService.register(input);
+    return { data: registeredUser, meta: {} };
   }
 
   @Post('refresh-token')
   @ApiOperation({
-    summary: 'Refresh access token',
+    summary: 'Refresh access token API',
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: AuthTokenOutput,
+    type: SwaggerBaseApiResponse(AuthTokenOutput),
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    type: BaseApiErrorResponse,
   })
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtRefreshGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async refreshToken(
     @Req() req: Request,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: RefreshTokenInput,
-  ): Promise<AuthTokenOutput> {
-    return this.authService.refreshToken(req.user as TokenUserIdentity);
+  ): Promise<BaseApiResponse<AuthTokenOutput>> {
+    const authToken = await this.authService.refreshToken(
+      req.user as TokenUserIdentity,
+    );
+    return { data: authToken, meta: {} };
   }
 }
