@@ -46,7 +46,10 @@ describe('AuthController', () => {
         .spyOn(mockedAuthService, 'register')
         .mockImplementation(async () => null);
 
-      expect(await authController.registerLocal(registerInputDto)).toBe(null);
+      expect(await authController.registerLocal(registerInputDto)).toEqual({
+        data: null,
+        meta: {},
+      });
     });
   });
 
@@ -63,7 +66,10 @@ describe('AuthController', () => {
         .spyOn(mockedAuthService, 'login')
         .mockImplementation(async () => null);
 
-      expect(await authController.login(reqObject, loginInputDto)).toBe(null);
+      expect(await authController.login(reqObject, loginInputDto)).toEqual({
+        data: null,
+        meta: {},
+      });
     });
   });
 
@@ -99,7 +105,7 @@ describe('AuthController', () => {
       );
 
       expect(mockedAuthService.refreshToken).toBeCalledWith(tokenUser);
-      expect(response).toEqual(authToken);
+      expect(response.data).toEqual(authToken);
     });
 
     afterEach(() => {

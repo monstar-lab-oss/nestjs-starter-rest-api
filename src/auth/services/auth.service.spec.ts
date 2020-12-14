@@ -32,17 +32,15 @@ describe('AuthService', () => {
   };
 
   const mockedUserService = {
-    setContext: jest.fn(),
-    log: jest.fn(),
     findById: jest.fn(),
     createUser: jest.fn(),
     validateUsernamePassword: jest.fn(),
   };
+
   const mockedJwtService = {
-    setContext: jest.fn(),
-    log: jest.fn(),
     sign: jest.fn(),
   };
+
   const mockedConfigService = { get: jest.fn() };
 
   beforeEach(async () => {
@@ -63,7 +61,7 @@ describe('AuthService', () => {
   });
 
   describe('validateUser', () => {
-    it('should success when username/ password valid', async () => {
+    it('should success when username/password valid', async () => {
       jest
         .spyOn(mockedUserService, 'validateUsernamePassword')
         .mockImplementation(() => <UserOutput>user);
@@ -75,7 +73,7 @@ describe('AuthService', () => {
       );
     });
 
-    it('should fail when username/ password invalid', async () => {
+    it('should fail when username/password invalid', async () => {
       jest
         .spyOn(mockedUserService, 'validateUsernamePassword')
         .mockImplementation(() => {

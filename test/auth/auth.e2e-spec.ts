@@ -47,7 +47,7 @@ describe('AuthController (e2e)', () => {
         .post('/auth/register')
         .send(registerInput)
         .expect(HttpStatus.CREATED)
-        .expect(registerOutput);
+        .expect({ data: registerOutput, meta: {} });
     });
 
     it('register fails without Input DTO', () => {
@@ -83,7 +83,7 @@ describe('AuthController (e2e)', () => {
         .send(loginInput)
         .expect(HttpStatus.OK)
         .expect((res) => {
-          const token = res.body;
+          const token = res.body.data;
           expect(token).toHaveProperty('accessToken');
           expect(token).toHaveProperty('refreshToken');
         });
@@ -108,7 +108,7 @@ describe('AuthController (e2e)', () => {
         .post('/auth/login')
         .send(loginInput);
 
-      const token: AuthTokenOutput = loginResponse.body;
+      const token: AuthTokenOutput = loginResponse.body.data;
       const refreshTokenInput: RefreshTokenInput = {
         refreshToken: token.refreshToken,
       };
@@ -118,7 +118,7 @@ describe('AuthController (e2e)', () => {
         .send(refreshTokenInput)
         .expect(HttpStatus.OK)
         .expect((res) => {
-          const token = res.body;
+          const token = res.body.data;
           expect(token).toHaveProperty('accessToken');
           expect(token).toHaveProperty('refreshToken');
         });
