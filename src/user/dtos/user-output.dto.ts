@@ -17,6 +17,6 @@ export class UserOutput {
   username: string;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ example: [ROLE.USER] })
   roles: ROLE[];
 }

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { ArrayNotEmpty, IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 import { ROLE } from '../../auth/constants/role.constant';
 
@@ -14,7 +14,7 @@ export class CreateUserInput {
   @IsString()
   password: string;
 
-  @IsNotEmpty()
-  @IsString()
+  @IsArray()
+  @ArrayNotEmpty()
   roles: ROLE[];
 }

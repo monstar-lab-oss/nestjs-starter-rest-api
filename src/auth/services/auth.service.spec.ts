@@ -6,7 +6,6 @@ import { UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserService } from '../../user/services/user.service';
 
-import { User } from '../../user/entities/user.entity';
 import { UserOutput } from '../../user/dtos/user-output.dto';
 import { AuthTokenOutput } from '../dtos/auth-token-output.dto';
 import { ROLE } from '../constants/role.constant';
