@@ -25,6 +25,7 @@ describe('AuthService', () => {
   const user = {
     username: 'jhon',
     name: 'Jhon doe',
+    roles: [ROLE.USER],
     ...userIdentity,
   };
 
@@ -92,7 +93,7 @@ describe('AuthService', () => {
     it('should return auth token for valid user', async () => {
       jest.spyOn(service, 'getAuthToken').mockImplementation(() => authToken);
 
-      const result = await service.login(<User>user);
+      const result = await service.login(user);
 
       expect(service.getAuthToken).toBeCalledWith(user);
       expect(result).toEqual(authToken);

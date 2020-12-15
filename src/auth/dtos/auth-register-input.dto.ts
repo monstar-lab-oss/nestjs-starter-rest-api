@@ -21,5 +21,5 @@ export class RegisterInput {
   password: string;
 
   // TODO : Setting default role as USER here. Will add option to change this later via ADMIN users.
-  roles = [ROLE.USER];
+  roles: ROLE[] = [ROLE.USER];
 }

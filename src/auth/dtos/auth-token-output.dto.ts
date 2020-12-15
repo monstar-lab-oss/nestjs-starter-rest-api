@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { ROLE } from '../constants/role.constant';
+
 export class AuthTokenOutput {
   @ApiProperty()
   accessToken: string;
@@ -11,7 +13,7 @@ export class AuthTokenOutput {
 export class UserAccessTokenClaims {
   id: number;
   username: string;
-  roles: string[];
+  roles: ROLE[];
 }
 
 export class UserRefreshTokenClaims {
