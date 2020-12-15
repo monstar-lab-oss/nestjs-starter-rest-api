@@ -13,7 +13,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   app.useLogger(new AppLogger(app.get(Logger)));
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.use(RequestIdMiddleware);
   app.enableCors();
 

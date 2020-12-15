@@ -14,4 +14,7 @@ export class User {
   @Unique('username', ['username'])
   @Column({ length: 200 })
   username: string;
+
+  @Column('simple-array')
+  roles: string[];
 }

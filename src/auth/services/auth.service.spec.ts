@@ -6,9 +6,9 @@ import { UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserService } from '../../user/services/user.service';
 
-import { User } from 'src/user/entities/user.entity';
-import { UserOutput } from 'src/user/dtos/user-output.dto';
+import { UserOutput } from '../../user/dtos/user-output.dto';
 import { AuthTokenOutput } from '../dtos/auth-token-output.dto';
+import { ROLE } from '../constants/role.constant';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -18,11 +18,13 @@ describe('AuthService', () => {
     username: 'jhon',
     name: 'Jhon doe',
     password: 'any password',
+    roles: [ROLE.USER],
   };
 
   const user = {
     username: 'jhon',
     name: 'Jhon doe',
+    roles: [ROLE.USER],
     ...userIdentity,
   };
 
@@ -90,7 +92,7 @@ describe('AuthService', () => {
     it('should return auth token for valid user', async () => {
       jest.spyOn(service, 'getAuthToken').mockImplementation(() => authToken);
 
-      const result = await service.login(<User>user);
+      const result = await service.login(user);
 
       expect(service.getAuthToken).toBeCalledWith(user);
       expect(result).toEqual(authToken);
@@ -142,10 +144,14 @@ describe('AuthService', () => {
   describe('getAuthToken', () => {
     const accessTokenExpiry = 100;
     const refreshTokenExpiry = 200;
-    const user = { id: 5, username: 'username' };
+    const user = { id: 5, username: 'username', roles: [ROLE.USER] };
 
     const subject = { sub: user.id };
-    const payload = { username: user.username, sub: user.id };
+    const payload = {
+      username: user.username,
+      sub: user.id,
+      roles: [ROLE.USER],
+    };
 
     beforeEach(() => {
       jest.spyOn(mockedConfigService, 'get').mockImplementation((key) => {

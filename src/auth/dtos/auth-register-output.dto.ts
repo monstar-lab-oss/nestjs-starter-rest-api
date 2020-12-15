@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { ROLE } from '../constants/role.constant';
+
 export class RegisterOutput {
   @ApiProperty()
   id: number;
@@ -7,4 +9,6 @@ export class RegisterOutput {
   name: string;
   @ApiProperty()
   username: string;
+  @ApiProperty({ example: [ROLE.USER] })
+  roles: ROLE[];
 }

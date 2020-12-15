@@ -15,6 +15,9 @@ import { UserService } from '../services/user.service';
 
 import { UserOutput } from '../dtos/user-output.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../auth/guards/roles.guard';
+import { Roles } from '../../auth/decorators/role.decorator';
+import { ROLE } from '../../auth/constants/role.constant';
 import {
   BaseApiErrorResponse,
   BaseApiResponse,
@@ -48,7 +51,6 @@ export class UserController {
     return { data: user, meta: {} };
   }
 
-  @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   @ApiOperation({
@@ -62,6 +64,9 @@ export class UserController {
     status: HttpStatus.UNAUTHORIZED,
     type: BaseApiErrorResponse,
   })
+  @UseGuards(RolesGuard)
+  @Roles(ROLE.ADMIN, ROLE.USER)
+  @UseGuards(JwtAuthGuard)
   async getUsers(
     @Query() query: PaginationParamsDto,
   ): Promise<BaseApiResponse<UserOutput[]>> {

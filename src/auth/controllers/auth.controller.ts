@@ -13,14 +13,14 @@ import { Request } from 'express';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 
 import { AuthService } from '../services/auth.service';
-import { User } from '../../user/entities/user.entity';
 import { LoginInput } from '../dtos/auth-login-input.dto';
 import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { RegisterOutput } from '../dtos/auth-register-output.dto';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 import {
   AuthTokenOutput,
-  TokenUserIdentity,
+  UserAccessTokenClaims,
+  UserRefreshTokenClaims,
 } from '../dtos/auth-token-output.dto';
 import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
 import { JwtRefreshGuard } from '../guards/jwt-refresh.guard';
@@ -55,7 +55,9 @@ export class AuthController {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: LoginInput,
   ): Promise<BaseApiResponse<AuthTokenOutput>> {
-    const authToken = await this.authService.login(req.user as User);
+    const authToken = await this.authService.login(
+      req.user as UserAccessTokenClaims,
+    );
     return { data: authToken, meta: {} };
   }
 
@@ -95,7 +97,7 @@ export class AuthController {
     @Body() credential: RefreshTokenInput,
   ): Promise<BaseApiResponse<AuthTokenOutput>> {
     const authToken = await this.authService.refreshToken(
-      req.user as TokenUserIdentity,
+      req.user as UserRefreshTokenClaims,
     );
     return { data: authToken, meta: {} };
   }

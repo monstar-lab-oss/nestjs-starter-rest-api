@@ -3,12 +3,12 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 import { UserService } from '../../user/services/user.service';
-import { User } from '../../user/entities/user.entity';
 import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { RegisterOutput } from '../dtos/auth-register-output.dto';
 import {
   AuthTokenOutput,
-  TokenUserIdentity,
+  UserAccessTokenClaims,
+  UserRefreshTokenClaims,
 } from '../dtos/auth-token-output.dto';
 
 @Injectable()
@@ -19,7 +19,10 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
+  async validateUser(
+    username: string,
+    pass: string,
+  ): Promise<UserAccessTokenClaims> {
     // The userService will throw Unauthorized in case of invalid username/password.
     const user = await this.userService.validateUsernamePassword(
       username,
@@ -29,7 +32,7 @@ export class AuthService {
     return user;
   }
 
-  login(user: User): AuthTokenOutput {
+  login(user: UserAccessTokenClaims): AuthTokenOutput {
     return this.getAuthToken(user);
   }
 
@@ -37,7 +40,9 @@ export class AuthService {
     return this.userService.createUser(input);
   }
 
-  async refreshToken(tokenUser: TokenUserIdentity): Promise<AuthTokenOutput> {
+  async refreshToken(
+    tokenUser: UserRefreshTokenClaims,
+  ): Promise<AuthTokenOutput> {
     const user = await this.userService.findById(tokenUser.id);
     if (!user) {
       throw new UnauthorizedException('Invalid user id');
@@ -46,9 +51,13 @@ export class AuthService {
     return this.getAuthToken(user);
   }
 
-  getAuthToken(user: { username: string; id: number }): AuthTokenOutput {
+  getAuthToken(user: UserAccessTokenClaims): AuthTokenOutput {
     const subject = { sub: user.id };
-    const payload = { username: user.username, sub: user.id };
+    const payload = {
+      username: user.username,
+      sub: user.id,
+      roles: user.roles,
+    };
 
     return {
       refreshToken: this.jwtService.sign(subject, {

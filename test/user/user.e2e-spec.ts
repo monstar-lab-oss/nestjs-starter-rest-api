@@ -10,7 +10,8 @@ import {
 } from '../test-utils';
 import { RegisterInput } from '../../src/auth/dtos/auth-register-input.dto';
 import { UserOutput } from '../../src/user/dtos/user-output.dto';
-import { LoginInput } from 'src/auth/dtos/auth-login-input.dto';
+import { LoginInput } from '../../src/auth/dtos/auth-login-input.dto';
+import { ROLE } from '../../src/auth/constants/role.constant';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -33,6 +34,7 @@ describe('UserController (e2e)', () => {
       name: 'e2etester',
       username: 'e2etester@random.com',
       password: '12345678',
+      roles: [ROLE.USER],
     };
 
     const loginInput: LoginInput = {
@@ -79,6 +81,7 @@ describe('UserController (e2e)', () => {
     id: 1,
     name: 'e2etester',
     username: 'e2etester@random.com',
+    roles: [ROLE.USER],
   };
 
   describe('get all users', () => {

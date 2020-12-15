@@ -8,7 +8,8 @@ import { LoginInput } from '../dtos/auth-login-input.dto';
 import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
 import {
   AuthTokenOutput,
-  TokenUserIdentity,
+  UserAccessTokenClaims,
+  UserRefreshTokenClaims,
 } from '../dtos/auth-token-output.dto';
 
 describe('AuthController', () => {
@@ -74,7 +75,7 @@ describe('AuthController', () => {
   });
 
   describe('refreshToken', () => {
-    let tokenUser: TokenUserIdentity;
+    let tokenUser: UserRefreshTokenClaims;
     let refreshTokenInputDto: RefreshTokenInput;
     let authToken: AuthTokenOutput;
     let request: any;
