@@ -1,5 +1,14 @@
-import { IsNotEmpty, MaxLength, Length, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsNotEmpty,
+  MaxLength,
+  Length,
+  IsString,
+  IsArray,
+  IsEnum,
+  IsOptional,
+  ArrayUnique,
+} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ROLE } from '../constants/role.constant';
 
 export class RegisterInput {
@@ -20,6 +29,10 @@ export class RegisterInput {
   @IsString()
   password: string;
 
-  // TODO : Setting default role as USER here. Will add option to change this later via ADMIN users.
+  @ApiPropertyOptional({ example: [ROLE.USER] })
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @IsEnum(ROLE, { each: true })
   roles: ROLE[] = [ROLE.USER];
 }
