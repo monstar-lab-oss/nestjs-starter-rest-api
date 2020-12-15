@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { plainToClass } from 'class-transformer';
 
 import { UserService } from '../../user/services/user.service';
 import { ROLE } from '../constants/role.constant';
@@ -41,7 +42,10 @@ export class AuthService {
     // TODO : Setting default role as USER here. Will add option to change this later via ADMIN users.
     input.roles = [ROLE.USER];
 
-    return this.userService.createUser(input);
+    const registeredUser = await this.userService.createUser(input);
+    return plainToClass(RegisterOutput, registeredUser, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async refreshToken(
@@ -63,7 +67,7 @@ export class AuthService {
       roles: user.roles,
     };
 
-    return {
+    const authToken = {
       refreshToken: this.jwtService.sign(subject, {
         expiresIn: this.configService.get('jwt.refreshTokenExpiresInSec'),
       }),
@@ -72,5 +76,8 @@ export class AuthService {
         { expiresIn: this.configService.get('jwt.accessTokenExpiresInSec') },
       ),
     };
+    return plainToClass(AuthTokenOutput, authToken, {
+      excludeExtraneousValues: true,
+    });
   }
 }
