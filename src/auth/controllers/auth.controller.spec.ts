@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { validateOrReject } from 'class-validator';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from '../services/auth.service';
@@ -8,7 +7,6 @@ import { LoginInput } from '../dtos/auth-login-input.dto';
 import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
 import {
   AuthTokenOutput,
-  UserAccessTokenClaims,
   UserRefreshTokenClaims,
 } from '../dtos/auth-token-output.dto';
 
@@ -41,7 +39,6 @@ describe('AuthController', () => {
       registerInputDto.name = 'John Doe';
       registerInputDto.username = 'john@example.com';
       registerInputDto.password = '123123';
-      await validateOrReject(registerInputDto);
 
       jest
         .spyOn(mockedAuthService, 'register')
@@ -59,7 +56,6 @@ describe('AuthController', () => {
       const loginInputDto = new LoginInput();
       loginInputDto.username = 'john@example.com';
       loginInputDto.password = '123123';
-      await validateOrReject(loginInputDto);
 
       const reqObject: any = {};
 
@@ -99,7 +95,6 @@ describe('AuthController', () => {
     });
 
     it('should generate refresh token', async () => {
-      await validateOrReject(refreshTokenInputDto);
       const response = await authController.refreshToken(
         request,
         refreshTokenInputDto,

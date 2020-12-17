@@ -19,4 +19,12 @@ export class RegisterOutput {
   @Expose()
   @ApiProperty({ example: [ROLE.USER] })
   roles: ROLE[];
+
+  @Expose()
+  @ApiProperty()
+  email: string;
+
+  @Expose()
+  @ApiProperty()
+  isAccountDisabled: boolean;
 }

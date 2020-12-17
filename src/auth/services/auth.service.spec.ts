@@ -19,6 +19,8 @@ describe('AuthService', () => {
     name: 'Jhon doe',
     password: 'any password',
     roles: [ROLE.USER],
+    isAccountDisabled: false,
+    email: 'randomUser@random.com',
   };
 
   const user = {

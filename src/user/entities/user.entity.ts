@@ -17,4 +17,11 @@ export class User {
 
   @Column('simple-array')
   roles: string[];
+
+  @Column()
+  isAccountDisabled: boolean;
+
+  @Unique('email', ['email'])
+  @Column({ length: 200 })
+  email: string;
 }
