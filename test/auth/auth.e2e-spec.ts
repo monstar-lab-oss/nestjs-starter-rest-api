@@ -34,15 +34,19 @@ describe('AuthController (e2e)', () => {
   describe('register a new user', () => {
     const registerInput: RegisterInput = {
       name: 'e2etester',
-      username: 'e2etester@random.com',
+      username: 'e2etester',
       password: '12345678',
       roles: [ROLE.USER],
+      isAccountDisabled: false,
+      email: 'e2etester@random.com',
     };
     const registerOutput: RegisterOutput = {
       id: 1,
       name: 'e2etester',
-      username: 'e2etester@random.com',
+      username: 'e2etester',
       roles: [ROLE.USER],
+      isAccountDisabled: false,
+      email: 'e2etester@random.com',
     };
 
     it('successfully register a new user', () => {
@@ -76,7 +80,7 @@ describe('AuthController (e2e)', () => {
 
   describe('login the registered user', () => {
     const loginInput: LoginInput = {
-      username: 'e2etester@random.com',
+      username: 'e2etester',
       password: '12345678',
     };
 
@@ -102,7 +106,7 @@ describe('AuthController (e2e)', () => {
 
   describe('refreshing jwt token', () => {
     const loginInput: LoginInput = {
-      username: 'e2etester@random.com',
+      username: 'e2etester',
       password: '12345678',
     };
 

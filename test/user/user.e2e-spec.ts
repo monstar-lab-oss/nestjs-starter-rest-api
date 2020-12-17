@@ -31,14 +31,16 @@ describe('UserController (e2e)', () => {
 
     // Create a User
     const registerInput: RegisterInput = {
-      name: 'e2etester',
-      username: 'e2etester@random.com',
+      name: 'e2e tester',
+      username: 'e2etester',
       password: '12345678',
       roles: [ROLE.USER],
+      isAccountDisabled: false,
+      email: 'e2etester@random.com',
     };
 
     const loginInput: LoginInput = {
-      username: 'e2etester@random.com',
+      username: 'e2etester',
       password: '12345678',
     };
 
@@ -79,9 +81,11 @@ describe('UserController (e2e)', () => {
 
   const userOutput: UserOutput = {
     id: 1,
-    name: 'e2etester',
-    username: 'e2etester@random.com',
+    name: 'e2e tester',
+    username: 'e2etester',
     roles: [ROLE.USER],
+    isAccountDisabled: false,
+    email: 'e2etester@random.com',
   };
 
   describe('get all users', () => {
