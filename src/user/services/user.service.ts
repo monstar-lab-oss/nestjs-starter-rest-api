@@ -1,12 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare, hash } from 'bcrypt';
+import { plainToClass } from 'class-transformer';
 
 import { UserRepository } from '../repositories/user.repository';
 
 import { User } from '../entities/user.entity';
 import { CreateUserInput } from '../dtos/user-create-input.dto';
 import { UserOutput } from '../dtos/user-output.dto';
-import { plainToClass } from 'class-transformer';
+import { UpdateUserInput } from '../dtos/user-update-input.dto';
 
 @Injectable()
 export class UserService {
@@ -60,6 +61,38 @@ export class UserService {
     const user = await this.repository.findOne(id);
 
     return plainToClass(UserOutput, user, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async findByUsername(username: string): Promise<UserOutput> {
+    const user = await this.repository.findOne({ username });
+
+    return plainToClass(UserOutput, user, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async updateUser(
+    userId: number,
+    input: UpdateUserInput,
+  ): Promise<UserOutput> {
+    const user = await this.repository.getById(userId);
+
+    // Hash the password if it exists in the input payload.
+    if (input.password) {
+      input.password = await hash(input.password, 10);
+    }
+
+    // merges the input (2nd line) to the found user (1st line)
+    const updatedUser: User = {
+      ...user,
+      ...plainToClass(User, input),
+    };
+
+    await this.repository.save(updatedUser);
+
+    return plainToClass(UserOutput, updatedUser, {
       excludeExtraneousValues: true,
     });
   }

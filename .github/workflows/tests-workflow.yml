@@ -19,6 +19,7 @@ jobs:
       JWT_REFRESH_TOKEN_EXP_IN_SEC: 7200
       JWT_PUBLIC_KEY_BASE64: ${{secrets.JWT_PUBLIC_KEY_BASE64}}
       JWT_PRIVATE_KEY_BASE64: ${{secrets.JWT_PRIVATE_KEY_BASE64}}
+      DEFAULT_ADMIN_USER_PASSWORD: example_admin_pass
 
     steps:
       - uses: actions/checkout@v2
