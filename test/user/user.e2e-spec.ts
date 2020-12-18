@@ -3,6 +3,7 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 
 import { AppModule } from '../../src/app.module';
+
 import {
   resetDBBeforeTest,
   createDBEntities,
@@ -85,14 +86,31 @@ describe('UserController (e2e)', () => {
   };
 
   describe('get all users', () => {
-    const usersOutput = [userOutput];
+    const expectedOutput = [userOutput];
 
     it('returns all users', async () => {
       return request(app.getHttpServer())
         .get('/users')
         .set('Authorization', 'Bearer ' + accessToken)
         .expect(HttpStatus.OK)
-        .expect({ data: usersOutput, meta: { count: 1 } });
+        .expect({ data: expectedOutput, meta: { count: 1 } });
+    });
+  });
+
+  describe('get a user by Id', () => {
+    const expectedOutput = userOutput;
+
+    it('should get a user by Id', async () => {
+      return request(app.getHttpServer())
+        .get('/users/1')
+        .expect(HttpStatus.OK)
+        .expect({ data: expectedOutput, meta: {} });
+    });
+
+    it('throws NOT_FOUND when user doesnt exist', () => {
+      return request(app.getHttpServer())
+        .get('/users/99')
+        .expect(HttpStatus.NOT_FOUND);
     });
   });
 
