@@ -8,6 +8,8 @@ import {
   HttpStatus,
   Query,
   Param,
+  Patch,
+  Body,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
@@ -25,6 +27,7 @@ import {
 import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 import { UserOutput } from '../dtos/user-output.dto';
 import { ROLE } from '../../auth/constants/role.constant';
+import { UpdateUserInput } from '../dtos/user-update-input.dto';
 
 @Controller('users')
 export class UserController {
@@ -95,6 +98,28 @@ export class UserController {
   })
   async getUser(@Param('id') id: number): Promise<BaseApiResponse<UserOutput>> {
     const user = await this.userService.getUserById(id);
+    return { data: user, meta: {} };
+  }
+
+  // TODO: ADD RoleGuard
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Update user API',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse(UserOutput),
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    type: BaseApiErrorResponse,
+  })
+  @UseInterceptors(ClassSerializerInterceptor)
+  async updateUser(
+    @Param('id') userId: number,
+    @Body() input: UpdateUserInput,
+  ): Promise<BaseApiResponse<UserOutput>> {
+    const user = await this.userService.updateUser(userId, input);
     return { data: user, meta: {} };
   }
 }

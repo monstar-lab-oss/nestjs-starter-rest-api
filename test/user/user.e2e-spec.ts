@@ -33,13 +33,13 @@ describe('UserController (e2e)', () => {
     // Create a User
     const registerInput: RegisterInput = {
       name: 'e2etester',
-      username: 'e2etester@random.com',
+      username: 'e2etester',
       password: '12345678',
       roles: [ROLE.USER],
     };
 
     const loginInput: LoginInput = {
-      username: 'e2etester@random.com',
+      username: 'e2etester',
       password: '12345678',
     };
 
@@ -81,7 +81,7 @@ describe('UserController (e2e)', () => {
   const userOutput: UserOutput = {
     id: 1,
     name: 'e2etester',
-    username: 'e2etester@random.com',
+    username: 'e2etester',
     roles: [ROLE.USER],
   };
 
@@ -111,6 +111,49 @@ describe('UserController (e2e)', () => {
       return request(app.getHttpServer())
         .get('/users/99')
         .expect(HttpStatus.NOT_FOUND);
+    });
+  });
+
+  const updateUserInput = {
+    name: 'New e2etestername',
+    password: '12345678aA12',
+  };
+
+  const expectedOutput: UserOutput = {
+    id: 1,
+    name: 'New e2etestername',
+    username: 'e2etester',
+    roles: [ROLE.USER],
+  };
+
+  describe('update a user', () => {
+    it('successfully updates a user', async () => {
+      return request(app.getHttpServer())
+        .patch('/users/1')
+        .send(updateUserInput)
+        .expect(HttpStatus.OK)
+        .expect({ data: expectedOutput, meta: {} });
+    });
+
+    it('throws NOT_FOUND when user doesnt exist', () => {
+      return request(app.getHttpServer())
+        .patch('/users/99')
+        .expect(HttpStatus.NOT_FOUND);
+    });
+
+    it('update fails when incorrect password format', () => {
+      updateUserInput.password = 12345 as any;
+      return request(app.getHttpServer())
+        .patch('/users/1')
+        .expect(HttpStatus.BAD_REQUEST)
+        .send(updateUserInput)
+        .expect((res) => {
+          const resp = res.body;
+
+          expect(resp.error.message.message).toContain(
+            'password must be a string',
+          );
+        });
     });
   });
 

@@ -7,10 +7,15 @@ import { UserService } from '../services/user.service';
 import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 import { UserOutput } from '../dtos/user-output.dto';
 import { ROLE } from '../../auth/constants/role.constant';
+import { UpdateUserInput } from '../dtos/user-update-input.dto';
 
 describe('UserController', () => {
   let controller: UserController;
-  const mockedUserService = { getUsers: jest.fn(), getUserById: jest.fn() };
+  const mockedUserService = {
+    getUsers: jest.fn(),
+    getUserById: jest.fn(),
+    updateUser: jest.fn(),
+  };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -54,6 +59,18 @@ describe('UserController', () => {
         meta: {},
       });
       expect(mockedUserService.getUserById).toHaveBeenCalledWith(id);
+    });
+  });
+
+  describe('Update user by id', () => {
+    it('Update user by id and returns user', async () => {
+      const input = new UpdateUserInput();
+      mockedUserService.updateUser.mockResolvedValue(expectedOutput);
+
+      expect(await controller.updateUser(1, input)).toEqual({
+        data: expectedOutput,
+        meta: {},
+      });
     });
   });
 });
