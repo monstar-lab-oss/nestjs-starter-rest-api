@@ -67,7 +67,7 @@ describe('AuthController (e2e)', () => {
         .send(registerInput)
         .expect((res) => {
           const resp = res.body;
-          expect(resp.error.message.message).toContain(
+          expect(resp.error.details.message).toContain(
             'username must be a string',
           );
         });
