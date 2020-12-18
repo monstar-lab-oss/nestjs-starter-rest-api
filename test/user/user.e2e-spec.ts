@@ -141,7 +141,7 @@ describe('UserController (e2e)', () => {
         .expect(HttpStatus.NOT_FOUND);
     });
 
-    it('update fails when incorrect password format', () => {
+    it('update fails when incorrect password type', () => {
       updateUserInput.password = 12345 as any;
       return request(app.getHttpServer())
         .patch('/users/1')
@@ -150,7 +150,7 @@ describe('UserController (e2e)', () => {
         .expect((res) => {
           const resp = res.body;
 
-          expect(resp.error.message.message).toContain(
+          expect(resp.error.details.message).toContain(
             'password must be a string',
           );
         });
