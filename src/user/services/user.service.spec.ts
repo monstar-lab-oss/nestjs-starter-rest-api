@@ -63,6 +63,8 @@ describe('UserService', () => {
         username: user.username,
         password: 'plain-password',
         roles: [ROLE.USER],
+        isAccountDisabled: false,
+        email: 'randomUser@random.com',
       };
 
       await service.createUser(userInput);
@@ -75,6 +77,8 @@ describe('UserService', () => {
         username: user.username,
         password: 'plain-password',
         roles: [ROLE.USER],
+        isAccountDisabled: false,
+        email: 'randomUser@random.com',
       };
 
       await service.createUser(userInput);
@@ -84,6 +88,8 @@ describe('UserService', () => {
         username: user.username,
         password: 'hashed-password',
         roles: [ROLE.USER],
+        isAccountDisabled: false,
+        email: 'randomUser@random.com',
       });
     });
 
@@ -98,6 +104,8 @@ describe('UserService', () => {
         username: user.username,
         password: 'plain-password',
         roles: [ROLE.USER],
+        isAccountDisabled: false,
+        email: 'randomUser@random.com',
       };
 
       const result = await service.createUser(userInput);
@@ -107,6 +115,8 @@ describe('UserService', () => {
         name: userInput.name,
         username: userInput.username,
         roles: [ROLE.USER],
+        isAccountDisabled: false,
+        email: 'randomUser@random.com',
       });
       expect(result).not.toHaveProperty('password');
     });
@@ -270,12 +280,15 @@ describe('UserService', () => {
         password: 'updated-password',
       };
 
-      const foundUser = new User();
-      foundUser.id = userId;
-      foundUser.name = 'Default User';
-      foundUser.username = 'default-user';
-      foundUser.password = 'random-password';
-      foundUser.roles = [ROLE.USER];
+      const foundUser: User = {
+        id: userId,
+        name: 'Default User',
+        username: 'default-user',
+        password: 'random-password',
+        roles: [ROLE.USER],
+        isAccountDisabled: false,
+        email: 'randomUser@random.com',
+      };
       mockedRepository.getById.mockResolvedValue(foundUser);
 
       const expected: User = {
@@ -284,6 +297,8 @@ describe('UserService', () => {
         username: 'default-user',
         password: input.password,
         roles: [ROLE.USER],
+        isAccountDisabled: false,
+        email: 'randomUser@random.com',
       };
 
       jest

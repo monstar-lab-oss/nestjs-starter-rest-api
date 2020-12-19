@@ -47,6 +47,8 @@ describe('UserController', () => {
     username: 'default-user',
     name: 'default-name',
     roles: [ROLE.USER],
+    isAccountDisabled: false,
+    email: 'e2etester@random.com',
   };
 
   describe('Get user by id', () => {

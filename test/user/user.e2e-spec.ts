@@ -36,6 +36,8 @@ describe('UserController (e2e)', () => {
       username: 'e2etester',
       password: '12345678',
       roles: [ROLE.USER],
+      isAccountDisabled: false,
+      email: 'e2etester@random.com',
     };
 
     const loginInput: LoginInput = {
@@ -83,6 +85,8 @@ describe('UserController (e2e)', () => {
     name: 'e2etester',
     username: 'e2etester',
     roles: [ROLE.USER],
+    isAccountDisabled: false,
+    email: 'e2etester@random.com',
   };
 
   describe('get all users', () => {
@@ -124,6 +128,8 @@ describe('UserController (e2e)', () => {
     name: 'New e2etestername',
     username: 'e2etester',
     roles: [ROLE.USER],
+    isAccountDisabled: false,
+    email: 'e2etester@random.com',
   };
 
   describe('update a user', () => {

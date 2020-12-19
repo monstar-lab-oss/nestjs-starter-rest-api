@@ -7,6 +7,8 @@ import {
   IsEnum,
   IsOptional,
   ArrayUnique,
+  IsEmail,
+  IsBoolean,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ROLE } from '../constants/role.constant';
@@ -35,4 +37,14 @@ export class RegisterInput {
   @ArrayUnique()
   @IsEnum(ROLE, { each: true })
   roles: ROLE[] = [ROLE.USER];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsEmail()
+  @MaxLength(100)
+  email: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  isAccountDisabled: boolean;
 }

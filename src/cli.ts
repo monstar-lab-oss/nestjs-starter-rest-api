@@ -26,6 +26,8 @@ async function bootstrap() {
     username: 'default-admin',
     password: defaultAdminUserPassword,
     roles: [ROLE.ADMIN],
+    isAccountDisabled: false,
+    email: 'default-admin@example.com',
   };
 
   // Create the default admin user if it doesn't already exist.
