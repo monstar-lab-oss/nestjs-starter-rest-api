@@ -391,3 +391,6 @@ Temporary Items
 dist
 local/
 documentation
+
+# SonarQube
+.scannerwork

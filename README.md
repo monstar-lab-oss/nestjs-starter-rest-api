@@ -24,6 +24,7 @@ To view sample implementations based on this starter-kit, please visit the [nest
 | Logging                  | nestjs-pino     | Done     |
 | Request Validation       | class-validator | Done     |
 | Docker Ready             | Dockerfile      | Done     |
+| Continuous Code Quality  | SonarQube       | Done     |
 | Auto-generated OpenAPI   | -               | Done     |
 | Auto-generated ChangeLog | -               | WIP      |
 
@@ -97,7 +98,25 @@ $ npm run migration:run
 
 # revert migration
 $ npm run migration:revert
+
 ```
+
+## SonarQube locally analyse
+
+To locally analyse your code it is enough to run
+
+```bash
+# build image
+$ docker-compose up
+
+# run container from image
+$ docker-compose exec sonarscanner sonar-scanner
+
+```
+
+The results can be viewed in local instance of sonarqube [http://localhost:9000/sonarqube/dashboard?id=nest-typescript-starter](http://localhost:9000/sonarqube/dashboard?id=nest-typescript-starter).
+
+Local instance of sonarqube uses `sonar-scanner.properties` file.
 
 ## Docker
 

@@ -46,6 +46,32 @@ services:
     depends_on:
       - mysqldb
 
+  sonarqube:
+    container_name: sonarqube
+    image: sonarqube:8-community
+    command: '-Dsonar.web.context=/sonarqube'
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_temp:/opt/sonarqube/temp
+    ports:
+      - 9000:9000
+  sonarscanner:
+    container_name: sonar-scanner
+    build:
+      context: .
+      dockerfile: ./docker/sonar-scanner/Dockerfile
+    volumes:
+      - .:/usr/src/
+      - ./sonar-scanner.properties:/usr/lib/sonar-scanner/conf/sonar-scanner.properties
+    network_mode: host
+    command: tail -f /dev/null
+
 volumes:
   node_modules:
   mysqldata:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  sonarqube_temp:
