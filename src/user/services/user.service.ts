@@ -5,6 +5,7 @@ import { plainToClass } from 'class-transformer';
 import { UserRepository } from '../repositories/user.repository';
 
 import { User } from '../entities/user.entity';
+
 import { CreateUserInput } from '../dtos/user-create-input.dto';
 import { UserOutput } from '../dtos/user-output.dto';
 import { UpdateUserInput } from '../dtos/user-update-input.dto';
@@ -59,6 +60,14 @@ export class UserService {
 
   async findById(id: number): Promise<UserOutput> {
     const user = await this.repository.findOne(id);
+
+    return plainToClass(UserOutput, user, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async getUserById(id: number): Promise<UserOutput> {
+    const user = await this.repository.getById(id);
 
     return plainToClass(UserOutput, user, {
       excludeExtraneousValues: true,

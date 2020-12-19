@@ -1,13 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { NotFoundException } from '@nestjs/common';
 
 import * as bcrypt from 'bcrypt';
 
 import { UserService } from './user.service';
+
 import { User } from '../entities/user.entity';
+
 import { ROLE } from '../../auth/constants/role.constant';
 import { UpdateUserInput } from '../dtos/user-update-input.dto';
-import { NotFoundException } from '@nestjs/common';
 
 describe('UserService', () => {
   let service: UserService;
@@ -23,6 +25,7 @@ describe('UserService', () => {
     id: 6,
     username: 'jhon',
     name: 'Jhon doe',
+    roles: [ROLE.USER],
   };
 
   beforeEach(async () => {
@@ -142,7 +145,45 @@ describe('UserService', () => {
         id: user.id,
         name: user.name,
         username: user.username,
+        roles: [ROLE.USER],
       });
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+  });
+
+  describe('getUserById', () => {
+    beforeEach(() => {
+      jest
+        .spyOn(mockedRepository, 'getById')
+        .mockImplementation(async () => user);
+    });
+
+    it('should find user from DB using given id', async () => {
+      await service.getUserById(user.id);
+      expect(mockedRepository.getById).toBeCalledWith(user.id);
+    });
+
+    it('should return serialized user', async () => {
+      const result = await service.getUserById(user.id);
+
+      expect(result).toEqual({
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        roles: [ROLE.USER],
+      });
+    });
+
+    it('throw not found exception if user is not found', async () => {
+      mockedRepository.getById.mockRejectedValue(new NotFoundException());
+      try {
+        await service.getUserById(100);
+      } catch (error) {
+        expect(error.constructor).toBe(NotFoundException);
+      }
     });
 
     afterEach(() => {
@@ -186,6 +227,7 @@ describe('UserService', () => {
         id: user.id,
         name: user.name,
         username: user.username,
+        roles: [ROLE.USER],
       });
     });
   });
@@ -221,6 +263,7 @@ describe('UserService', () => {
         id: user.id,
         name: user.name,
         username: user.username,
+        roles: [ROLE.USER],
       });
     });
 

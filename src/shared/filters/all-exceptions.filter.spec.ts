@@ -96,7 +96,7 @@ describe('AllExceptionsFilter', () => {
     expect(mockResponse.json).toBeCalledWith(
       expect.objectContaining({
         error: expect.objectContaining({
-          status: HttpStatus.NOT_FOUND,
+          statusCode: HttpStatus.NOT_FOUND,
           message: mockMessage1,
         }),
       }),
@@ -108,8 +108,8 @@ describe('AllExceptionsFilter', () => {
     expect(mockResponse.json).toBeCalledWith(
       expect.objectContaining({
         error: expect.objectContaining({
-          status: HttpStatus.BAD_REQUEST,
-          message: mockMessage2,
+          statusCode: HttpStatus.BAD_REQUEST,
+          details: mockMessage2,
         }),
       }),
     );
@@ -124,7 +124,7 @@ describe('AllExceptionsFilter', () => {
     expect(mockResponse.json).toBeCalledWith(
       expect.objectContaining({
         error: expect.objectContaining({
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
           message: mockMessage3,
         }),
       }),
@@ -142,7 +142,7 @@ describe('AllExceptionsFilter', () => {
     expect(mockResponse.json).toBeCalledWith(
       expect.objectContaining({
         error: expect.objectContaining({
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
           message: 'Internal server error',
         }),
       }),
