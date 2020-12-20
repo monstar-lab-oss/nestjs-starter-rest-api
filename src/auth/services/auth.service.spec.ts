@@ -7,14 +7,24 @@ import { AuthService } from './auth.service';
 import { UserService } from '../../user/services/user.service';
 
 import { UserOutput } from '../../user/dtos/user-output.dto';
-import { AuthTokenOutput } from '../dtos/auth-token-output.dto';
+import {
+  AuthTokenOutput,
+  UserAccessTokenClaims,
+  UserRefreshTokenClaims,
+} from '../dtos/auth-token-output.dto';
 import { ROLE } from '../constants/role.constant';
 
 describe('AuthService', () => {
   let service: AuthService;
 
-  const userIdentity = { id: 6 };
-  const userInput = {
+  const refreshTokenClaims: UserRefreshTokenClaims = { id: 6 };
+  const accessTokenClaims: UserAccessTokenClaims = {
+    id: 6,
+    username: 'jhon',
+    roles: [ROLE.USER],
+  };
+
+  const registerInput = {
     username: 'jhon',
     name: 'Jhon doe',
     password: 'any password',
@@ -23,16 +33,18 @@ describe('AuthService', () => {
     email: 'randomUser@random.com',
   };
 
-  const user = {
+  const userOutput: UserOutput = {
     username: 'jhon',
     name: 'Jhon doe',
     roles: [ROLE.USER],
-    ...userIdentity,
+    isAccountDisabled: false,
+    email: 'randomUser@random.com',
+    ...accessTokenClaims,
   };
 
   const authToken: AuthTokenOutput = {
-    accessToken: 'access_token',
-    refreshToken: 'refresh_token',
+    accessToken: 'random_access_token',
+    refreshToken: 'random_refresh_token',
   };
 
   const mockedUserService = {
@@ -68,9 +80,11 @@ describe('AuthService', () => {
     it('should success when username/password valid', async () => {
       jest
         .spyOn(mockedUserService, 'validateUsernamePassword')
-        .mockImplementation(() => <UserOutput>user);
+        .mockImplementation(() => userOutput);
 
-      expect(await service.validateUser('jhon', 'somepass')).toEqual(user);
+      expect(await service.validateUser('jhon', 'somepass')).toEqual(
+        userOutput,
+      );
       expect(mockedUserService.validateUsernamePassword).toBeCalledWith(
         'jhon',
         'somepass',
@@ -94,9 +108,9 @@ describe('AuthService', () => {
     it('should return auth token for valid user', async () => {
       jest.spyOn(service, 'getAuthToken').mockImplementation(() => authToken);
 
-      const result = await service.login(user);
+      const result = await service.login(accessTokenClaims);
 
-      expect(service.getAuthToken).toBeCalledWith(user);
+      expect(service.getAuthToken).toBeCalledWith(accessTokenClaims);
       expect(result).toEqual(authToken);
     });
   });
@@ -105,12 +119,12 @@ describe('AuthService', () => {
     it('should register new user', async () => {
       jest
         .spyOn(mockedUserService, 'createUser')
-        .mockImplementation(() => user);
+        .mockImplementation(() => userOutput);
 
-      const result = await service.register(userInput);
+      const result = await service.register(registerInput);
 
-      expect(mockedUserService.createUser).toBeCalledWith(userInput);
-      expect(result).toEqual(user);
+      expect(mockedUserService.createUser).toBeCalledWith(registerInput);
+      expect(result).toEqual(userOutput);
     });
   });
 
@@ -118,13 +132,13 @@ describe('AuthService', () => {
     it('should generate auth token', async () => {
       jest
         .spyOn(mockedUserService, 'findById')
-        .mockImplementation(async () => <UserOutput>user);
+        .mockImplementation(async () => userOutput);
 
       jest.spyOn(service, 'getAuthToken').mockImplementation(() => authToken);
 
-      const result = await service.refreshToken(userIdentity);
+      const result = await service.refreshToken(refreshTokenClaims);
 
-      expect(service.getAuthToken).toBeCalledWith(user);
+      expect(service.getAuthToken).toBeCalledWith(userOutput);
       expect(result).toMatchObject(authToken);
     });
 
@@ -133,9 +147,9 @@ describe('AuthService', () => {
         .spyOn(mockedUserService, 'findById')
         .mockImplementation(async () => null);
 
-      await expect(service.refreshToken(userIdentity)).rejects.toThrowError(
-        'Invalid user id',
-      );
+      await expect(
+        service.refreshToken(refreshTokenClaims),
+      ).rejects.toThrowError('Invalid user id');
     });
 
     afterEach(() => {

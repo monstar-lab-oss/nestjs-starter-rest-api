@@ -99,7 +99,7 @@ describe('AuthController (e2e)', () => {
     it('should failed to login with wrong credential', () => {
       return request(app.getHttpServer())
         .post('/auth/login')
-        .send({ ...loginInput, password: 'wrong-passs' })
+        .send({ ...loginInput, password: 'wrong-pass' })
         .expect(HttpStatus.UNAUTHORIZED);
     });
   });
