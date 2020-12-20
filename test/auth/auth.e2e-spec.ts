@@ -102,6 +102,8 @@ describe('AuthController (e2e)', () => {
         .send({ ...loginInput, password: 'wrong-pass' })
         .expect(HttpStatus.UNAUTHORIZED);
     });
+
+    // TODO : Should fail when isAccountDisabled is set to true.
   });
 
   describe('refreshing jwt token', () => {

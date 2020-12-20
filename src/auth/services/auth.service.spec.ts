@@ -104,10 +104,9 @@ describe('AuthService', () => {
     });
 
     it('should fail when user account is disabled', async () => {
-      const userOutput2 = { ...userOutput, isAccountDisabled: true };
       jest
         .spyOn(mockedUserService, 'validateUsernamePassword')
-        .mockImplementation(() => userOutput2);
+        .mockImplementation(() => ({ ...userOutput, isAccountDisabled: true }));
 
       await expect(
         service.validateUser('jhon', 'somepass'),
