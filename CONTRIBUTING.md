@@ -94,6 +94,6 @@ reference Github issues that this commit **Closes**.
 
 **Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.
 
-## Opening Issues
+### Opening Issues
 
 Before opening any issues, it is prefered to ensure that the issue is not already reported by searching [here](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/issues).
