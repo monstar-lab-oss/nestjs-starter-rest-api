@@ -1,5 +1,11 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+  MaxLength,
+} from 'class-validator';
 
 export class UpdateUserInput {
   @ApiPropertyOptional()
@@ -12,7 +18,7 @@ export class UpdateUserInput {
   @ApiPropertyOptional()
   @IsOptional()
   @IsNotEmpty()
-  @MaxLength(100)
+  @Length(6, 100)
   @IsString()
   password: string;
 }

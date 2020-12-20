@@ -28,6 +28,7 @@ import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 import { UserOutput } from '../dtos/user-output.dto';
 import { ROLE } from '../../auth/constants/role.constant';
 import { UpdateUserInput } from '../dtos/user-update-input.dto';
+import { UserAccessTokenClaims } from 'src/auth/dtos/auth-token-output.dto';
 
 @Controller('users')
 export class UserController {
@@ -51,7 +52,9 @@ export class UserController {
   async getMyProfile(
     @Req() req: Request,
   ): Promise<BaseApiResponse<UserOutput>> {
-    const user = await this.userService.findById(req.user['id']);
+    const user = await this.userService.findById(
+      (req.user as UserAccessTokenClaims).id,
+    );
     return { data: user, meta: {} };
   }
 
@@ -83,6 +86,7 @@ export class UserController {
   }
 
   // TODO: ADD RoleGuard
+  // NOTE : This can be made a admin only endpoint. For normal users they can use GET /me
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   @ApiOperation({
@@ -102,6 +106,7 @@ export class UserController {
   }
 
   // TODO: ADD RoleGuard
+  // NOTE : This can be made a admin only endpoint. For normal users they can use PATCH /me
   @Patch(':id')
   @ApiOperation({
     summary: 'Update user API',
