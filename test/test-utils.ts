@@ -8,6 +8,7 @@ import { CreateUserInput } from '../src/user/dtos/user-create-input.dto';
 import { ROLE } from '../src/auth/constants/role.constant';
 import { LoginInput } from 'src/auth/dtos/auth-login-input.dto';
 import { AuthTokenOutput } from 'src/auth/dtos/auth-token-output.dto';
+import { UserOutput } from 'src/user/dtos/user-output.dto';
 
 const TEST_DB_CONNECTION_NAME = 'e2e_test_connection';
 export const TEST_DB_NAME = 'e2e_test_db';
@@ -50,7 +51,7 @@ export const createDBEntities = async (): Promise<void> => {
 
 export const createAdminUser = async (
   app: INestApplication,
-): Promise<AuthTokenOutput> => {
+): Promise<{ adminUser: UserOutput; authTokenForAdmin: AuthTokenOutput }> => {
   const defaultAdmin: CreateUserInput = {
     name: 'Default Admin User',
     username: 'default-admin',
@@ -75,9 +76,18 @@ export const createAdminUser = async (
     .send(loginInput)
     .expect(HttpStatus.OK);
 
-  const authToken: AuthTokenOutput = loginResponse.body.data;
+  const authTokenForAdmin: AuthTokenOutput = loginResponse.body.data;
 
-  return authToken;
+  const adminUser: UserOutput = {
+    id: 1,
+    name: 'Default Admin User',
+    username: 'default-admin',
+    roles: [ROLE.ADMIN],
+    isAccountDisabled: false,
+    email: 'default-admin@example.com',
+  };
+
+  return { adminUser, authTokenForAdmin };
 };
 
 export const closeDBAfterTest = async (): Promise<void> => {

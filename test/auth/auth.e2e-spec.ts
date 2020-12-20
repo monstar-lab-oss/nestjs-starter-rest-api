@@ -32,7 +32,7 @@ describe('AuthController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
 
-    authTokenForAdmin = await createAdminUser(app);
+    ({ authTokenForAdmin } = await createAdminUser(app));
   });
 
   describe('Admin User Auth Tokens', () => {

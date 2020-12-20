@@ -11,11 +11,11 @@ import {
   createAdminUser,
 } from '../test-utils';
 import { UserOutput } from '../../src/user/dtos/user-output.dto';
-import { ROLE } from '../../src/auth/constants/role.constant';
 import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
+  let adminUser: UserOutput;
   let authTokenForAdmin: AuthTokenOutput;
 
   beforeAll(async () => {
@@ -30,7 +30,7 @@ describe('UserController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
 
-    authTokenForAdmin = await createAdminUser(app);
+    ({ adminUser, authTokenForAdmin } = await createAdminUser(app));
   });
 
   describe('Get user me', () => {
@@ -55,19 +55,10 @@ describe('UserController (e2e)', () => {
     });
   });
 
-  const userOutput: UserOutput = {
-    id: 1,
-    name: 'Default Admin User',
-    username: 'default-admin',
-    roles: [ROLE.ADMIN],
-    email: 'default-admin@example.com',
-    isAccountDisabled: false,
-  };
-
   describe('get all users', () => {
-    const expectedOutput = [userOutput];
-
     it('returns all users', async () => {
+      const expectedOutput = [adminUser];
+
       return request(app.getHttpServer())
         .get('/users')
         .set('Authorization', 'Bearer ' + authTokenForAdmin.accessToken)
@@ -77,9 +68,9 @@ describe('UserController (e2e)', () => {
   });
 
   describe('get a user by Id', () => {
-    const expectedOutput = userOutput;
-
     it('should get a user by Id', async () => {
+      const expectedOutput = adminUser;
+
       return request(app.getHttpServer())
         .get('/users/1')
         .expect(HttpStatus.OK)
@@ -98,17 +89,13 @@ describe('UserController (e2e)', () => {
     password: '12345678aA12',
   };
 
-  const expectedOutput: UserOutput = {
-    id: 1,
-    name: 'New e2etestername',
-    username: 'default-admin',
-    roles: [ROLE.ADMIN],
-    email: 'default-admin@example.com',
-    isAccountDisabled: false,
-  };
-
   describe('update a user', () => {
     it('successfully updates a user', async () => {
+      const expectedOutput: UserOutput = {
+        ...adminUser,
+        ...{ name: 'New e2etestername' },
+      };
+
       return request(app.getHttpServer())
         .patch('/users/1')
         .send(updateUserInput)
