@@ -2,6 +2,8 @@ import { createConnection, getConnection } from 'typeorm';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
+import { UserService } from '../src/user/services/user.service';
+
 import { CreateUserInput } from '../src/user/dtos/user-create-input.dto';
 import { ROLE } from '../src/auth/constants/role.constant';
 import { LoginInput } from 'src/auth/dtos/auth-login-input.dto';
@@ -59,10 +61,8 @@ export const createAdminUser = async (
   };
 
   // Creating Admin User
-  await request(app.getHttpServer())
-    .post('/auth/register')
-    .send(defaultAdmin)
-    .expect(HttpStatus.CREATED);
+  const userService = app.get(UserService);
+  await userService.createUser(defaultAdmin);
 
   const loginInput: LoginInput = {
     username: 'default-admin',
