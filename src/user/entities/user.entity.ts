@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Timestamp,
+} from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -24,4 +32,10 @@ export class User {
   @Unique('email', ['email'])
   @Column({ length: 200 })
   email: string;
+
+  @CreateDateColumn({ name: 'created_at', nullable: true })
+  createdAt: Timestamp;
+
+  @UpdateDateColumn({ name: 'updated_at', nullable: true })
+  updatedAt: Timestamp;
 }
