@@ -131,7 +131,7 @@ $ npm run migration:revert
 $ docker build -t my-app .
 
 # run container from image
-$ docker run -p 3000:3000 --volume 'pwd':/usr/src/app --env-file .env my-app
+$ docker run -p 3000:3000 --volume 'pwd':/usr/src/app --network host --env-file .env my-app
 
 # run using docker compose
 $ docker-compose up
