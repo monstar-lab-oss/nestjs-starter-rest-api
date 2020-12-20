@@ -62,6 +62,16 @@ JWT_PRIVATE_KEY_BASE64=BASE64_OF_JWT_PRIVATE_KEY
 
 ## Running the app
 
+We can run the project with or without docker.
+
+### Local
+
+To run the server without Docker we need this pre-requisite:
+
+- MySQL server running
+
+Commands:
+
 ```bash
 # development
 $ npm run start
@@ -72,6 +82,21 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+### Docker
+
+```bash
+# build image
+$ docker build -t my-app .
+
+# run container from image
+$ docker run -p 3000:3000 --volume `pwd`:/usr/src/app --env-file .env my-app
+
+# run using docker compose
+$ docker-compose up
+```
+
+Learn more about Docker conventions [here](https://github.com/monstar-lab-group/nodejs-backend/blob/master/architecture/docker-ready.md). (WIP - Currently this is an internal org link.)
 
 ## Test
 
@@ -98,18 +123,3 @@ $ npm run migration:run
 # revert migration
 $ npm run migration:revert
 ```
-
-## Docker
-
-```bash
-# build image
-$ docker build -t my-app .
-
-# run container from image
-$ docker run -p 3000:3000 --volume `pwd`:/usr/src/app --env-file .env my-app
-
-# run using docker compose
-$ docker-compose up
-```
-
-Learn more about Docker conventions [here](https://github.com/monstar-lab-group/nodejs-backend/blob/master/architecture/docker-ready.md). (WIP - Currently this is an internal org link.)
