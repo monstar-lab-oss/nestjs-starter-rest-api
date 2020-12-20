@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { plainToClass } from 'class-transformer';
 
 import { UserService } from '../../user/services/user.service';
-import { ROLE } from '../constants/role.constant';
 import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { RegisterOutput } from '../dtos/auth-register-output.dto';
 import {
@@ -39,9 +38,6 @@ export class AuthService {
   }
 
   async register(input: RegisterInput): Promise<RegisterOutput> {
-    // TODO : Setting default role as USER here. Will add option to change this later via ADMIN users.
-    input.roles = [ROLE.USER];
-
     const registeredUser = await this.userService.createUser(input);
     return plainToClass(RegisterOutput, registeredUser, {
       excludeExtraneousValues: true,

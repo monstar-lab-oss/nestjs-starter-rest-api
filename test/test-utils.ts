@@ -1,4 +1,11 @@
 import { createConnection, getConnection } from 'typeorm';
+import { HttpStatus, INestApplication } from '@nestjs/common';
+import * as request from 'supertest';
+
+import { CreateUserInput } from '../src/user/dtos/user-create-input.dto';
+import { ROLE } from '../src/auth/constants/role.constant';
+import { LoginInput } from 'src/auth/dtos/auth-login-input.dto';
+import { AuthTokenOutput } from 'src/auth/dtos/auth-token-output.dto';
 
 const TEST_DB_CONNECTION_NAME = 'e2e_test_connection';
 export const TEST_DB_NAME = 'e2e_test_db';
@@ -37,6 +44,40 @@ export const createDBEntities = async (): Promise<void> => {
     entities: [__dirname + '/../src/**/*.entity{.ts,.js}'],
     synchronize: true,
   });
+};
+
+export const createAdminUser = async (
+  app: INestApplication,
+): Promise<AuthTokenOutput> => {
+  const defaultAdmin: CreateUserInput = {
+    name: 'Default Admin User',
+    username: 'default-admin',
+    password: 'default-admin-password',
+    roles: [ROLE.ADMIN],
+    isAccountDisabled: false,
+    email: 'default-admin@example.com',
+  };
+
+  // Creating Admin User
+  await request(app.getHttpServer())
+    .post('/auth/register')
+    .send(defaultAdmin)
+    .expect(HttpStatus.CREATED);
+
+  const loginInput: LoginInput = {
+    username: 'default-admin',
+    password: 'default-admin-password',
+  };
+
+  // Logging in Admin User to get AuthToken
+  const loginResponse = await request(app.getHttpServer())
+    .post('/auth/login')
+    .send(loginInput)
+    .expect(HttpStatus.OK);
+
+  const authToken: AuthTokenOutput = loginResponse.body.data;
+
+  return authToken;
 };
 
 export const closeDBAfterTest = async (): Promise<void> => {

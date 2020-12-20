@@ -5,6 +5,7 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 
 import {
   closeDBAfterTest,
+  createAdminUser,
   createDBEntities,
   resetDBBeforeTest,
 } from './../test-utils';
@@ -17,6 +18,7 @@ import { ROLE } from '../../src/auth/constants/role.constant';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
+  let authTokenForAdmin: AuthTokenOutput;
 
   beforeAll(async () => {
     await resetDBBeforeTest();
@@ -29,6 +31,15 @@ describe('AuthController (e2e)', () => {
     app = moduleRef.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
+
+    authTokenForAdmin = await createAdminUser(app);
+  });
+
+  describe('Admin User Auth Tokens', () => {
+    it('presence of Auth Tokens for admin ', async () => {
+      expect(authTokenForAdmin).toHaveProperty('accessToken');
+      expect(authTokenForAdmin).toHaveProperty('refreshToken');
+    });
   });
 
   describe('register a new user', () => {
@@ -41,7 +52,7 @@ describe('AuthController (e2e)', () => {
       email: 'e2etester@random.com',
     };
     const registerOutput: RegisterOutput = {
-      id: 1,
+      id: 2,
       name: 'e2etester',
       username: 'e2etester',
       roles: [ROLE.USER],
