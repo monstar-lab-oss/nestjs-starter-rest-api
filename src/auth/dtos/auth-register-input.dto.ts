@@ -31,20 +31,13 @@ export class RegisterInput {
   @IsString()
   password: string;
 
-  @ApiPropertyOptional({ example: [ROLE.USER] })
-  @IsOptional()
-  @IsArray()
-  @ArrayUnique()
-  @IsEnum(ROLE, { each: true })
-  roles: ROLE[] = [ROLE.USER];
-
   @ApiProperty()
   @IsNotEmpty()
   @IsEmail()
   @MaxLength(100)
   email: string;
 
-  @ApiProperty()
-  @IsBoolean()
+  // These keys can only be set by ADMIN user.
+  roles: ROLE[] = [ROLE.USER];
   isAccountDisabled: boolean;
 }

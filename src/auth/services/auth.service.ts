@@ -31,6 +31,11 @@ export class AuthService {
       pass,
     );
 
+    // Prevent disabled users from logging in.
+    if (user.isAccountDisabled) {
+      throw new UnauthorizedException('This user account has been disabled');
+    }
+
     return user;
   }
 
@@ -41,6 +46,7 @@ export class AuthService {
   async register(input: RegisterInput): Promise<RegisterOutput> {
     // TODO : Setting default role as USER here. Will add option to change this later via ADMIN users.
     input.roles = [ROLE.USER];
+    input.isAccountDisabled = false;
 
     const registeredUser = await this.userService.createUser(input);
     return plainToClass(RegisterOutput, registeredUser, {
