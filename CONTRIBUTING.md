@@ -24,7 +24,7 @@ Pull requests are the only way to propose a value you want to add. Following is 
 2. If you've added code that should be tested
 3. Ensure that your code doesn't fail to build
 4. Make pull request to `master` branch
-5. Assign respective develops to review and merge pull request
+5. Assign respective developers to review and merge pull request
 
 ### Commit Message Guidelines
 
