@@ -4,11 +4,11 @@ import * as request from 'supertest';
 
 import { UserService } from '../src/user/services/user.service';
 
-import { CreateUserInput } from '../src/user/dtos/user-create-input.dto';
 import { ROLE } from '../src/auth/constants/role.constant';
-import { LoginInput } from 'src/auth/dtos/auth-login-input.dto';
-import { AuthTokenOutput } from 'src/auth/dtos/auth-token-output.dto';
-import { UserOutput } from 'src/user/dtos/user-output.dto';
+import { CreateUserInput } from '../src/user/dtos/user-create-input.dto';
+import { LoginInput } from '../src/auth/dtos/auth-login-input.dto';
+import { AuthTokenOutput } from '../src/auth/dtos/auth-token-output.dto';
+import { UserOutput } from '../src/user/dtos/user-output.dto';
 
 const TEST_DB_CONNECTION_NAME = 'e2e_test_connection';
 export const TEST_DB_NAME = 'e2e_test_db';
@@ -63,7 +63,7 @@ export const createAdminUser = async (
 
   // Creating Admin User
   const userService = app.get(UserService);
-  await userService.createUser(defaultAdmin);
+  const adminUser = { ...(await userService.createUser(defaultAdmin)) };
 
   const loginInput: LoginInput = {
     username: 'default-admin',
@@ -77,15 +77,6 @@ export const createAdminUser = async (
     .expect(HttpStatus.OK);
 
   const authTokenForAdmin: AuthTokenOutput = loginResponse.body.data;
-
-  const adminUser: UserOutput = {
-    id: 1,
-    name: 'Default Admin User',
-    username: 'default-admin',
-    roles: [ROLE.ADMIN],
-    isAccountDisabled: false,
-    email: 'default-admin@example.com',
-  };
 
   return { adminUser, authTokenForAdmin };
 };
