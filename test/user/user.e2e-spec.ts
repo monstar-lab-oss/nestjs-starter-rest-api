@@ -8,7 +8,7 @@ import {
   resetDBBeforeTest,
   createDBEntities,
   closeDBAfterTest,
-  createAdminUser,
+  seedAdminUser,
 } from '../test-utils';
 import { UserOutput } from '../../src/user/dtos/user-output.dto';
 import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
@@ -30,7 +30,7 @@ describe('UserController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
 
-    ({ adminUser, authTokenForAdmin } = await createAdminUser(app));
+    ({ adminUser, authTokenForAdmin } = await seedAdminUser(app));
   });
 
   describe('Get user me', () => {

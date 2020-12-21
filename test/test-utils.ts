@@ -49,7 +49,7 @@ export const createDBEntities = async (): Promise<void> => {
   });
 };
 
-export const createAdminUser = async (
+export const seedAdminUser = async (
   app: INestApplication,
 ): Promise<{ adminUser: UserOutput; authTokenForAdmin: AuthTokenOutput }> => {
   const defaultAdmin: CreateUserInput = {
@@ -63,7 +63,7 @@ export const createAdminUser = async (
 
   // Creating Admin User
   const userService = app.get(UserService);
-  const adminUser = { ...(await userService.createUser(defaultAdmin)) };
+  const userOutput = await userService.createUser(defaultAdmin);
 
   const loginInput: LoginInput = {
     username: 'default-admin',
@@ -77,6 +77,8 @@ export const createAdminUser = async (
     .expect(HttpStatus.OK);
 
   const authTokenForAdmin: AuthTokenOutput = loginResponse.body.data;
+
+  const adminUser: UserOutput = { ...userOutput };
 
   return { adminUser, authTokenForAdmin };
 };

@@ -5,7 +5,7 @@ import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 
 import {
   closeDBAfterTest,
-  createAdminUser,
+  seedAdminUser,
   createDBEntities,
   resetDBBeforeTest,
 } from './../test-utils';
@@ -32,7 +32,7 @@ describe('AuthController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
 
-    ({ authTokenForAdmin } = await createAdminUser(app));
+    ({ authTokenForAdmin } = await seedAdminUser(app));
   });
 
   describe('Admin User Auth Tokens', () => {
