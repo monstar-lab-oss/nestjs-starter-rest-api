@@ -66,8 +66,8 @@ export const seedAdminUser = async (
   const userOutput = await userService.createUser(defaultAdmin);
 
   const loginInput: LoginInput = {
-    username: 'default-admin',
-    password: 'default-admin-password',
+    username: defaultAdmin.username,
+    password: defaultAdmin.password,
   };
 
   // Logging in Admin User to get AuthToken
