@@ -33,9 +33,9 @@ export class User {
   @Column({ length: 200 })
   email: string;
 
-  @CreateDateColumn({ name: 'created_at', nullable: true })
+  @CreateDateColumn({ name: 'createdAt', nullable: true })
   createdAt: Timestamp;
 
-  @UpdateDateColumn({ name: 'updated_at', nullable: true })
+  @UpdateDateColumn({ name: 'updatedAt', nullable: true })
   updatedAt: Timestamp;
 }
