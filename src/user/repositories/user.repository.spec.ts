@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Timestamp } from 'typeorm';
 
 import { ROLE } from '../../auth/constants/role.constant';
 import { User } from '../entities/user.entity';
@@ -21,8 +22,11 @@ describe('UserRepository', () => {
   });
 
   describe('Get user by id', () => {
+    const timestamp = (new Date().toISOString() as unknown) as Timestamp;
+
     it('should call findOne with correct id', () => {
       const id = 1;
+
       const expectedOutput: User = {
         id,
         name: 'Default User',
@@ -31,6 +35,8 @@ describe('UserRepository', () => {
         roles: [ROLE.USER],
         isAccountDisabled: false,
         email: 'default-user@random.com',
+        createdAt: timestamp,
+        updatedAt: timestamp,
       };
 
       jest.spyOn(repository, 'findOne').mockResolvedValue(expectedOutput);
@@ -47,6 +53,8 @@ describe('UserRepository', () => {
         roles: [ROLE.USER],
         isAccountDisabled: false,
         email: 'default-user@random.com',
+        createdAt: timestamp,
+        updatedAt: timestamp,
       };
 
       jest.spyOn(repository, 'findOne').mockResolvedValue(expectedOutput);
