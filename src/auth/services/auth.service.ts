@@ -12,6 +12,7 @@ import {
   UserAccessTokenClaims,
   UserRefreshTokenClaims,
 } from '../dtos/auth-token-output.dto';
+import { UserOutput } from '../../user/dtos/user-output.dto';
 
 @Injectable()
 export class AuthService {
@@ -31,16 +32,22 @@ export class AuthService {
       pass,
     );
 
+    // Prevent disabled users from logging in.
+    if (user.isAccountDisabled) {
+      throw new UnauthorizedException('This user account has been disabled');
+    }
+
     return user;
   }
 
-  login(user: UserAccessTokenClaims): AuthTokenOutput {
-    return this.getAuthToken(user);
+  login(accessTokenClaims: UserAccessTokenClaims): AuthTokenOutput {
+    return this.getAuthToken(accessTokenClaims);
   }
 
   async register(input: RegisterInput): Promise<RegisterOutput> {
     // TODO : Setting default role as USER here. Will add option to change this later via ADMIN users.
     input.roles = [ROLE.USER];
+    input.isAccountDisabled = false;
 
     const registeredUser = await this.userService.createUser(input);
     return plainToClass(RegisterOutput, registeredUser, {
@@ -49,9 +56,9 @@ export class AuthService {
   }
 
   async refreshToken(
-    tokenUser: UserRefreshTokenClaims,
+    refreshTokenClaims: UserRefreshTokenClaims,
   ): Promise<AuthTokenOutput> {
-    const user = await this.userService.findById(tokenUser.id);
+    const user = await this.userService.findById(refreshTokenClaims.id);
     if (!user) {
       throw new UnauthorizedException('Invalid user id');
     }
@@ -59,7 +66,7 @@ export class AuthService {
     return this.getAuthToken(user);
   }
 
-  getAuthToken(user: UserAccessTokenClaims): AuthTokenOutput {
+  getAuthToken(user: UserAccessTokenClaims | UserOutput): AuthTokenOutput {
     const subject = { sub: user.id };
     const payload = {
       username: user.username,

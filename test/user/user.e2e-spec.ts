@@ -8,15 +8,15 @@ import {
   resetDBBeforeTest,
   createDBEntities,
   closeDBAfterTest,
+  seedAdminUser,
 } from '../test-utils';
-import { RegisterInput } from '../../src/auth/dtos/auth-register-input.dto';
 import { UserOutput } from '../../src/user/dtos/user-output.dto';
-import { LoginInput } from '../../src/auth/dtos/auth-login-input.dto';
-import { ROLE } from '../../src/auth/constants/role.constant';
+import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
-  let accessToken: string;
+  let adminUser: UserOutput;
+  let authTokenForAdmin: AuthTokenOutput;
 
   beforeAll(async () => {
     await resetDBBeforeTest();
@@ -30,39 +30,14 @@ describe('UserController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
 
-    // Create a User
-    const registerInput: RegisterInput = {
-      name: 'e2etester',
-      username: 'e2etester',
-      password: '12345678',
-      roles: [ROLE.USER],
-      isAccountDisabled: false,
-      email: 'e2etester@random.com',
-    };
-
-    const loginInput: LoginInput = {
-      username: 'e2etester',
-      password: '12345678',
-    };
-
-    await request(app.getHttpServer())
-      .post('/auth/register')
-      .send(registerInput)
-      .expect(HttpStatus.CREATED);
-
-    const tokenResponse = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send(loginInput)
-      .expect(HttpStatus.OK);
-
-    accessToken = tokenResponse.body.data.accessToken;
+    ({ adminUser, authTokenForAdmin } = await seedAdminUser(app));
   });
 
   describe('Get user me', () => {
     it('gets user me', async () => {
       return request(app.getHttpServer())
         .get('/users/me')
-        .set('Authorization', 'Bearer ' + accessToken)
+        .set('Authorization', 'Bearer ' + authTokenForAdmin.accessToken)
         .expect(HttpStatus.OK);
     });
 
@@ -80,31 +55,22 @@ describe('UserController (e2e)', () => {
     });
   });
 
-  const userOutput: UserOutput = {
-    id: 1,
-    name: 'e2etester',
-    username: 'e2etester',
-    roles: [ROLE.USER],
-    isAccountDisabled: false,
-    email: 'e2etester@random.com',
-  };
-
   describe('get all users', () => {
-    const expectedOutput = [userOutput];
-
     it('returns all users', async () => {
+      const expectedOutput = [adminUser];
+
       return request(app.getHttpServer())
         .get('/users')
-        .set('Authorization', 'Bearer ' + accessToken)
+        .set('Authorization', 'Bearer ' + authTokenForAdmin.accessToken)
         .expect(HttpStatus.OK)
         .expect({ data: expectedOutput, meta: { count: 1 } });
     });
   });
 
   describe('get a user by Id', () => {
-    const expectedOutput = userOutput;
-
     it('should get a user by Id', async () => {
+      const expectedOutput = adminUser;
+
       return request(app.getHttpServer())
         .get('/users/1')
         .expect(HttpStatus.OK)
@@ -123,17 +89,13 @@ describe('UserController (e2e)', () => {
     password: '12345678aA12',
   };
 
-  const expectedOutput: UserOutput = {
-    id: 1,
-    name: 'New e2etestername',
-    username: 'e2etester',
-    roles: [ROLE.USER],
-    isAccountDisabled: false,
-    email: 'e2etester@random.com',
-  };
-
   describe('update a user', () => {
     it('successfully updates a user', async () => {
+      const expectedOutput: UserOutput = {
+        ...adminUser,
+        ...{ name: 'New e2etestername' },
+      };
+
       return request(app.getHttpServer())
         .patch('/users/1')
         .send(updateUserInput)
