@@ -33,12 +33,16 @@ describe('AuthService', () => {
     email: 'randomUser@random.com',
   };
 
+  const timestamp = new Date().toISOString();
+
   const userOutput: UserOutput = {
     username: 'jhon',
     name: 'Jhon doe',
     roles: [ROLE.USER],
     isAccountDisabled: false,
     email: 'randomUser@random.com',
+    createdAt: timestamp,
+    updatedAt: timestamp,
     ...accessTokenClaims,
   };
 

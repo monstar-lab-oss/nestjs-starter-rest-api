@@ -100,7 +100,11 @@ describe('UserController (e2e)', () => {
         .patch('/users/1')
         .send(updateUserInput)
         .expect(HttpStatus.OK)
-        .expect({ data: expectedOutput, meta: {} });
+        .expect((res) => {
+          const resp = res.body;
+          expectedOutput.updatedAt = resp.data.updatedAt;
+          expect(resp).toEqual({ data: expectedOutput, meta: {} });
+        });
     });
 
     it('throws NOT_FOUND when user doesnt exist', () => {

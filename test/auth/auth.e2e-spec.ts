@@ -51,6 +51,7 @@ describe('AuthController (e2e)', () => {
       isAccountDisabled: false,
       email: 'e2etester@random.com',
     };
+
     const registerOutput: RegisterOutput = {
       id: 2,
       name: 'e2etester',
@@ -58,6 +59,8 @@ describe('AuthController (e2e)', () => {
       roles: [ROLE.USER],
       isAccountDisabled: false,
       email: 'e2etester@random.com',
+      createdAt: null,
+      updatedAt: null,
     };
 
     it('successfully register a new user', () => {
@@ -65,7 +68,12 @@ describe('AuthController (e2e)', () => {
         .post('/auth/register')
         .send(registerInput)
         .expect(HttpStatus.CREATED)
-        .expect({ data: registerOutput, meta: {} });
+        .expect((res) => {
+          const resp = res.body;
+          registerOutput.createdAt = resp.data.createdAt;
+          registerOutput.updatedAt = resp.data.updatedAt;
+          expect(resp).toEqual({ data: registerOutput, meta: {} });
+        });
     });
 
     it('register fails without Input DTO', () => {

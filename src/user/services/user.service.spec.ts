@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
+import { Timestamp } from 'typeorm';
 
 import * as bcrypt from 'bcrypt';
 
@@ -280,6 +281,8 @@ describe('UserService', () => {
         password: 'updated-password',
       };
 
+      const timestamp = (new Date().toISOString() as unknown) as Timestamp;
+
       const foundUser: User = {
         id: userId,
         name: 'Default User',
@@ -288,7 +291,10 @@ describe('UserService', () => {
         roles: [ROLE.USER],
         isAccountDisabled: false,
         email: 'randomUser@random.com',
+        createdAt: timestamp,
+        updatedAt: timestamp,
       };
+
       mockedRepository.getById.mockResolvedValue(foundUser);
 
       const expected: User = {
@@ -299,6 +305,8 @@ describe('UserService', () => {
         roles: [ROLE.USER],
         isAccountDisabled: false,
         email: 'randomUser@random.com',
+        createdAt: timestamp,
+        updatedAt: timestamp,
       };
 
       jest
