@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class AddTimestampsToUser1608692055675 implements MigrationInterface {
-    name = 'AddTimestampsToUser1608692055675'
+export class AddTimestampsToUser1608790838594 implements MigrationInterface {
+    name = 'AddTimestampsToUser1608790838594'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query("ALTER TABLE `users` ADD `createdAt` datetime(6) NULL DEFAULT CURRENT_TIMESTAMP(6)");

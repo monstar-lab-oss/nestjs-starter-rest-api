@@ -12,6 +12,9 @@ module.exports = {
     entitiesDir: 'src',
     migrationsDir: 'migrations',
   },
+  // Timezone configured on the MySQL server.
+  // This is used to typecast server date/time values to JavaScript Date object and vice versa.
+  timezone: 'Z',
   synchronize: false,
   debug: process.env.NODE_ENV === 'development' ? true : false,
 };

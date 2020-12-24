@@ -5,7 +5,6 @@ import {
   Unique,
   CreateDateColumn,
   UpdateDateColumn,
-  Timestamp,
 } from 'typeorm';
 
 @Entity('users')
@@ -34,8 +33,8 @@ export class User {
   email: string;
 
   @CreateDateColumn({ name: 'createdAt', nullable: true })
-  createdAt: Timestamp;
+  createdAt: Date;
 
   @UpdateDateColumn({ name: 'updatedAt', nullable: true })
-  updatedAt: Timestamp;
+  updatedAt: Date;
 }
