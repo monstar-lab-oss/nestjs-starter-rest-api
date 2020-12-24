@@ -42,7 +42,7 @@ describe('UserController', () => {
     });
   });
 
-  const timestamp = new Date().toISOString();
+  const currentDate = new Date().toString();
 
   const expectedOutput: UserOutput = {
     id: 1,
@@ -51,8 +51,8 @@ describe('UserController', () => {
     roles: [ROLE.USER],
     isAccountDisabled: false,
     email: 'e2etester@random.com',
-    createdAt: timestamp,
-    updatedAt: timestamp,
+    createdAt: currentDate,
+    updatedAt: currentDate,
   };
 
   describe('Get user by id', () => {
