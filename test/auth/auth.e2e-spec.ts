@@ -10,7 +10,6 @@ import {
   resetDBBeforeTest,
 } from './../test-utils';
 import { RegisterInput } from '../../src/auth/dtos/auth-register-input.dto';
-import { RegisterOutput } from '../../src/auth/dtos/auth-register-output.dto';
 import { LoginInput } from '../../src/auth/dtos/auth-login-input.dto';
 import { RefreshTokenInput } from '../../src/auth/dtos/auth-refresh-token-input.dto';
 import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
@@ -52,15 +51,13 @@ describe('AuthController (e2e)', () => {
       email: 'e2etester@random.com',
     };
 
-    const registerOutput: RegisterOutput = {
+    const registerOutput = {
       id: 2,
       name: 'e2etester',
       username: 'e2etester',
       roles: [ROLE.USER],
       isAccountDisabled: false,
       email: 'e2etester@random.com',
-      createdAt: null,
-      updatedAt: null,
     };
 
     it('successfully register a new user', () => {
@@ -70,9 +67,7 @@ describe('AuthController (e2e)', () => {
         .expect(HttpStatus.CREATED)
         .expect((res) => {
           const resp = res.body;
-          registerOutput.createdAt = resp.data.createdAt;
-          registerOutput.updatedAt = resp.data.updatedAt;
-          expect(resp).toEqual({ data: registerOutput, meta: {} });
+          expect(resp.data).toEqual(expect.objectContaining(registerOutput));
         });
     });
 
