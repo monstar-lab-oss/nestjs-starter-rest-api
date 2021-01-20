@@ -280,6 +280,8 @@ describe('UserService', () => {
         password: 'updated-password',
       };
 
+      const currentDate = new Date();
+
       const foundUser: User = {
         id: userId,
         name: 'Default User',
@@ -288,7 +290,10 @@ describe('UserService', () => {
         roles: [ROLE.USER],
         isAccountDisabled: false,
         email: 'randomUser@random.com',
+        createdAt: currentDate,
+        updatedAt: currentDate,
       };
+
       mockedRepository.getById.mockResolvedValue(foundUser);
 
       const expected: User = {
@@ -299,6 +304,8 @@ describe('UserService', () => {
         roles: [ROLE.USER],
         isAccountDisabled: false,
         email: 'randomUser@random.com',
+        createdAt: currentDate,
+        updatedAt: currentDate,
       };
 
       jest

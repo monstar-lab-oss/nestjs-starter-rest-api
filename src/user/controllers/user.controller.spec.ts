@@ -42,6 +42,8 @@ describe('UserController', () => {
     });
   });
 
+  const currentDate = new Date().toString();
+
   const expectedOutput: UserOutput = {
     id: 1,
     username: 'default-user',
@@ -49,6 +51,8 @@ describe('UserController', () => {
     roles: [ROLE.USER],
     isAccountDisabled: false,
     email: 'e2etester@random.com',
+    createdAt: currentDate,
+    updatedAt: currentDate,
   };
 
   describe('Get user by id', () => {

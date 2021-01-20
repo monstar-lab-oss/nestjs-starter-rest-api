@@ -21,8 +21,10 @@ describe('UserRepository', () => {
   });
 
   describe('Get user by id', () => {
+    const currentDate = new Date();
     it('should call findOne with correct id', () => {
       const id = 1;
+
       const expectedOutput: User = {
         id,
         name: 'Default User',
@@ -31,6 +33,8 @@ describe('UserRepository', () => {
         roles: [ROLE.USER],
         isAccountDisabled: false,
         email: 'default-user@random.com',
+        createdAt: currentDate,
+        updatedAt: currentDate,
       };
 
       jest.spyOn(repository, 'findOne').mockResolvedValue(expectedOutput);
@@ -47,6 +51,8 @@ describe('UserRepository', () => {
         roles: [ROLE.USER],
         isAccountDisabled: false,
         email: 'default-user@random.com',
+        createdAt: currentDate,
+        updatedAt: currentDate,
       };
 
       jest.spyOn(repository, 'findOne').mockResolvedValue(expectedOutput);

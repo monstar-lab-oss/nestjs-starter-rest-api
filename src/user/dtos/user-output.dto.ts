@@ -27,4 +27,12 @@ export class UserOutput {
   @Expose()
   @ApiProperty()
   isAccountDisabled: boolean;
+
+  @Expose()
+  @ApiProperty()
+  createdAt: string;
+
+  @Expose()
+  @ApiProperty()
+  updatedAt: string;
 }

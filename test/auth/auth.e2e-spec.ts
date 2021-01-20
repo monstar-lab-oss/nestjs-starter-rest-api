@@ -10,7 +10,6 @@ import {
   resetDBBeforeTest,
 } from './../test-utils';
 import { RegisterInput } from '../../src/auth/dtos/auth-register-input.dto';
-import { RegisterOutput } from '../../src/auth/dtos/auth-register-output.dto';
 import { LoginInput } from '../../src/auth/dtos/auth-login-input.dto';
 import { RefreshTokenInput } from '../../src/auth/dtos/auth-refresh-token-input.dto';
 import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
@@ -51,7 +50,8 @@ describe('AuthController (e2e)', () => {
       isAccountDisabled: false,
       email: 'e2etester@random.com',
     };
-    const registerOutput: RegisterOutput = {
+
+    const registerOutput = {
       id: 2,
       name: 'e2etester',
       username: 'e2etester',
@@ -65,7 +65,10 @@ describe('AuthController (e2e)', () => {
         .post('/auth/register')
         .send(registerInput)
         .expect(HttpStatus.CREATED)
-        .expect({ data: registerOutput, meta: {} });
+        .expect((res) => {
+          const resp = res.body;
+          expect(resp.data).toEqual(expect.objectContaining(registerOutput));
+        });
     });
 
     it('register fails without Input DTO', () => {

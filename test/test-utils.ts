@@ -78,7 +78,7 @@ export const seedAdminUser = async (
 
   const authTokenForAdmin: AuthTokenOutput = loginResponse.body.data;
 
-  const adminUser: UserOutput = { ...userOutput };
+  const adminUser: UserOutput = JSON.parse(JSON.stringify(userOutput));
 
   return { adminUser, authTokenForAdmin };
 };
