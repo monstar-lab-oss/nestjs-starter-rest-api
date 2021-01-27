@@ -2,9 +2,6 @@
 
 ![Build Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/build/badge.svg)
 ![Tests Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/tests/badge.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=monstar-lab-oss-nestjs-starter-rest-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=monstar-lab-oss-nestjs-starter-rest-api)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=monstar-lab-oss-nestjs-starter-rest-api&metric=coverage)](https://sonarcloud.io/dashboard?id=monstar-lab-oss-nestjs-starter-rest-api)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=monstar-lab-oss-nestjs-starter-rest-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=monstar-lab-oss-nestjs-starter-rest-api)
 
 This starter kit has the following outline:
 
