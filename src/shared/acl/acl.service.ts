@@ -29,7 +29,7 @@ export class BaseAclService {
           if (canDoAction) return true;
 
           //find acl rule for given user role
-          const aclRule = this.acl.find((aclRule) => aclRule.role === userRole);
+          const aclRule = this.acl.find((rule) => rule.role === userRole);
 
           //if acl rule found, check action permission
           const hasActionPermission =
