@@ -14,7 +14,9 @@ export class BaseAclService {
     actions: Action[],
     isResourceOwner?: IsResourceOwner,
   ): void {
-    this.acl.push({ role, actions, isResourceOwner });
+    isResourceOwner
+      ? this.acl.push({ role, actions, isResourceOwner })
+      : this.acl.push({ role, actions });
   }
 
   /**
