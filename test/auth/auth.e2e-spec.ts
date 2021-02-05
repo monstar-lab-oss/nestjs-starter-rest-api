@@ -141,9 +141,9 @@ describe('AuthController (e2e)', () => {
         .send(refreshTokenInput)
         .expect(HttpStatus.OK)
         .expect((res) => {
-          const token = res.body.data;
-          expect(token).toHaveProperty('accessToken');
-          expect(token).toHaveProperty('refreshToken');
+          const data = res.body.data;
+          expect(data).toHaveProperty('accessToken');
+          expect(data).toHaveProperty('refreshToken');
         });
     });
   });

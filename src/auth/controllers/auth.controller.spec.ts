@@ -59,11 +59,9 @@ describe('AuthController', () => {
 
       const reqObject: any = {};
 
-      jest
-        .spyOn(mockedAuthService, 'login')
-        .mockImplementation(async () => null);
+      jest.spyOn(mockedAuthService, 'login').mockImplementation(() => null);
 
-      expect(await authController.login(reqObject, loginInputDto)).toEqual({
+      expect(authController.login(reqObject, loginInputDto)).toEqual({
         data: null,
         meta: {},
       });

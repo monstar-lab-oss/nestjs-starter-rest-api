@@ -50,14 +50,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async login(
+  login(
     @Req() req: Request,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: LoginInput,
-  ): Promise<BaseApiResponse<AuthTokenOutput>> {
-    const authToken = await this.authService.login(
-      req.user as UserAccessTokenClaims,
-    );
+  ): BaseApiResponse<AuthTokenOutput> {
+    const authToken = this.authService.login(req.user as UserAccessTokenClaims);
     return { data: authToken, meta: {} };
   }
 

@@ -122,7 +122,7 @@ describe('AuthService', () => {
     it('should return auth token for valid user', async () => {
       jest.spyOn(service, 'getAuthToken').mockImplementation(() => authToken);
 
-      const result = await service.login(accessTokenClaims);
+      const result = service.login(accessTokenClaims);
 
       expect(service.getAuthToken).toBeCalledWith(accessTokenClaims);
       expect(result).toEqual(authToken);
