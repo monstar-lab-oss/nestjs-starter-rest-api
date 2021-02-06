@@ -3,12 +3,7 @@ import {
   MaxLength,
   Length,
   IsString,
-  IsArray,
-  IsEnum,
-  IsOptional,
-  ArrayUnique,
   IsEmail,
-  IsBoolean,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ROLE } from '../constants/role.constant';
