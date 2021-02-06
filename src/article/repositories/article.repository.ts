@@ -1,5 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
+
+import { NotFoundException } from '@nestjs/common';
 
 import { Article } from '../entities/article.entity';
 

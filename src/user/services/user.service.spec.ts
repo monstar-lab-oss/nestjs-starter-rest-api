@@ -1,15 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { NotFoundException } from '@nestjs/common';
-
 import * as bcrypt from 'bcrypt';
 
-import { UserService } from './user.service';
-
-import { User } from '../entities/user.entity';
+import { NotFoundException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { ROLE } from '../../auth/constants/role.constant';
 import { UpdateUserInput } from '../dtos/user-update-input.dto';
+import { User } from '../entities/user.entity';
+import { UserService } from './user.service';
 
 describe('UserService', () => {
   let service: UserService;
@@ -292,6 +290,7 @@ describe('UserService', () => {
         email: 'randomUser@random.com',
         createdAt: currentDate,
         updatedAt: currentDate,
+        articles: [],
       };
 
       mockedRepository.getById.mockResolvedValue(foundUser);
@@ -306,6 +305,7 @@ describe('UserService', () => {
         email: 'randomUser@random.com',
         createdAt: currentDate,
         updatedAt: currentDate,
+        articles: [],
       };
 
       jest

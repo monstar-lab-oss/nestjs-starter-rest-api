@@ -31,7 +31,7 @@ describe('ArticleRepository', () => {
     });
 
     it('should return article if found', async () => {
-      const expectedOutput: Article = {
+      const expectedOutput: any = {
         id: 1,
         title: 'Default Article',
         post: 'Hello, world!',
