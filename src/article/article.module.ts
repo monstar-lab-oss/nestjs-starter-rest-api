@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
 import { ArticleController } from './controllers/article.controller';
 import { ArticleRepository } from './repositories/article.repository';
+import { ArticleAclService } from './services/article-acl.service';
 import { ArticleService } from './services/article.service';
 
 @Module({
@@ -14,7 +15,7 @@ import { ArticleService } from './services/article.service';
     TypeOrmModule.forFeature([ArticleRepository]),
     UserModule,
   ],
-  providers: [ArticleService, JwtAuthStrategy],
+  providers: [ArticleService, JwtAuthStrategy, ArticleAclService],
   controllers: [ArticleController],
   exports: [ArticleService],
 })
