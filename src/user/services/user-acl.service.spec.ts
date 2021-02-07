@@ -26,15 +26,15 @@ describe('UserAclService', () => {
         username: 'admin',
         roles: [ROLE.ADMIN],
       };
-      userAcl = service.forUser(user);
+      userAcl = service.forActor(user);
     });
 
     it('should allow admin user to create, read, update, delete, list user', async () => {
-      expect(userAcl.canDoAction(Action.Create, 'all')).toBeTruthy();
-      expect(userAcl.canDoAction(Action.Read, 'all')).toBeTruthy();
-      expect(userAcl.canDoAction(Action.Update, 'all')).toBeTruthy();
-      expect(userAcl.canDoAction(Action.Delete, 'all')).toBeTruthy();
-      expect(userAcl.canDoAction(Action.List, 'all')).toBeTruthy();
+      expect(userAcl.canDoAction(Action.Create)).toBeTruthy();
+      expect(userAcl.canDoAction(Action.Read)).toBeTruthy();
+      expect(userAcl.canDoAction(Action.Update)).toBeTruthy();
+      expect(userAcl.canDoAction(Action.Delete)).toBeTruthy();
+      expect(userAcl.canDoAction(Action.List)).toBeTruthy();
     });
 
     it('should allow admin to read, update, delete any user', () => {
@@ -57,7 +57,7 @@ describe('UserAclService', () => {
         username: 'jeo',
         roles: [ROLE.USER],
       };
-      userAcl = service.forUser(user);
+      userAcl = service.forActor(user);
     });
 
     it('should allow user to read, update himself', async () => {
@@ -69,11 +69,17 @@ describe('UserAclService', () => {
       expect(userAcl.canDoAction(Action.Delete, user)).toBeFalsy();
     });
 
-    it('should allow user to read, update, delete other user', () => {
+    it('should allow user to read other user', () => {
       const otherUser = {
         id: 7,
       };
-      expect(userAcl.canDoAction(Action.Read, otherUser)).toBeFalsy();
+      expect(userAcl.canDoAction(Action.Read, otherUser)).toBeTruthy();
+    });
+
+    it('should not allow user to update, delete other user', () => {
+      const otherUser = {
+        id: 7,
+      };
       expect(userAcl.canDoAction(Action.Update, otherUser)).toBeFalsy();
       expect(userAcl.canDoAction(Action.Delete, otherUser)).toBeFalsy();
     });
