@@ -128,6 +128,10 @@ $ npm run migration:run
 $ npm run migration:revert
 ```
 
+## Architecture
+
+- [Project Structure - ](./docs/project-structure.md)
+
 ## External Links
 
 <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo.svg" width="150" alt="Nest Logo" /></a>
