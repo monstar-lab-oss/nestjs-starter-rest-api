@@ -13,9 +13,7 @@
 ││ │   ├── controllers/ # Responsible for handling incoming requests and returning responses to the client.
 ││ │   │   └── module.controller.ts
 ││ │   ├── dtos/ DTO is an object that defines strictness as to how data will be sent over the network
-││ │   ├── guards/ # Guards decides a given request will be handled by the route handler or not, depending on certain conditions
 ││ │   ├── decorators/ # Custom decorators attaches properties to the request object
-││ │   ├── strategies/ # Implement various authentication mechanisms to handle authentication
 ││ │   ├── constants/ # Any business logic class constants
 ││ │   ├── helpers/ # Assist service files to implement business logic
 ││ │   ├── entites/ # We have entities which are models with entity decorators in your app that represent database tables
