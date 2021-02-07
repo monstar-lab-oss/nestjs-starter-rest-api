@@ -1,10 +1,14 @@
-import { AclRule, IsResourceOwner } from './acl-rule.constant';
+import { AclRule, RuleCallback } from './acl-rule.constant';
 import { Action } from './action.constant';
-import { ROLE } from 'src/auth/constants/role.constant';
-import { Subject } from './subject.constant';
+import { ROLE } from './../../auth/constants/role.constant';
+import { Resource } from './resource.constant';
+import { Actor } from './actor.constant';
 
 export class BaseAclService {
-  protected acl: AclRule[] = [];
+  /**
+   * ACL rules
+   */
+  protected aclRules: AclRule[] = [];
 
   /**
    * Set ACL rule for user role
@@ -12,38 +16,45 @@ export class BaseAclService {
   protected canDo(
     role: ROLE,
     actions: Action[],
-    isResourceOwner?: IsResourceOwner,
+    ruleCallback?: RuleCallback,
   ): void {
-    isResourceOwner
-      ? this.acl.push({ role, actions, isResourceOwner })
-      : this.acl.push({ role, actions });
+    ruleCallback
+      ? this.aclRules.push({ role, actions, ruleCallback })
+      : this.aclRules.push({ role, actions });
   }
 
   /**
    * create user specific acl object to check ability to perform any action
    */
-  public forUser = (user: { id: number; roles: ROLE[] }): any => {
+  public forActor = (actor: Actor): any => {
     return {
-      canDoAction: (action: Action, subject: Subject) => {
+      canDoAction: (action: Action, resource?: Resource) => {
         let canDoAction = false;
-        user.roles.forEach((userRole) => {
+
+        actor.roles.forEach((actorRole) => {
           //If already has accress, return
           if (canDoAction) return true;
 
-          //find acl rule for given user role
-          const aclRule = this.acl.find((rule) => rule.role === userRole);
+          //find all rules for given user role
+          const aclRules = this.aclRules.filter(
+            (rule) => rule.role === actorRole,
+          );
 
-          //if acl rule found, check action permission
-          const hasActionPermission =
-            aclRule &&
-            (aclRule.actions.includes(action) ||
-              aclRule.actions.includes(Action.Manage));
+          //for each rule, check action permission
+          aclRules.forEach((aclRule) => {
+            //If already has accress, return
+            if (canDoAction) return true;
 
-          // check resource ownership rule
-          canDoAction =
-            hasActionPermission &&
-            (!aclRule.isResourceOwner ||
-              aclRule.isResourceOwner(subject, user));
+            //check action permission
+            const hasActionPermission =
+              aclRule.actions.includes(action) ||
+              aclRule.actions.includes(Action.Manage);
+
+            //check for custom `ruleCallback` callback
+            canDoAction =
+              hasActionPermission &&
+              (!aclRule.ruleCallback || aclRule.ruleCallback(resource, actor));
+          });
         });
 
         return canDoAction;
