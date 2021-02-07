@@ -14,10 +14,10 @@ export class UserAclService extends BaseAclService {
     //user can read himself or any other user
     this.canDo(ROLE.USER, [Action.Read]);
     // user can only update himself
-    this.canDo(ROLE.USER, [Action.Update], this.isUserHimself);
+    this.canDo(ROLE.USER, [Action.Update], this.isUserItself);
   }
 
-  isUserHimself(resource: User, actor: User): boolean {
+  isUserItself(resource: User, actor: Actor): boolean {
     return resource.id === actor.id;
   }
 }
