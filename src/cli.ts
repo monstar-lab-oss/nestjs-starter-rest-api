@@ -1,5 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 
 import { AppModule } from './app.module';
@@ -12,7 +11,7 @@ import { CreateUserInput } from './user/dtos/user-create-input.dto';
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
 
-  app.useLogger(new AppLogger(app.get(Logger)));
+  app.useLogger(new AppLogger());
 
   const configService = app.get(ConfigService);
   const defaultAdminUserPassword = configService.get<string>(

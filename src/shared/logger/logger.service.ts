@@ -1,39 +1,54 @@
-import { LoggerService, Injectable, Scope } from '@nestjs/common';
-import { Logger } from 'nestjs-pino';
+import { Injectable, LoggerService, Scope } from '@nestjs/common';
+import { createLogger, Logger, transports } from 'winston';
 
-@Injectable({
-  scope: Scope.TRANSIENT,
-})
+@Injectable({ scope: Scope.TRANSIENT })
 export class AppLogger implements LoggerService {
   private context?: string;
+  private logger: Logger;
 
   public setContext(context: string): void {
     this.context = context;
   }
 
-  constructor(private logger: Logger) {}
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  log(message: any, context?: string, ...args: any[]): void {
-    return this.logger.log(message, context || this.context, ...args);
+  constructor() {
+    this.logger = createLogger({
+      transports: [new transports.Console()],
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  error(message: any, trace?: string, context?: string, ...args: any[]): void {
-    return this.logger.error(message, trace, context || this.context, ...args);
+  log(message: any, context?: string): Logger {
+    return this.logger.info(message, {
+      context: context || this.context,
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  warn(message: any, context?: string, ...args: any[]): void {
-    return this.logger.warn(message, context || this.context, ...args);
-  }
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  debug(message: any, context?: string, ...args: any[]): void {
-    return this.logger.debug(message, context || this.context, ...args);
+  error(message: any, trace?: string, context?: string): Logger {
+    return this.logger.error(message, {
+      trace,
+      context: context || this.context,
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  verbose(message: any, context?: string, ...args: any[]): void {
-    return this.logger.verbose(message, context || this.context, ...args);
+  warn(message: any, context?: string): Logger {
+    return this.logger.warn(message, {
+      context: context || this.context,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  debug(message: any, context?: string): Logger {
+    return this.logger.debug(message, {
+      context: context || this.context,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  verbose(message: any, context?: string): Logger {
+    return this.logger.verbose(message, {
+      context: context || this.context,
+    });
   }
 }
