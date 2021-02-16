@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AppLogger } from './shared/logger/logger.service';
+import { RequestContext } from './shared/request-context/request-context.dto';
 
 describe('AppController', () => {
   let moduleRef: TestingModule;
@@ -20,7 +21,8 @@ describe('AppController', () => {
   describe('getHello', () => {
     it('should return "Hello World!"', () => {
       const appController = moduleRef.get<AppController>(AppController);
-      expect(appController.getHello()).toBe('Hello World!');
+      const ctx = new RequestContext();
+      expect(appController.getHello(ctx)).toBe('Hello World!');
     });
   });
 });
