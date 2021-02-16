@@ -391,3 +391,4 @@ Temporary Items
 dist
 local/
 documentation
+test-report.xml
