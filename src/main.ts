@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
-import { Logger } from 'nestjs-pino';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
@@ -12,7 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api/v1');
 
-  app.useLogger(new AppLogger(app.get(Logger)));
+  app.useLogger(new AppLogger());
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.use(RequestIdMiddleware);
   app.enableCors();
