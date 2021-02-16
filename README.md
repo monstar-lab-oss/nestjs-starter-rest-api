@@ -130,7 +130,7 @@ $ npm run migration:revert
 
 ## Architecture
 
-- [Project Structure - ](./docs/project-structure.md)
+- [Project Structure](./docs/project-structure.md)
 
 ## External Links
 
