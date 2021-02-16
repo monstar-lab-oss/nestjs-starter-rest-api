@@ -1,6 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { RequestContext } from './shared/request-context/request-context.dto';
 import { AppLogger } from './shared/logger/logger.service';
+import { ReqContext } from './shared/request-context/req-context.decorator';
 
 @Controller()
 export class AppController {
@@ -12,7 +14,9 @@ export class AppController {
   }
 
   @Get()
-  getHello(): string {
+  getHello(@ReqContext() ctx: RequestContext): string {
+    console.log('ctx', ctx);
+
     this.logger.log('Hello world from App controller');
 
     return this.appService.getHello();

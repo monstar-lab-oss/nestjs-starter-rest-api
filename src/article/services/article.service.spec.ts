@@ -110,6 +110,15 @@ describe('ArticleService', () => {
         post: 'New Post',
       };
 
+      const author = new User();
+      author.id = 1;
+      mockedRepository.getById.mockResolvedValue({
+        id: 1,
+        title: 'Old title',
+        post: 'Old post',
+        author,
+      });
+
       service.updateArticle(userClaims, articleId, input);
       expect(mockedRepository.getById).toHaveBeenCalledWith(articleId);
     });
