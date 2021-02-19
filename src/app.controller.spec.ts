@@ -6,7 +6,7 @@ import { RequestContext } from './shared/request-context/request-context.dto';
 
 describe('AppController', () => {
   let moduleRef: TestingModule;
-  const mockedLogger = { setContext: jest.fn(), log: jest.fn() };
+  const mockedLogger = { setContext: jest.fn(), logWithContext: jest.fn() };
 
   beforeEach(async () => {
     moduleRef = await Test.createTestingModule({

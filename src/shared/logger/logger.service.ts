@@ -1,5 +1,6 @@
 import { Injectable, LoggerService, Scope } from '@nestjs/common';
 import { createLogger, Logger, transports } from 'winston';
+import { RequestContext } from '../request-context/request-context.dto';
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class AppLogger implements LoggerService {
@@ -49,6 +50,17 @@ export class AppLogger implements LoggerService {
   verbose(message: any, context?: string): Logger {
     return this.logger.verbose(message, {
       context: context || this.context,
+    });
+  }
+
+  // TODO : This is a temporary function, it will be renamed to `log` once we update it across
+  // all controllers, services, etc.
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  logWithContext(ctx: RequestContext, message: any): Logger {
+    return this.logger.info({
+      message,
+      ctx,
+      contextName: this.context,
     });
   }
 }
