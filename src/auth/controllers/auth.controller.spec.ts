@@ -9,6 +9,8 @@ import {
   AuthTokenOutput,
   UserRefreshTokenClaims,
 } from '../dtos/auth-token-output.dto';
+import { RequestContext } from '../../shared/request-context/request-context.dto';
+import { AppLogger } from '../../shared/logger/logger.service';
 
 describe('AuthController', () => {
   let moduleRef: TestingModule;
@@ -20,10 +22,15 @@ describe('AuthController', () => {
     refreshToken: jest.fn(),
   };
 
+  const mockedLogger = { setContext: jest.fn(), logWithContext: jest.fn() };
+
   beforeEach(async () => {
     moduleRef = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [{ provide: AuthService, useValue: mockedAuthService }],
+      providers: [
+        { provide: AuthService, useValue: mockedAuthService },
+        { provide: AppLogger, useValue: mockedLogger },
+      ],
     }).compile();
 
     authController = moduleRef.get<AuthController>(AuthController);
@@ -32,6 +39,8 @@ describe('AuthController', () => {
   it('should be defined', () => {
     expect(authController).toBeDefined();
   });
+
+  const ctx = new RequestContext();
 
   describe('registerLocal', () => {
     it('should register new user', async () => {
@@ -44,10 +53,12 @@ describe('AuthController', () => {
         .spyOn(mockedAuthService, 'register')
         .mockImplementation(async () => null);
 
-      expect(await authController.registerLocal(registerInputDto)).toEqual({
-        data: null,
-        meta: {},
-      });
+      expect(await authController.registerLocal(ctx, registerInputDto)).toEqual(
+        {
+          data: null,
+          meta: {},
+        },
+      );
     });
   });
 
@@ -61,10 +72,12 @@ describe('AuthController', () => {
 
       jest.spyOn(mockedAuthService, 'login').mockImplementation(() => null);
 
-      expect(authController.login(reqObject, loginInputDto)).toEqual({
-        data: null,
-        meta: {},
-      });
+      expect(await authController.login(ctx, reqObject, loginInputDto)).toEqual(
+        {
+          data: null,
+          meta: {},
+        },
+      );
     });
   });
 
@@ -94,11 +107,12 @@ describe('AuthController', () => {
 
     it('should generate refresh token', async () => {
       const response = await authController.refreshToken(
+        ctx,
         request,
         refreshTokenInputDto,
       );
 
-      expect(mockedAuthService.refreshToken).toBeCalledWith(tokenUser);
+      expect(mockedAuthService.refreshToken).toBeCalledWith(ctx, tokenUser);
       expect(response.data).toEqual(authToken);
     });
 

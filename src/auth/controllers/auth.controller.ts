@@ -29,12 +29,19 @@ import {
   BaseApiResponse,
   SwaggerBaseApiResponse,
 } from '../../shared/dtos/base-api-response.dto';
+import { ReqContext } from '../../shared/request-context/req-context.decorator';
+import { RequestContext } from '../../shared/request-context/request-context.dto';
+import { AppLogger } from '../../shared/logger/logger.service';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
-
+  constructor(
+    private readonly authService: AuthService,
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(AuthController.name);
+  }
   @Post('login')
   @ApiOperation({
     summary: 'User login API',
@@ -50,12 +57,18 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  login(
+  async login(
+    @ReqContext() ctx: RequestContext,
     @Req() req: Request,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: LoginInput,
-  ): BaseApiResponse<AuthTokenOutput> {
-    const authToken = this.authService.login(req.user as UserAccessTokenClaims);
+  ): Promise<BaseApiResponse<AuthTokenOutput>> {
+    this.logger.logWithContext(ctx, `${this.login.name} was called`);
+
+    const authToken = this.authService.login(
+      ctx,
+      req.user as UserAccessTokenClaims,
+    );
     return { data: authToken, meta: {} };
   }
 
@@ -68,9 +81,10 @@ export class AuthController {
     type: SwaggerBaseApiResponse(RegisterOutput),
   })
   async registerLocal(
+    @ReqContext() ctx: RequestContext,
     @Body() input: RegisterInput,
   ): Promise<BaseApiResponse<RegisterOutput>> {
-    const registeredUser = await this.authService.register(input);
+    const registeredUser = await this.authService.register(ctx, input);
     return { data: registeredUser, meta: {} };
   }
 
@@ -90,11 +104,15 @@ export class AuthController {
   @UseGuards(JwtRefreshGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   async refreshToken(
+    @ReqContext() ctx: RequestContext,
     @Req() req: Request,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: RefreshTokenInput,
   ): Promise<BaseApiResponse<AuthTokenOutput>> {
+    this.logger.logWithContext(ctx, `${this.refreshToken.name} was called`);
+
     const authToken = await this.authService.refreshToken(
+      ctx,
       req.user as UserRefreshTokenClaims,
     );
     return { data: authToken, meta: {} };
