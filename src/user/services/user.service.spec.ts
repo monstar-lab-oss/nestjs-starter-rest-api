@@ -8,6 +8,8 @@ import { ROLE } from '../../auth/constants/role.constant';
 import { UpdateUserInput } from '../dtos/user-update-input.dto';
 import { User } from '../entities/user.entity';
 import { UserService } from './user.service';
+import { AppLogger } from '../../shared/logger/logger.service';
+import { RequestContext } from '../../shared/request-context/request-context.dto';
 
 describe('UserService', () => {
   let service: UserService;
@@ -26,6 +28,8 @@ describe('UserService', () => {
     roles: [ROLE.USER],
   };
 
+  const mockedLogger = { setContext: jest.fn(), logWithContext: jest.fn() };
+
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
@@ -34,6 +38,7 @@ describe('UserService', () => {
           provide: getRepositoryToken(User),
           useValue: mockedRepository,
         },
+        { provide: AppLogger, useValue: mockedLogger },
       ],
     }).compile();
 
@@ -43,6 +48,8 @@ describe('UserService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  const ctx = new RequestContext();
 
   describe('createUser', () => {
     beforeEach(() => {
@@ -65,7 +72,7 @@ describe('UserService', () => {
         email: 'randomUser@random.com',
       };
 
-      await service.createUser(userInput);
+      await service.createUser(ctx, userInput);
       expect(bcrypt.hash).toBeCalledWith(userInput.password, 10);
     });
 
@@ -79,7 +86,7 @@ describe('UserService', () => {
         email: 'randomUser@random.com',
       };
 
-      await service.createUser(userInput);
+      await service.createUser(ctx, userInput);
 
       expect(mockedRepository.save).toBeCalledWith({
         name: user.name,
@@ -106,7 +113,7 @@ describe('UserService', () => {
         email: 'randomUser@random.com',
       };
 
-      const result = await service.createUser(userInput);
+      const result = await service.createUser(ctx, userInput);
 
       expect(result).toEqual({
         id: user.id,
@@ -132,12 +139,12 @@ describe('UserService', () => {
     });
 
     it('should find user from DB using given id', async () => {
-      await service.findById(user.id);
+      await service.findById(ctx, user.id);
       expect(mockedRepository.findOne).toBeCalledWith(user.id);
     });
 
     it('should return serialized user', async () => {
-      const result = await service.findById(user.id);
+      const result = await service.findById(ctx, user.id);
 
       expect(result).toEqual({
         id: user.id,
@@ -160,12 +167,12 @@ describe('UserService', () => {
     });
 
     it('should find user from DB using given id', async () => {
-      await service.getUserById(user.id);
+      await service.getUserById(ctx, user.id);
       expect(mockedRepository.getById).toBeCalledWith(user.id);
     });
 
     it('should return serialized user', async () => {
-      const result = await service.getUserById(user.id);
+      const result = await service.getUserById(ctx, user.id);
 
       expect(result).toEqual({
         id: user.id,
@@ -178,7 +185,7 @@ describe('UserService', () => {
     it('throw not found exception if user is not found', async () => {
       mockedRepository.getById.mockRejectedValue(new NotFoundException());
       try {
-        await service.getUserById(100);
+        await service.getUserById(ctx, 100);
       } catch (error) {
         expect(error.constructor).toBe(NotFoundException);
       }
@@ -196,7 +203,7 @@ describe('UserService', () => {
         .mockImplementation(async () => null);
 
       await expect(
-        service.validateUsernamePassword('jhon', 'password'),
+        service.validateUsernamePassword(ctx, 'jhon', 'password'),
       ).rejects.toThrowError();
     });
 
@@ -208,7 +215,7 @@ describe('UserService', () => {
       jest.spyOn(bcrypt, 'compare').mockImplementation(async () => false);
 
       await expect(
-        service.validateUsernamePassword('jhon', 'password'),
+        service.validateUsernamePassword(ctx, 'jhon', 'password'),
       ).rejects.toThrowError();
     });
 
@@ -219,7 +226,11 @@ describe('UserService', () => {
 
       jest.spyOn(bcrypt, 'compare').mockImplementation(async () => true);
 
-      const result = await service.validateUsernamePassword('jhon', 'password');
+      const result = await service.validateUsernamePassword(
+        ctx,
+        'jhon',
+        'password',
+      );
 
       expect(result).toEqual({
         id: user.id,
@@ -235,7 +246,7 @@ describe('UserService', () => {
       const offset = 0;
       const limit = 0;
       mockedRepository.findAndCount.mockResolvedValue([[user], 1]);
-      await service.getUsers(limit, offset);
+      await service.getUsers(ctx, limit, offset);
       expect(mockedRepository.findAndCount).toHaveBeenCalled();
     });
   });
@@ -248,14 +259,14 @@ describe('UserService', () => {
     });
 
     it('should find user from DB using given username', async () => {
-      await service.findByUsername(user.username);
+      await service.findByUsername(ctx, user.username);
       expect(mockedRepository.findOne).toBeCalledWith({
         username: user.username,
       });
     });
 
     it('should return serialized user', async () => {
-      const result = await service.findByUsername(user.username);
+      const result = await service.findByUsername(ctx, user.username);
 
       expect(result).toEqual({
         id: user.id,
@@ -312,7 +323,7 @@ describe('UserService', () => {
         .spyOn(bcrypt, 'hash')
         .mockImplementation(async () => 'updated-password');
 
-      await service.updateUser(userId, input);
+      await service.updateUser(ctx, userId, input);
       expect(mockedRepository.save).toHaveBeenCalledWith(expected);
     });
 
@@ -326,7 +337,7 @@ describe('UserService', () => {
       mockedRepository.getById.mockRejectedValue(new NotFoundException());
 
       try {
-        await service.updateUser(userId, input);
+        await service.updateUser(ctx, userId, input);
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);
       }

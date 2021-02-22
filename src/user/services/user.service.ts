@@ -9,16 +9,28 @@ import { User } from '../entities/user.entity';
 import { CreateUserInput } from '../dtos/user-create-input.dto';
 import { UserOutput } from '../dtos/user-output.dto';
 import { UpdateUserInput } from '../dtos/user-update-input.dto';
+import { AppLogger } from '../../shared/logger/logger.service';
+import { RequestContext } from '../../shared/request-context/request-context.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private repository: UserRepository) {}
+  constructor(
+    private repository: UserRepository,
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(UserService.name);
+  }
+  async createUser(
+    ctx: RequestContext,
+    input: CreateUserInput,
+  ): Promise<UserOutput> {
+    this.logger.logWithContext(ctx, `${this.createUser.name} was called`);
 
-  async createUser(input: CreateUserInput): Promise<UserOutput> {
     const user = plainToClass(User, input);
 
     user.password = await hash(input.password, 10);
 
+    this.logger.logWithContext(ctx, `calling ${UserRepository.name}.saveUser`);
     await this.repository.save(user);
 
     return plainToClass(UserOutput, user, {
@@ -27,9 +39,16 @@ export class UserService {
   }
 
   async validateUsernamePassword(
+    ctx: RequestContext,
     username: string,
     pass: string,
   ): Promise<UserOutput> {
+    this.logger.logWithContext(
+      ctx,
+      `${this.validateUsernamePassword.name} was called`,
+    );
+
+    this.logger.logWithContext(ctx, `calling ${UserRepository.name}.findOne`);
     const user = await this.repository.findOne({ username });
     if (!user) throw new UnauthorizedException();
 
@@ -42,9 +61,16 @@ export class UserService {
   }
 
   async getUsers(
+    ctx: RequestContext,
     limit: number,
     offset: number,
   ): Promise<{ users: UserOutput[]; count: number }> {
+    this.logger.logWithContext(ctx, `${this.getUsers.name} was called`);
+
+    this.logger.logWithContext(
+      ctx,
+      `calling ${UserRepository.name}.findAndCount`,
+    );
     const [users, count] = await this.repository.findAndCount({
       where: {},
       take: limit,
@@ -58,7 +84,10 @@ export class UserService {
     return { users: usersOutput, count };
   }
 
-  async findById(id: number): Promise<UserOutput> {
+  async findById(ctx: RequestContext, id: number): Promise<UserOutput> {
+    this.logger.logWithContext(ctx, `${this.findById.name} was called`);
+
+    this.logger.logWithContext(ctx, `calling ${UserRepository.name}.findOne`);
     const user = await this.repository.findOne(id);
 
     return plainToClass(UserOutput, user, {
@@ -66,7 +95,10 @@ export class UserService {
     });
   }
 
-  async getUserById(id: number): Promise<UserOutput> {
+  async getUserById(ctx: RequestContext, id: number): Promise<UserOutput> {
+    this.logger.logWithContext(ctx, `${this.getUserById.name} was called`);
+
+    this.logger.logWithContext(ctx, `calling ${UserRepository.name}.getById`);
     const user = await this.repository.getById(id);
 
     return plainToClass(UserOutput, user, {
@@ -74,7 +106,13 @@ export class UserService {
     });
   }
 
-  async findByUsername(username: string): Promise<UserOutput> {
+  async findByUsername(
+    ctx: RequestContext,
+    username: string,
+  ): Promise<UserOutput> {
+    this.logger.logWithContext(ctx, `${this.findByUsername.name} was called`);
+
+    this.logger.logWithContext(ctx, `calling ${UserRepository.name}.findOne`);
     const user = await this.repository.findOne({ username });
 
     return plainToClass(UserOutput, user, {
@@ -83,9 +121,13 @@ export class UserService {
   }
 
   async updateUser(
+    ctx: RequestContext,
     userId: number,
     input: UpdateUserInput,
   ): Promise<UserOutput> {
+    this.logger.logWithContext(ctx, `${this.updateUser.name} was called`);
+
+    this.logger.logWithContext(ctx, `calling ${UserRepository.name}.getById`);
     const user = await this.repository.getById(userId);
 
     // Hash the password if it exists in the input payload.
@@ -99,6 +141,7 @@ export class UserService {
       ...plainToClass(User, input),
     };
 
+    this.logger.logWithContext(ctx, `calling ${UserRepository.name}.save`);
     await this.repository.save(updatedUser);
 
     return plainToClass(UserOutput, updatedUser, {
