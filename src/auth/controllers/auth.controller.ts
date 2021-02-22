@@ -57,12 +57,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  async login(
+  login(
     @ReqContext() ctx: RequestContext,
     @Req() req: Request,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: LoginInput,
-  ): Promise<BaseApiResponse<AuthTokenOutput>> {
+  ): BaseApiResponse<AuthTokenOutput> {
     this.logger.logWithContext(ctx, `${this.login.name} was called`);
 
     const authToken = this.authService.login(
