@@ -9,6 +9,7 @@ import { CreateUserInput } from '../src/user/dtos/user-create-input.dto';
 import { LoginInput } from '../src/auth/dtos/auth-login-input.dto';
 import { AuthTokenOutput } from '../src/auth/dtos/auth-token-output.dto';
 import { UserOutput } from '../src/user/dtos/user-output.dto';
+import { RequestContext } from '../src/shared/request-context/request-context.dto';
 
 const TEST_DB_CONNECTION_NAME = 'e2e_test_connection';
 export const TEST_DB_NAME = 'e2e_test_db';
@@ -61,9 +62,11 @@ export const seedAdminUser = async (
     email: 'default-admin@example.com',
   };
 
+  const ctx = new RequestContext();
+
   // Creating Admin User
   const userService = app.get(UserService);
-  const userOutput = await userService.createUser(defaultAdmin);
+  const userOutput = await userService.createUser(ctx, defaultAdmin);
 
   const loginInput: LoginInput = {
     username: defaultAdmin.username,

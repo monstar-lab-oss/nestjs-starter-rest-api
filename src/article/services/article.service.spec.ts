@@ -13,6 +13,7 @@ import {
 import { ArticleRepository } from '../repositories/article.repository';
 import { ArticleAclService } from './article-acl.service';
 import { ArticleService } from './article.service';
+import { RequestContext } from '../../shared/request-context/request-context.dto';
 
 describe('ArticleService', () => {
   let service: ArticleService;
@@ -58,9 +59,10 @@ describe('ArticleService', () => {
         roles: [ROLE.USER],
         username: 'testuser',
       };
+      const ctx = new RequestContext();
 
       service.createArticle(userClaims, new CreateArticleInput());
-      expect(mockedUserService.getUserById).toHaveBeenCalledWith(1);
+      expect(mockedUserService.getUserById).toHaveBeenCalledWith(ctx, 1);
     });
 
     it('should call repository save with proper article input and return proper output', async () => {
