@@ -13,6 +13,8 @@ import {
   UserRefreshTokenClaims,
 } from '../dtos/auth-token-output.dto';
 import { UserOutput } from '../../user/dtos/user-output.dto';
+import { AppLogger } from '../../shared/logger/logger.service';
+import { RequestContext } from '../../shared/request-context/request-context.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,14 +22,21 @@ export class AuthService {
     private userService: UserService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(AuthService.name);
+  }
 
   async validateUser(
+    ctx: RequestContext,
     username: string,
     pass: string,
   ): Promise<UserAccessTokenClaims> {
+    this.logger.logWithContext(ctx, `${this.validateUser.name} was called`);
+
     // The userService will throw Unauthorized in case of invalid username/password.
     const user = await this.userService.validateUsernamePassword(
+      ctx,
       username,
       pass,
     );
@@ -40,33 +49,51 @@ export class AuthService {
     return user;
   }
 
-  login(accessTokenClaims: UserAccessTokenClaims): AuthTokenOutput {
-    return this.getAuthToken(accessTokenClaims);
+  login(
+    ctx: RequestContext,
+    accessTokenClaims: UserAccessTokenClaims,
+  ): AuthTokenOutput {
+    this.logger.logWithContext(ctx, `${this.login.name} was called`);
+
+    return this.getAuthToken(ctx, accessTokenClaims);
   }
 
-  async register(input: RegisterInput): Promise<RegisterOutput> {
+  async register(
+    ctx: RequestContext,
+    input: RegisterInput,
+  ): Promise<RegisterOutput> {
+    this.logger.logWithContext(ctx, `${this.register.name} was called`);
+
     // TODO : Setting default role as USER here. Will add option to change this later via ADMIN users.
     input.roles = [ROLE.USER];
     input.isAccountDisabled = false;
 
-    const registeredUser = await this.userService.createUser(input);
+    const registeredUser = await this.userService.createUser(ctx, input);
     return plainToClass(RegisterOutput, registeredUser, {
       excludeExtraneousValues: true,
     });
   }
 
   async refreshToken(
+    ctx: RequestContext,
     refreshTokenClaims: UserRefreshTokenClaims,
   ): Promise<AuthTokenOutput> {
-    const user = await this.userService.findById(refreshTokenClaims.id);
+    this.logger.logWithContext(ctx, `${this.refreshToken.name} was called`);
+
+    const user = await this.userService.findById(ctx, refreshTokenClaims.id);
     if (!user) {
       throw new UnauthorizedException('Invalid user id');
     }
 
-    return this.getAuthToken(user);
+    return this.getAuthToken(ctx, user);
   }
 
-  getAuthToken(user: UserAccessTokenClaims | UserOutput): AuthTokenOutput {
+  getAuthToken(
+    ctx: RequestContext,
+    user: UserAccessTokenClaims | UserOutput,
+  ): AuthTokenOutput {
+    this.logger.logWithContext(ctx, `${this.getAuthToken.name} was called`);
+
     const subject = { sub: user.id };
     const payload = {
       username: user.username,

@@ -28,12 +28,19 @@ import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 import { UserOutput } from '../dtos/user-output.dto';
 import { ROLE } from '../../auth/constants/role.constant';
 import { UpdateUserInput } from '../dtos/user-update-input.dto';
-import { UserAccessTokenClaims } from 'src/auth/dtos/auth-token-output.dto';
+import { UserAccessTokenClaims } from '../../auth/dtos/auth-token-output.dto';
+import { AppLogger } from '../../shared/logger/logger.service';
+import { RequestContext } from '../../shared/request-context/request-context.dto';
+import { ReqContext } from '../../shared/request-context/req-context.decorator';
 
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
-
+  constructor(
+    private readonly userService: UserService,
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(UserController.name);
+  }
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @UseInterceptors(ClassSerializerInterceptor)
@@ -50,9 +57,13 @@ export class UserController {
     type: BaseApiErrorResponse,
   })
   async getMyProfile(
+    @ReqContext() ctx: RequestContext,
     @Req() req: Request,
   ): Promise<BaseApiResponse<UserOutput>> {
+    this.logger.logWithContext(ctx, `${this.getMyProfile.name} was called`);
+
     const user = await this.userService.findById(
+      ctx,
       (req.user as UserAccessTokenClaims).id,
     );
     return { data: user, meta: {} };
@@ -75,9 +86,13 @@ export class UserController {
   @Roles(ROLE.ADMIN, ROLE.USER)
   @UseGuards(JwtAuthGuard)
   async getUsers(
+    @ReqContext() ctx: RequestContext,
     @Query() query: PaginationParamsDto,
   ): Promise<BaseApiResponse<UserOutput[]>> {
+    this.logger.logWithContext(ctx, `${this.getUsers.name} was called`);
+
     const { users, count } = await this.userService.getUsers(
+      ctx,
       query.limit,
       query.offset,
     );
@@ -100,8 +115,13 @@ export class UserController {
     status: HttpStatus.NOT_FOUND,
     type: BaseApiErrorResponse,
   })
-  async getUser(@Param('id') id: number): Promise<BaseApiResponse<UserOutput>> {
-    const user = await this.userService.getUserById(id);
+  async getUser(
+    @ReqContext() ctx: RequestContext,
+    @Param('id') id: number,
+  ): Promise<BaseApiResponse<UserOutput>> {
+    this.logger.logWithContext(ctx, `${this.getUser.name} was called`);
+
+    const user = await this.userService.getUserById(ctx, id);
     return { data: user, meta: {} };
   }
 
@@ -121,10 +141,13 @@ export class UserController {
   })
   @UseInterceptors(ClassSerializerInterceptor)
   async updateUser(
+    @ReqContext() ctx: RequestContext,
     @Param('id') userId: number,
     @Body() input: UpdateUserInput,
   ): Promise<BaseApiResponse<UserOutput>> {
-    const user = await this.userService.updateUser(userId, input);
+    this.logger.logWithContext(ctx, `${this.updateUser.name} was called`);
+
+    const user = await this.userService.updateUser(ctx, userId, input);
     return { data: user, meta: {} };
   }
 }

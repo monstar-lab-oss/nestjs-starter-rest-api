@@ -7,6 +7,7 @@ import { AppLogger } from './shared/logger/logger.service';
 import { UserService } from './user/services/user.service';
 import { ROLE } from './auth/constants/role.constant';
 import { CreateUserInput } from './user/dtos/user-create-input.dto';
+import { RequestContext } from './shared/request-context/request-context.dto';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -29,10 +30,12 @@ async function bootstrap() {
     email: 'default-admin@example.com',
   };
 
+  const ctx = new RequestContext();
+
   // Create the default admin user if it doesn't already exist.
-  const user = await userService.findByUsername(defaultAdmin.username);
+  const user = await userService.findByUsername(ctx, defaultAdmin.username);
   if (!user) {
-    await userService.createUser(defaultAdmin);
+    await userService.createUser(ctx, defaultAdmin);
   }
 
   await app.close();

@@ -14,6 +14,7 @@ import { ArticleOutput } from '../dtos/article-output.dto';
 import { Article } from '../entities/article.entity';
 import { ArticleRepository } from '../repositories/article.repository';
 import { ArticleAclService } from './article-acl.service';
+import { RequestContext } from '../../shared/request-context/request-context.dto';
 
 @Injectable()
 export class ArticleService {
@@ -29,7 +30,10 @@ export class ArticleService {
   ): Promise<ArticleOutput> {
     const article = plainToClass(Article, input);
 
-    const user = await this.userService.getUserById(actor.id);
+    // TODO: get correct RequestContext from controller and pass it to getUserById
+    const ctx = new RequestContext();
+
+    const user = await this.userService.getUserById(ctx, actor.id);
 
     const isAllowed = this.aclService
       .forActor(actor)
