@@ -93,14 +93,12 @@ export class AppLogger implements LoggerService {
     ctx: RequestContext,
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     message: any,
-    trace?: string,
     meta?: Record<string, any>,
   ): Logger {
     const timestamp = new Date().toISOString();
 
     return this.logger.error({
       message,
-      trace,
       contextName: this.context,
       ctx,
       timestamp,
