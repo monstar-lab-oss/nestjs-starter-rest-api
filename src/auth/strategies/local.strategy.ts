@@ -15,6 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, STRATEGY_LOCAL) {
     private authService: AuthService,
     private readonly logger: AppLogger,
   ) {
+    // Add option passReqToCallback: true to configure strategy to be request-scoped.
     super({
       usernameField: 'username',
       passwordField: 'password',

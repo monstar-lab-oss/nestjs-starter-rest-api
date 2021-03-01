@@ -1,5 +1,4 @@
 import {
-  Req,
   Post,
   Body,
   UseGuards,
@@ -9,7 +8,6 @@ import {
   ClassSerializerInterceptor,
   HttpCode,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { ApiTags, ApiResponse, ApiOperation } from '@nestjs/swagger';
 
 import { AuthService } from '../services/auth.service';
@@ -17,11 +15,7 @@ import { LoginInput } from '../dtos/auth-login-input.dto';
 import { RegisterInput } from '../dtos/auth-register-input.dto';
 import { RegisterOutput } from '../dtos/auth-register-output.dto';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
-import {
-  AuthTokenOutput,
-  UserAccessTokenClaims,
-  UserRefreshTokenClaims,
-} from '../dtos/auth-token-output.dto';
+import { AuthTokenOutput } from '../dtos/auth-token-output.dto';
 import { RefreshTokenInput } from '../dtos/auth-refresh-token-input.dto';
 import { JwtRefreshGuard } from '../guards/jwt-refresh.guard';
 import {
@@ -59,16 +53,12 @@ export class AuthController {
   @UseInterceptors(ClassSerializerInterceptor)
   login(
     @ReqContext() ctx: RequestContext,
-    @Req() req: Request,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: LoginInput,
   ): BaseApiResponse<AuthTokenOutput> {
     this.logger.logWithContext(ctx, `${this.login.name} was called`);
 
-    const authToken = this.authService.login(
-      ctx,
-      req.user as UserAccessTokenClaims,
-    );
+    const authToken = this.authService.login(ctx);
     return { data: authToken, meta: {} };
   }
 
@@ -105,16 +95,12 @@ export class AuthController {
   @UseInterceptors(ClassSerializerInterceptor)
   async refreshToken(
     @ReqContext() ctx: RequestContext,
-    @Req() req: Request,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: RefreshTokenInput,
   ): Promise<BaseApiResponse<AuthTokenOutput>> {
     this.logger.logWithContext(ctx, `${this.refreshToken.name} was called`);
 
-    const authToken = await this.authService.refreshToken(
-      ctx,
-      req.user as UserRefreshTokenClaims,
-    );
+    const authToken = await this.authService.refreshToken(ctx);
     return { data: authToken, meta: {} };
   }
 }
