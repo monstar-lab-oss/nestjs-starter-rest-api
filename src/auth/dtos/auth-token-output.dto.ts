@@ -14,8 +14,11 @@ export class AuthTokenOutput {
 }
 
 export class UserAccessTokenClaims {
+  @Expose()
   id: number;
+  @Expose()
   username: string;
+  @Expose()
   roles: ROLE[];
 }
 
