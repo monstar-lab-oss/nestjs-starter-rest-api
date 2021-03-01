@@ -25,6 +25,7 @@ describe('AllExceptionsFilter', () => {
   const mockedLogger = {
     warn: jest.fn().mockReturnThis(),
     setContext: jest.fn().mockReturnThis(),
+    warnWithContext: jest.fn().mockReturnThis(),
   };
   let filter: AllExceptionsFilter<any>;
 

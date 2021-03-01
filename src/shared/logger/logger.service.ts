@@ -55,12 +55,56 @@ export class AppLogger implements LoggerService {
 
   // TODO : This is a temporary function, it will be renamed to `log` once we update it across
   // all controllers, services, etc.
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  logWithContext(ctx: RequestContext, message: any): Logger {
+  logWithContext(
+    ctx: RequestContext,
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    message: any,
+    meta?: Record<string, any>,
+  ): Logger {
+    const timestamp = new Date().toISOString();
+
     return this.logger.info({
       message,
-      ctx,
       contextName: this.context,
+      ctx,
+      timestamp,
+      ...meta,
+    });
+  }
+
+  warnWithContext(
+    ctx: RequestContext,
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    message: any,
+    meta?: Record<string, any>,
+  ): Logger {
+    const timestamp = new Date().toISOString();
+
+    return this.logger.warn({
+      message,
+      contextName: this.context,
+      ctx,
+      timestamp,
+      ...meta,
+    });
+  }
+
+  errorWithContext(
+    ctx: RequestContext,
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    message: any,
+    trace?: string,
+    meta?: Record<string, any>,
+  ): Logger {
+    const timestamp = new Date().toISOString();
+
+    return this.logger.error({
+      message,
+      trace,
+      contextName: this.context,
+      ctx,
+      timestamp,
+      ...meta,
     });
   }
 }
