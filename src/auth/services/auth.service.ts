@@ -10,7 +10,6 @@ import { RegisterOutput } from '../dtos/auth-register-output.dto';
 import {
   AuthTokenOutput,
   UserAccessTokenClaims,
-  UserRefreshTokenClaims,
 } from '../dtos/auth-token-output.dto';
 import { UserOutput } from '../../user/dtos/user-output.dto';
 import { AppLogger } from '../../shared/logger/logger.service';
@@ -49,13 +48,10 @@ export class AuthService {
     return user;
   }
 
-  login(
-    ctx: RequestContext,
-    accessTokenClaims: UserAccessTokenClaims,
-  ): AuthTokenOutput {
+  login(ctx: RequestContext): AuthTokenOutput {
     this.logger.logWithContext(ctx, `${this.login.name} was called`);
 
-    return this.getAuthToken(ctx, accessTokenClaims);
+    return this.getAuthToken(ctx, ctx.user);
   }
 
   async register(
@@ -74,13 +70,10 @@ export class AuthService {
     });
   }
 
-  async refreshToken(
-    ctx: RequestContext,
-    refreshTokenClaims: UserRefreshTokenClaims,
-  ): Promise<AuthTokenOutput> {
+  async refreshToken(ctx: RequestContext): Promise<AuthTokenOutput> {
     this.logger.logWithContext(ctx, `${this.refreshToken.name} was called`);
 
-    const user = await this.userService.findById(ctx, refreshTokenClaims.id);
+    const user = await this.userService.findById(ctx, ctx.user.id);
     if (!user) {
       throw new UnauthorizedException('Invalid user id');
     }

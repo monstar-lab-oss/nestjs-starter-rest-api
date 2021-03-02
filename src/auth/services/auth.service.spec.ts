@@ -10,7 +10,6 @@ import { UserOutput } from '../../user/dtos/user-output.dto';
 import {
   AuthTokenOutput,
   UserAccessTokenClaims,
-  UserRefreshTokenClaims,
 } from '../dtos/auth-token-output.dto';
 import { ROLE } from '../constants/role.constant';
 import { AppLogger } from '../../shared/logger/logger.service';
@@ -19,7 +18,6 @@ import { RequestContext } from '../../shared/request-context/request-context.dto
 describe('AuthService', () => {
   let service: AuthService;
 
-  const refreshTokenClaims: UserRefreshTokenClaims = { id: 6 };
   const accessTokenClaims: UserAccessTokenClaims = {
     id: 6,
     username: 'jhon',
@@ -130,7 +128,7 @@ describe('AuthService', () => {
     it('should return auth token for valid user', async () => {
       jest.spyOn(service, 'getAuthToken').mockImplementation(() => authToken);
 
-      const result = service.login(ctx, accessTokenClaims);
+      const result = service.login(ctx);
 
       expect(service.getAuthToken).toBeCalledWith(ctx, accessTokenClaims);
       expect(result).toEqual(authToken);
@@ -151,6 +149,8 @@ describe('AuthService', () => {
   });
 
   describe('refreshToken', () => {
+    ctx.user = accessTokenClaims;
+
     it('should generate auth token', async () => {
       jest
         .spyOn(mockedUserService, 'findById')
@@ -158,7 +158,7 @@ describe('AuthService', () => {
 
       jest.spyOn(service, 'getAuthToken').mockImplementation(() => authToken);
 
-      const result = await service.refreshToken(ctx, refreshTokenClaims);
+      const result = await service.refreshToken(ctx);
 
       expect(service.getAuthToken).toBeCalledWith(ctx, userOutput);
       expect(result).toMatchObject(authToken);
@@ -169,9 +169,9 @@ describe('AuthService', () => {
         .spyOn(mockedUserService, 'findById')
         .mockImplementation(async () => null);
 
-      await expect(
-        service.refreshToken(ctx, refreshTokenClaims),
-      ).rejects.toThrowError('Invalid user id');
+      await expect(service.refreshToken(ctx)).rejects.toThrowError(
+        'Invalid user id',
+      );
     });
 
     afterEach(() => {

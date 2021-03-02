@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { REQUEST_ID_TOKEN_HEADER } from '../constants';
 import { AppLogger } from '../logger/logger.service';
 import { BaseApiError } from '../errors/base-api-error';
+import { createRequestContext } from '../request-context/util';
 
 @Catch()
 export class AllExceptionsFilter<T> implements ExceptionFilter {
@@ -30,6 +31,7 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
     const path = req.url;
     const timestamp = new Date().toISOString();
     const requestId = req.headers[REQUEST_ID_TOKEN_HEADER];
+    const requestContext = createRequestContext(req);
 
     let stack: any;
     let statusCode: HttpStatus;
@@ -75,7 +77,10 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
       requestId,
       timestamp,
     };
-    this.logger.warn({ error, stack });
+    this.logger.warnWithContext(requestContext, error.message, {
+      error,
+      stack,
+    });
 
     // Suppress original internal server error details in prod mode
     const isProMood = this.config.get<string>('env') !== 'development';

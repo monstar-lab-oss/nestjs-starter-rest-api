@@ -1,6 +1,5 @@
 import {
   Controller,
-  Req,
   Get,
   UseGuards,
   UseInterceptors,
@@ -11,7 +10,6 @@ import {
   Patch,
   Body,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 
 import { UserService } from '../services/user.service';
@@ -28,7 +26,6 @@ import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 import { UserOutput } from '../dtos/user-output.dto';
 import { ROLE } from '../../auth/constants/role.constant';
 import { UpdateUserInput } from '../dtos/user-update-input.dto';
-import { UserAccessTokenClaims } from '../../auth/dtos/auth-token-output.dto';
 import { AppLogger } from '../../shared/logger/logger.service';
 import { RequestContext } from '../../shared/request-context/request-context.dto';
 import { ReqContext } from '../../shared/request-context/req-context.decorator';
@@ -58,14 +55,10 @@ export class UserController {
   })
   async getMyProfile(
     @ReqContext() ctx: RequestContext,
-    @Req() req: Request,
   ): Promise<BaseApiResponse<UserOutput>> {
     this.logger.logWithContext(ctx, `${this.getMyProfile.name} was called`);
 
-    const user = await this.userService.findById(
-      ctx,
-      (req.user as UserAccessTokenClaims).id,
-    );
+    const user = await this.userService.findById(ctx, ctx.user.id);
     return { data: user, meta: {} };
   }
 
@@ -82,9 +75,8 @@ export class UserController {
     status: HttpStatus.UNAUTHORIZED,
     type: BaseApiErrorResponse,
   })
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(ROLE.ADMIN, ROLE.USER)
-  @UseGuards(JwtAuthGuard)
   async getUsers(
     @ReqContext() ctx: RequestContext,
     @Query() query: PaginationParamsDto,
