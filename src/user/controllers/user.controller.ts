@@ -75,9 +75,8 @@ export class UserController {
     status: HttpStatus.UNAUTHORIZED,
     type: BaseApiErrorResponse,
   })
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(ROLE.ADMIN, ROLE.USER)
-  @UseGuards(JwtAuthGuard)
   async getUsers(
     @ReqContext() ctx: RequestContext,
     @Query() query: PaginationParamsDto,

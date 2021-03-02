@@ -7,7 +7,7 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AppLogger } from '../logger/logger.service';
-import { REQUEST_ID_TOKEN_HEADER } from '../constants';
+import { createRequestContext } from '../request-context/util';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -18,10 +18,7 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
     const method = request.method;
-    const url = request.originalUrl;
-    const requestID = request.headers[REQUEST_ID_TOKEN_HEADER];
-
-    this.appLogger.log({ method, requestID, url });
+    const ctx = createRequestContext(request);
 
     const now = Date.now();
     return next.handle().pipe(
@@ -30,13 +27,10 @@ export class LoggingInterceptor implements NestInterceptor {
         const statusCode = response.statusCode;
 
         const responseTime = Date.now() - now;
-        this.appLogger.log({
-          method,
-          requestID,
-          url,
-          statusCode,
-          responseTime,
-        });
+
+        const resData = { method, statusCode, responseTime };
+
+        this.appLogger.logWithContext(ctx, 'Request completed', { resData });
       }),
     );
   }
