@@ -9,7 +9,7 @@ export class AppService {
   }
 
   getHello(ctx: RequestContext): string {
-    this.logger.logWithContext(ctx, 'Hello world from App service');
+    this.logger.log(ctx, 'Hello world from App service');
 
     return 'Hello World!';
   }

@@ -31,7 +31,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, STRATEGY_LOCAL) {
   ): Promise<UserAccessTokenClaims> {
     const ctx = createRequestContext(request);
 
-    this.logger.logWithContext(ctx, `${this.validate.name} was called`);
+    this.logger.log(ctx, `${this.validate.name} was called`);
 
     const user = await this.authService.validateUser(ctx, username, password);
     // Passport automatically creates a user object, based on the value we return from the validate() method,

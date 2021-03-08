@@ -1,9 +1,9 @@
-import { Injectable, LoggerService, Scope } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { createLogger, Logger, transports } from 'winston';
 import { RequestContext } from '../request-context/request-context.dto';
 
 @Injectable({ scope: Scope.TRANSIENT })
-export class AppLogger implements LoggerService {
+export class AppLogger {
   private context?: string;
   private logger: Logger;
 
@@ -17,53 +17,15 @@ export class AppLogger implements LoggerService {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  log(message: any, context?: string): Logger {
-    return this.logger.info(message, {
-      context: context || this.context,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  error(message: any, trace?: string, context?: string): Logger {
-    return this.logger.error(message, {
-      trace,
-      context: context || this.context,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  warn(message: any, context?: string): Logger {
-    return this.logger.warn(message, {
-      context: context || this.context,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  debug(message: any, context?: string): Logger {
-    return this.logger.debug(message, {
-      context: context || this.context,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  verbose(message: any, context?: string): Logger {
-    return this.logger.verbose(message, {
-      context: context || this.context,
-    });
-  }
-
-  // TODO : This is a temporary function, it will be renamed to `log` once we update it across
-  // all controllers, services, etc.
-  logWithContext(
+  error(
     ctx: RequestContext,
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    message: any,
+    message: string,
     meta?: Record<string, any>,
   ): Logger {
     const timestamp = new Date().toISOString();
 
-    return this.logger.info({
+    return this.logger.error({
       message,
       contextName: this.context,
       ctx,
@@ -72,10 +34,10 @@ export class AppLogger implements LoggerService {
     });
   }
 
-  warnWithContext(
+  warn(
     ctx: RequestContext,
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    message: any,
+    message: string,
     meta?: Record<string, any>,
   ): Logger {
     const timestamp = new Date().toISOString();
@@ -89,15 +51,50 @@ export class AppLogger implements LoggerService {
     });
   }
 
-  errorWithContext(
+  debug(
     ctx: RequestContext,
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    message: any,
+    message: string,
     meta?: Record<string, any>,
   ): Logger {
     const timestamp = new Date().toISOString();
 
-    return this.logger.error({
+    return this.logger.debug({
+      message,
+      contextName: this.context,
+      ctx,
+      timestamp,
+      ...meta,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  verbose(
+    ctx: RequestContext,
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    message: string,
+    meta?: Record<string, any>,
+  ): Logger {
+    const timestamp = new Date().toISOString();
+
+    return this.logger.verbose({
+      message,
+      contextName: this.context,
+      ctx,
+      timestamp,
+      ...meta,
+    });
+  }
+
+  log(
+    ctx: RequestContext,
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    message: string,
+    meta?: Record<string, any>,
+  ): Logger {
+    const timestamp = new Date().toISOString();
+
+    return this.logger.info({
       message,
       contextName: this.context,
       ctx,

@@ -63,7 +63,7 @@ describe('AuthService', () => {
 
   const mockedConfigService = { get: jest.fn() };
 
-  const mockedLogger = { setContext: jest.fn(), logWithContext: jest.fn() };
+  const mockedLogger = { setContext: jest.fn(), log: jest.fn() };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({

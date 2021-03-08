@@ -31,7 +31,7 @@ export class AuthService {
     username: string,
     pass: string,
   ): Promise<UserAccessTokenClaims> {
-    this.logger.logWithContext(ctx, `${this.validateUser.name} was called`);
+    this.logger.log(ctx, `${this.validateUser.name} was called`);
 
     // The userService will throw Unauthorized in case of invalid username/password.
     const user = await this.userService.validateUsernamePassword(
@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   login(ctx: RequestContext): AuthTokenOutput {
-    this.logger.logWithContext(ctx, `${this.login.name} was called`);
+    this.logger.log(ctx, `${this.login.name} was called`);
 
     return this.getAuthToken(ctx, ctx.user);
   }
@@ -58,7 +58,7 @@ export class AuthService {
     ctx: RequestContext,
     input: RegisterInput,
   ): Promise<RegisterOutput> {
-    this.logger.logWithContext(ctx, `${this.register.name} was called`);
+    this.logger.log(ctx, `${this.register.name} was called`);
 
     // TODO : Setting default role as USER here. Will add option to change this later via ADMIN users.
     input.roles = [ROLE.USER];
@@ -71,7 +71,7 @@ export class AuthService {
   }
 
   async refreshToken(ctx: RequestContext): Promise<AuthTokenOutput> {
-    this.logger.logWithContext(ctx, `${this.refreshToken.name} was called`);
+    this.logger.log(ctx, `${this.refreshToken.name} was called`);
 
     const user = await this.userService.findById(ctx, ctx.user.id);
     if (!user) {
@@ -85,7 +85,7 @@ export class AuthService {
     ctx: RequestContext,
     user: UserAccessTokenClaims | UserOutput,
   ): AuthTokenOutput {
-    this.logger.logWithContext(ctx, `${this.getAuthToken.name} was called`);
+    this.logger.log(ctx, `${this.getAuthToken.name} was called`);
 
     const subject = { sub: user.id };
     const payload = {

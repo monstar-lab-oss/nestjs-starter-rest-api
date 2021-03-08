@@ -56,7 +56,7 @@ export class AuthController {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: LoginInput,
   ): BaseApiResponse<AuthTokenOutput> {
-    this.logger.logWithContext(ctx, `${this.login.name} was called`);
+    this.logger.log(ctx, `${this.login.name} was called`);
 
     const authToken = this.authService.login(ctx);
     return { data: authToken, meta: {} };
@@ -98,7 +98,7 @@ export class AuthController {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Body() credential: RefreshTokenInput,
   ): Promise<BaseApiResponse<AuthTokenOutput>> {
-    this.logger.logWithContext(ctx, `${this.refreshToken.name} was called`);
+    this.logger.log(ctx, `${this.refreshToken.name} was called`);
 
     const authToken = await this.authService.refreshToken(ctx);
     return { data: authToken, meta: {} };
