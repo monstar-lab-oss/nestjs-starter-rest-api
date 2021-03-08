@@ -19,17 +19,18 @@ To view sample implementations based on this starter-kit, please visit the [nest
 
 ## Starter-kit Features
 
-| Feature                  | Info              | Progress |
-| ------------------------ | ----------------- | -------- |
-| Authentication           | JWT               | Done     |
-| Authorization            | RBAC (Role based) | WIP      |
-| ORM Integration          | TypeORM           | Done     |
-| DB Migrations            | TypeORM           | Done     |
-| Logging                  | winston           | Done     |
-| Request Validation       | class-validator   | Done     |
-| Docker Ready             | Dockerfile        | Done     |
-| Auto-generated OpenAPI   | -                 | Done     |
-| Auto-generated ChangeLog | -                 | WIP      |
+| Feature                  | Info               | Progress |
+| ------------------------ | ------------------ | -------- |
+| Authentication           | JWT                | Done     |
+| Authorization            | RBAC (Role based)  | WIP      |
+| ORM Integration          | TypeORM            | Done     |
+| DB Migrations            | TypeORM            | Done     |
+| Logging                  | winston            | Done     |
+| Request Validation       | class-validator    | Done     |
+| Pagination               | SQL offset & limit | Done     |
+| Docker Ready             | Dockerfile         | Done     |
+| Auto-generated OpenAPI   | -                  | Done     |
+| Auto-generated ChangeLog | -                  | WIP      |
 
 ## Installation
 
