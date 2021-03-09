@@ -15,7 +15,7 @@ export class AppController {
 
   @Get()
   getHello(@ReqContext() ctx: RequestContext): string {
-    this.logger.logWithContext(ctx, 'Hello world from App controller');
+    this.logger.log(ctx, 'Hello world from App controller');
 
     return this.appService.getHello(ctx);
   }

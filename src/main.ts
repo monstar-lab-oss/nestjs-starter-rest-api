@@ -4,14 +4,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
-import { AppLogger } from './shared/logger/logger.service';
 import { RequestIdMiddleware } from './shared/middlewares/request-id/request-id.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api/v1');
 
-  app.useLogger(new AppLogger());
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.use(RequestIdMiddleware);
   app.enableCors();

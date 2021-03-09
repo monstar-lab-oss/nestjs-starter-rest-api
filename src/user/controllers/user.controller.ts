@@ -56,7 +56,7 @@ export class UserController {
   async getMyProfile(
     @ReqContext() ctx: RequestContext,
   ): Promise<BaseApiResponse<UserOutput>> {
-    this.logger.logWithContext(ctx, `${this.getMyProfile.name} was called`);
+    this.logger.log(ctx, `${this.getMyProfile.name} was called`);
 
     const user = await this.userService.findById(ctx, ctx.user.id);
     return { data: user, meta: {} };
@@ -81,7 +81,7 @@ export class UserController {
     @ReqContext() ctx: RequestContext,
     @Query() query: PaginationParamsDto,
   ): Promise<BaseApiResponse<UserOutput[]>> {
-    this.logger.logWithContext(ctx, `${this.getUsers.name} was called`);
+    this.logger.log(ctx, `${this.getUsers.name} was called`);
 
     const { users, count } = await this.userService.getUsers(
       ctx,
@@ -111,7 +111,7 @@ export class UserController {
     @ReqContext() ctx: RequestContext,
     @Param('id') id: number,
   ): Promise<BaseApiResponse<UserOutput>> {
-    this.logger.logWithContext(ctx, `${this.getUser.name} was called`);
+    this.logger.log(ctx, `${this.getUser.name} was called`);
 
     const user = await this.userService.getUserById(ctx, id);
     return { data: user, meta: {} };
@@ -137,7 +137,7 @@ export class UserController {
     @Param('id') userId: number,
     @Body() input: UpdateUserInput,
   ): Promise<BaseApiResponse<UserOutput>> {
-    this.logger.logWithContext(ctx, `${this.updateUser.name} was called`);
+    this.logger.log(ctx, `${this.updateUser.name} was called`);
 
     const user = await this.userService.updateUser(ctx, userId, input);
     return { data: user, meta: {} };

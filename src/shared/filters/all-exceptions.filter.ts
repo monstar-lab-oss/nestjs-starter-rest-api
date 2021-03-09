@@ -77,7 +77,7 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
       requestId,
       timestamp,
     };
-    this.logger.warnWithContext(requestContext, error.message, {
+    this.logger.warn(requestContext, error.message, {
       error,
       stack,
     });

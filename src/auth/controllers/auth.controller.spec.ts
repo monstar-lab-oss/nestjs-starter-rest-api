@@ -19,7 +19,7 @@ describe('AuthController', () => {
     refreshToken: jest.fn(),
   };
 
-  const mockedLogger = { setContext: jest.fn(), logWithContext: jest.fn() };
+  const mockedLogger = { setContext: jest.fn(), log: jest.fn() };
 
   beforeEach(async () => {
     moduleRef = await Test.createTestingModule({

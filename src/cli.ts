@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 
 import { AppModule } from './app.module';
 
-import { AppLogger } from './shared/logger/logger.service';
 import { UserService } from './user/services/user.service';
 import { ROLE } from './auth/constants/role.constant';
 import { CreateUserInput } from './user/dtos/user-create-input.dto';
@@ -11,8 +10,6 @@ import { RequestContext } from './shared/request-context/request-context.dto';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
-
-  app.useLogger(new AppLogger());
 
   const configService = app.get(ConfigService);
   const defaultAdminUserPassword = configService.get<string>(
