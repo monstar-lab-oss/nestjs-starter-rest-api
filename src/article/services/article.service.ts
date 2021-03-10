@@ -15,6 +15,7 @@ import { Article } from '../entities/article.entity';
 import { ArticleRepository } from '../repositories/article.repository';
 import { ArticleAclService } from './article-acl.service';
 import { RequestContext } from '../../shared/request-context/request-context.dto';
+import { AppLogger } from '../../shared/logger/logger.service';
 
 @Injectable()
 export class ArticleService {
@@ -22,16 +23,20 @@ export class ArticleService {
     private repository: ArticleRepository,
     private userService: UserService,
     private aclService: ArticleAclService,
-  ) {}
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(ArticleService.name);
+  }
 
   async createArticle(
-    actor: Actor,
+    ctx: RequestContext,
     input: CreateArticleInput,
   ): Promise<ArticleOutput> {
+    this.logger.log(ctx, `${this.createArticle.name} was called`);
+
     const article = plainToClass(Article, input);
 
-    // TODO: get correct RequestContext from controller and pass it to getUserById
-    const ctx = new RequestContext();
+    const actor: Actor = ctx.user;
 
     const user = await this.userService.getUserById(ctx, actor.id);
 
@@ -43,6 +48,8 @@ export class ArticleService {
     }
 
     article.author = plainToClass(User, user);
+
+    this.logger.log(ctx, `calling ${ArticleRepository.name}.save`);
     const savedArticle = await this.repository.save(article);
 
     return plainToClass(ArticleOutput, savedArticle, {
@@ -51,11 +58,16 @@ export class ArticleService {
   }
 
   async updateArticle(
-    actor: Actor,
+    ctx: RequestContext,
     articleId: number,
     input: UpdateArticleInput,
   ): Promise<ArticleOutput> {
+    this.logger.log(ctx, `${this.updateArticle.name} was called`);
+
+    this.logger.log(ctx, `calling ${ArticleRepository.name}.getById`);
     const article = await this.repository.getById(articleId);
+
+    const actor: Actor = ctx.user;
 
     const isAllowed = this.aclService
       .forActor(actor)
@@ -69,6 +81,7 @@ export class ArticleService {
       ...plainToClass(Article, input),
     };
 
+    this.logger.log(ctx, `calling ${ArticleRepository.name}.save`);
     const savedArticle = await this.repository.save(updatedArticle);
 
     return plainToClass(ArticleOutput, savedArticle, {

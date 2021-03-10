@@ -1,5 +1,3 @@
-import { Request } from 'express';
-
 import {
   Body,
   ClassSerializerInterceptor,
@@ -8,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -19,7 +16,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { UserAccessTokenClaims } from '../../auth/dtos/auth-token-output.dto';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import {
   BaseApiResponse,
@@ -31,11 +27,19 @@ import {
 } from '../dtos/article-input.dto';
 import { ArticleOutput } from '../dtos/article-output.dto';
 import { ArticleService } from '../services/article.service';
+import { AppLogger } from '../../shared/logger/logger.service';
+import { ReqContext } from '../../shared/request-context/req-context.decorator';
+import { RequestContext } from '../../shared/request-context/request-context.dto';
 
 @ApiTags('articles')
 @Controller('articles')
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(
+    private readonly articleService: ArticleService,
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(ArticleController.name);
+  }
 
   @Post()
   @ApiOperation({
@@ -48,14 +52,11 @@ export class ArticleController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  async createRoom(
+  async createArticle(
+    @ReqContext() ctx: RequestContext,
     @Body() input: CreateArticleInput,
-    @Req() req: Request,
   ): Promise<BaseApiResponse<ArticleOutput>> {
-    const article = await this.articleService.createArticle(
-      req.user as UserAccessTokenClaims,
-      input,
-    );
+    const article = await this.articleService.createArticle(ctx, input);
     return { data: article, meta: {} };
   }
 
@@ -70,13 +71,13 @@ export class ArticleController {
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  async updateRoom(
+  async updateArticle(
+    @ReqContext() ctx: RequestContext,
     @Param('id') articleId: number,
     @Body() input: UpdateArticleInput,
-    @Req() req: Request,
   ): Promise<BaseApiResponse<ArticleOutput>> {
     const article = await this.articleService.updateArticle(
-      req.user as UserAccessTokenClaims,
+      ctx,
       articleId,
       input,
     );

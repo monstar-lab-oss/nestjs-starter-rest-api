@@ -2,7 +2,6 @@ import { UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { ROLE } from '../../auth/constants/role.constant';
-import { UserAccessTokenClaims } from '../../auth/dtos/auth-token-output.dto';
 import { UserOutput } from '../../user/dtos/user-output.dto';
 import { User } from '../../user/entities/user.entity';
 import { UserService } from '../../user/services/user.service';
@@ -14,11 +13,13 @@ import { ArticleRepository } from '../repositories/article.repository';
 import { ArticleAclService } from './article-acl.service';
 import { ArticleService } from './article.service';
 import { RequestContext } from '../../shared/request-context/request-context.dto';
+import { AppLogger } from '../../shared/logger/logger.service';
 
 describe('ArticleService', () => {
   let service: ArticleService;
   let mockedRepository: any;
   let mockedUserService: any;
+  const mockedLogger = { setContext: jest.fn(), log: jest.fn() };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -40,6 +41,7 @@ describe('ArticleService', () => {
           },
         },
         { provide: ArticleAclService, useValue: new ArticleAclService() },
+        { provide: AppLogger, useValue: mockedLogger },
       ],
     }).compile();
 
@@ -52,21 +54,22 @@ describe('ArticleService', () => {
     expect(service).toBeDefined();
   });
 
+  const ctx = new RequestContext();
+
   describe('Create Article', () => {
     it('should get user from user claims user id', () => {
-      const userClaims: UserAccessTokenClaims = {
+      ctx.user = {
         id: 1,
         roles: [ROLE.USER],
         username: 'testuser',
       };
-      const ctx = new RequestContext();
 
-      service.createArticle(userClaims, new CreateArticleInput());
+      service.createArticle(ctx, new CreateArticleInput());
       expect(mockedUserService.getUserById).toHaveBeenCalledWith(ctx, 1);
     });
 
     it('should call repository save with proper article input and return proper output', async () => {
-      const userClaims: UserAccessTokenClaims = {
+      ctx.user = {
         id: 1,
         roles: [ROLE.USER],
         username: 'testuser',
@@ -93,7 +96,7 @@ describe('ArticleService', () => {
       };
       mockedRepository.save.mockResolvedValue(expectedOutput);
 
-      const output = await service.createArticle(userClaims, articleInput);
+      const output = await service.createArticle(ctx, articleInput);
       expect(mockedRepository.save).toHaveBeenCalledWith(expected);
       expect(output).toEqual(expectedOutput);
     });
@@ -101,7 +104,7 @@ describe('ArticleService', () => {
 
   describe('Update Article', () => {
     it('should get article by id', () => {
-      const userClaims: UserAccessTokenClaims = {
+      ctx.user = {
         id: 1,
         roles: [ROLE.USER],
         username: 'testuser',
@@ -121,12 +124,12 @@ describe('ArticleService', () => {
         author,
       });
 
-      service.updateArticle(userClaims, articleId, input);
+      service.updateArticle(ctx, articleId, input);
       expect(mockedRepository.getById).toHaveBeenCalledWith(articleId);
     });
 
     it('should save article with updated title and post', async () => {
-      const userClaims: UserAccessTokenClaims = {
+      ctx.user = {
         id: 1,
         roles: [ROLE.USER],
         username: 'testuser',
@@ -152,12 +155,12 @@ describe('ArticleService', () => {
         post: 'New Post',
         author,
       };
-      await service.updateArticle(userClaims, articleId, input);
+      await service.updateArticle(ctx, articleId, input);
       expect(mockedRepository.save).toHaveBeenCalledWith(expected);
     });
 
     it('should throw unauthorized exception when someone other than resource owner tries to update article', async () => {
-      const userClaims: UserAccessTokenClaims = {
+      ctx.user = {
         id: 2,
         roles: [ROLE.USER],
         username: 'testuser',
@@ -178,7 +181,7 @@ describe('ArticleService', () => {
       });
 
       try {
-        await service.updateArticle(userClaims, articleId, input);
+        await service.updateArticle(ctx, articleId, input);
       } catch (error) {
         expect(error.constructor).toEqual(UnauthorizedException);
         expect(mockedRepository.save).not.toHaveBeenCalled();
