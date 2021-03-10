@@ -33,6 +33,7 @@ describe('AllExceptionsFilter', () => {
     mockRequest = {
       headers: {},
       url: 'mock-url',
+      header: jest.fn(),
     };
     mockRequest.headers[REQUEST_ID_TOKEN_HEADER] = uuidv4();
 
