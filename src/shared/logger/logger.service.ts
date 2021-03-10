@@ -19,7 +19,6 @@ export class AppLogger {
 
   error(
     ctx: RequestContext,
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     message: string,
     meta?: Record<string, any>,
   ): Logger {
@@ -36,7 +35,6 @@ export class AppLogger {
 
   warn(
     ctx: RequestContext,
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     message: string,
     meta?: Record<string, any>,
   ): Logger {
@@ -53,7 +51,6 @@ export class AppLogger {
 
   debug(
     ctx: RequestContext,
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     message: string,
     meta?: Record<string, any>,
   ): Logger {
@@ -68,10 +65,8 @@ export class AppLogger {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   verbose(
     ctx: RequestContext,
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     message: string,
     meta?: Record<string, any>,
   ): Logger {
@@ -88,7 +83,6 @@ export class AppLogger {
 
   log(
     ctx: RequestContext,
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     message: string,
     meta?: Record<string, any>,
   ): Logger {
