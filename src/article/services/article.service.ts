@@ -57,6 +57,57 @@ export class ArticleService {
     });
   }
 
+  async getArticles(
+    ctx: RequestContext,
+    limit: number,
+    offset: number,
+  ): Promise<{ articles: ArticleOutput[]; count: number }> {
+    this.logger.log(ctx, `${this.getArticles.name} was called`);
+
+    const actor: Actor = ctx.user;
+
+    const isAllowed = this.aclService.forActor(actor).canDoAction(Action.List);
+    if (!isAllowed) {
+      throw new UnauthorizedException();
+    }
+
+    this.logger.log(ctx, `calling ${ArticleRepository.name}.findAndCount`);
+    const [articles, count] = await this.repository.findAndCount({
+      where: {},
+      take: limit,
+      skip: offset,
+    });
+
+    const articlesOutput = plainToClass(ArticleOutput, articles, {
+      excludeExtraneousValues: true,
+    });
+
+    return { articles: articlesOutput, count };
+  }
+
+  async getArticleById(
+    ctx: RequestContext,
+    id: number,
+  ): Promise<ArticleOutput> {
+    this.logger.log(ctx, `${this.getArticleById.name} was called`);
+
+    const actor: Actor = ctx.user;
+
+    this.logger.log(ctx, `calling ${ArticleRepository.name}.getById`);
+    const article = await this.repository.getById(id);
+
+    const isAllowed = this.aclService
+      .forActor(actor)
+      .canDoAction(Action.Read, article);
+    if (!isAllowed) {
+      throw new UnauthorizedException();
+    }
+
+    return plainToClass(ArticleOutput, article, {
+      excludeExtraneousValues: true,
+    });
+  }
+
   async updateArticle(
     ctx: RequestContext,
     articleId: number,
@@ -87,5 +138,24 @@ export class ArticleService {
     return plainToClass(ArticleOutput, savedArticle, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async deleteArticle(ctx: RequestContext, id: number): Promise<void> {
+    this.logger.log(ctx, `${this.deleteArticle.name} was called`);
+
+    this.logger.log(ctx, `calling ${ArticleRepository.name}.getById`);
+    const article = await this.repository.getById(id);
+
+    const actor: Actor = ctx.user;
+
+    const isAllowed = this.aclService
+      .forActor(actor)
+      .canDoAction(Action.Delete, article);
+    if (!isAllowed) {
+      throw new UnauthorizedException();
+    }
+
+    this.logger.log(ctx, `calling ${ArticleRepository.name}.remove`);
+    await this.repository.remove(article);
   }
 }

@@ -11,6 +11,7 @@ import {
 } from '../dtos/article-input.dto';
 import { ArticleOutput } from '../dtos/article-output.dto';
 import { User } from '../../user/entities/user.entity';
+import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 
 describe('ArticleController', () => {
   let controller: ArticleController;
@@ -19,6 +20,7 @@ describe('ArticleController', () => {
     getArticleById: jest.fn(),
     updateArticle: jest.fn(),
     createArticle: jest.fn(),
+    deleteArticle: jest.fn(),
   };
   const mockedLogger = { setContext: jest.fn(), log: jest.fn() };
 
@@ -90,6 +92,35 @@ describe('ArticleController', () => {
     });
   });
 
+  describe('Get articles', () => {
+    it('should call service method getArticles', () => {
+      mockedArticleService.getArticles.mockResolvedValue({
+        articles: [],
+        meta: null,
+      });
+      const queryParams: PaginationParamsDto = {
+        limit: 100,
+        offset: 0,
+      };
+
+      controller.getArticles(ctx, queryParams);
+      expect(mockedArticleService.getArticles).toHaveBeenCalledWith(
+        ctx,
+        queryParams.limit,
+        queryParams.offset,
+      );
+    });
+  });
+
+  describe('Get article by id', () => {
+    it('should call service method getArticleById with id', () => {
+      const id = 1;
+
+      controller.getArticle(ctx, id);
+      expect(mockedArticleService.getArticleById).toHaveBeenCalledWith(ctx, id);
+    });
+  });
+
   describe('Update article', () => {
     it('should call articleService.updateArticle with correct parameters', () => {
       const articleId = 1;
@@ -102,6 +133,17 @@ describe('ArticleController', () => {
         ctx,
         articleId,
         input,
+      );
+    });
+  });
+
+  describe('Delete article', () => {
+    it('should call articleService.deleteArticle with correct id', () => {
+      const articleId = 1;
+      controller.deleteArticle(ctx, articleId);
+      expect(mockedArticleService.deleteArticle).toHaveBeenCalledWith(
+        ctx,
+        articleId,
       );
     });
   });

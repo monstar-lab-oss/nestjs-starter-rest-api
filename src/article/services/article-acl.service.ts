@@ -11,8 +11,8 @@ export class ArticleAclService extends BaseAclService {
   constructor() {
     super();
     this.canDo(ROLE.ADMIN, [Action.Manage]);
-    this.canDo(ROLE.USER, [Action.Create]);
-    this.canDo(ROLE.USER, [Action.Update], this.isArticleAuthor);
+    this.canDo(ROLE.USER, [Action.Create, Action.List, Action.Read]);
+    this.canDo(ROLE.USER, [Action.Update, Action.Delete], this.isArticleAuthor);
   }
 
   isArticleAuthor(article: Article, user: Actor): boolean {
