@@ -11,7 +11,7 @@ export class BaseAclService {
   protected aclRules: AclRule[] = [];
 
   /**
-   * Set ACL rule for user role
+   * Set ACL rule for a role
    */
   protected canDo(
     role: ROLE,
@@ -32,7 +32,7 @@ export class BaseAclService {
         let canDoAction = false;
 
         actor.roles.forEach((actorRole) => {
-          //If already has accress, return
+          //If already has access, return
           if (canDoAction) return true;
 
           //find all rules for given user role
@@ -42,7 +42,7 @@ export class BaseAclService {
 
           //for each rule, check action permission
           aclRules.forEach((aclRule) => {
-            //If already has accress, return
+            //If already has access, return
             if (canDoAction) return true;
 
             //check action permission
