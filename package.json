@@ -21,7 +21,8 @@
     "start:prod": "node dist/src/main",
     "cli:dev": "ts-node -r tsconfig-paths/register src/cli.ts",
     "cli:prod": "node dist/src/cli.js",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -35,8 +36,14 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "lint-staged": {
+    "**/*.ts": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
@@ -83,9 +90,11 @@
     "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "husky": "^4.3.0",
     "jest": "^26.4.2",
     "jest-sonar-reporter": "^2.0.0",
+    "lint-staged": "^10.5.4",
     "prettier": "^2.0.5",
     "supertest": "^4.0.2",
     "ts-jest": "^26.2.0",
