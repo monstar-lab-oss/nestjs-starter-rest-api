@@ -1,4 +1,4 @@
-## NestJS Starter-Kit [WIP]
+## NestJS Starter-Kit [v2]
 
 ![Build Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/build/badge.svg)
 ![Tests Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/tests/badge.svg)
@@ -22,7 +22,7 @@ To view sample implementations based on this starter-kit, please visit the [nest
 | Feature                  | Info               | Progress |
 | ------------------------ | ------------------ | -------- |
 | Authentication           | JWT                | Done     |
-| Authorization            | RBAC (Role based)  | WIP      |
+| Authorization            | RBAC (Role based)  | Done     |
 | ORM Integration          | TypeORM            | Done     |
 | DB Migrations            | TypeORM            | Done     |
 | Logging                  | winston            | Done     |
@@ -31,6 +31,12 @@ To view sample implementations based on this starter-kit, please visit the [nest
 | Docker Ready             | Dockerfile         | Done     |
 | Auto-generated OpenAPI   | -                  | Done     |
 | Auto-generated ChangeLog | -                  | WIP      |
+
+## Note
+
+Most of the features added to this starter-kit have already been tried out in production applications by us here at MonstarLab. Our production applications are more feature rich, and we constantly strive to bring those features to this OSS starter-kit.
+
+If you would like to use a more feature rich starter-kit, with more awesome features from Day 1, then please reach out to us and we can collaborate on it together as technology partners. :)
 
 ## Installation
 
