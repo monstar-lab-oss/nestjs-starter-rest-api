@@ -19,6 +19,8 @@ To view sample implementations based on this starter-kit, please visit the [nest
 
 ## Starter-kit Features
 
+One of our main principals has been to keep the starter-kit as lightweight as possible. With that in mind, here are some of the features that we have added in this starter-kit.
+
 | Feature                  | Info               | Progress |
 | ------------------------ | ------------------ | -------- |
 | Authentication           | JWT                | Done     |
@@ -32,7 +34,9 @@ To view sample implementations based on this starter-kit, please visit the [nest
 | Auto-generated OpenAPI   | -                  | Done     |
 | Auto-generated ChangeLog | -                  | WIP      |
 
-## Note
+Apart from these features above, our start-kit comes loaded with a bunch of minor awesomeness like prettier integration, commit-linting husky hooks, package import sorting, SonarCloud github actions, docker-compose for database dependencies, etc. :D
+
+## Consulting
 
 Most of the features added to this starter-kit have already been tried out in production applications by us here at MonstarLab. Our production applications are more feature rich, and we constantly strive to bring those features to this OSS starter-kit.
 
@@ -138,6 +142,14 @@ $ npm run migration:revert
 ## Architecture
 
 - [Project Structure](./docs/project-structure.md)
+
+## Contributors
+
+- [Yash Murty](https://github.com/yashmurty)
+- [S M Asad Rahman](https://github.com/asad-mlbd)
+- [Tanveer Hassan](https://github.com/war1oc)
+- [Saad Bin Amjad](https://github.com/Saad-Amjad)
+- [Sivan Payyadakath](https://github.com/sivanpayyadakath)
 
 ## External Links
 
