@@ -1,4 +1,4 @@
-## NestJS Starter-Kit [v2]
+## NestJS Starter Kit [v2]
 
 ![Build Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/build/badge.svg)
 ![Tests Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/tests/badge.svg)
@@ -15,11 +15,11 @@ This is a Github Template Repository, so it can be easily [used as a starter tem
 
 ## Sample implementations
 
-To view sample implementations based on this starter-kit, please visit the [nestjs-sample-solutions](https://github.com/monstar-lab-oss/nestjs-sample-solutions) repository.
+To view sample implementations based on this starter kit, please visit the [nestjs-sample-solutions](https://github.com/monstar-lab-oss/nestjs-sample-solutions) repository.
 
-## Starter-kit Features
+## Starter kit Features
 
-One of our main principals has been to keep the starter-kit as lightweight as possible. With that in mind, here are some of the features that we have added in this starter-kit.
+One of our main principals has been to keep the starter kit as lightweight as possible. With that in mind, here are some of the features that we have added in this starter kit.
 
 | Feature                  | Info               | Progress |
 | ------------------------ | ------------------ | -------- |
@@ -38,9 +38,9 @@ Apart from these features above, our start-kit comes loaded with a bunch of mino
 
 ## Consulting
 
-Most of the features added to this starter-kit have already been tried out in production applications by us here at MonstarLab. Our production applications are more feature rich, and we constantly strive to bring those features to this OSS starter-kit.
+Most of the features added to this starter kit have already been tried out in production applications by us here at MonstarLab. Our production applications are more feature rich, and we constantly strive to bring those features to this OSS starter kit.
 
-If you would like to use a more feature rich starter-kit, with more awesome features from Day 1, then please reach out to us and we can collaborate on it together as technology partners. :)
+If you would like to use a more feature rich starter kit, with more awesome features from Day 1, then please reach out to us and we can collaborate on it together as technology partners. :)
 
 ## Installation
 
