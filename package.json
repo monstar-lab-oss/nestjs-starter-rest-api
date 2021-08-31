@@ -98,7 +98,7 @@
     "prettier": "^2.3.2",
     "supertest": "^4.0.2",
     "ts-jest": "^26.5.6",
-    "ts-loader": "^7.0.5",
+    "ts-loader": "^8.0.10",
     "ts-node": "^8.10.2",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.9.7"
