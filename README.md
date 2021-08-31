@@ -1,5 +1,6 @@
 ## NestJS Starter Kit [v2]
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![Build Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/build/badge.svg)
 ![Tests Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/tests/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=monstar-lab-oss_nestjs-starter-rest-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=monstar-lab-oss_nestjs-starter-rest-api)
@@ -22,7 +23,7 @@ To view sample implementations based on this starter kit, please visit the [nest
 One of our main principals has been to keep the starter kit as lightweight as possible. With that in mind, here are some of the features that we have added in this starter kit.
 
 | Feature                  | Info               | Progress |
-| ------------------------ | ------------------ | -------- |
+|--------------------------|--------------------|----------|
 | Authentication           | JWT                | Done     |
 | Authorization            | RBAC (Role based)  | Done     |
 | ORM Integration          | TypeORM            | Done     |
