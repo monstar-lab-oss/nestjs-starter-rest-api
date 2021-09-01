@@ -54,7 +54,7 @@
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.4.2",
     "@nestjs/swagger": "4.5.1",
-    "@nestjs/typeorm": "^7.1.0",
+    "@nestjs/typeorm": "^7.1.5",
     "@types/uuid": "^8.3.0",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.3.1",
