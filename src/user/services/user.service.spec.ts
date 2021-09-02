@@ -1,15 +1,14 @@
-import * as bcrypt from 'bcrypt';
-
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 
 import { ROLE } from '../../auth/constants/role.constant';
-import { UpdateUserInput } from '../dtos/user-update-input.dto';
-import { User } from '../entities/user.entity';
-import { UserService } from './user.service';
 import { AppLogger } from '../../shared/logger/logger.service';
 import { RequestContext } from '../../shared/request-context/request-context.dto';
+import { UpdateUserInput } from '../dtos/user-update-input.dto';
+import { User } from '../entities/user.entity';
+import { UserRepository } from '../repositories/user.repository';
+import { UserService } from './user.service';
 
 describe('UserService', () => {
   let service: UserService;
@@ -35,7 +34,7 @@ describe('UserService', () => {
       providers: [
         UserService,
         {
-          provide: getRepositoryToken(User),
+          provide: UserRepository,
           useValue: mockedRepository,
         },
         { provide: AppLogger, useValue: mockedLogger },
