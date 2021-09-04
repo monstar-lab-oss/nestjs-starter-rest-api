@@ -109,7 +109,7 @@ $ docker build -t my-app .
 $ docker run -p 3000:3000 --volume 'pwd':/usr/src/app --network --env-file .env my-app
 
 # run using docker compose
-$ docker-compose up
+$ docker compose up
 ```
 
 Learn more about Docker conventions [here](https://github.com/monstar-lab-group/nodejs-backend/blob/master/architecture/docker-ready.md). (WIP - Currently this is an internal org link.)
