@@ -45,6 +45,9 @@ If you would like to use a more feature rich starter kit, with more awesome feat
 
 ## Installation
 
+Note: when using docker, all the `npm` commands can also be performed using `./scripts/npm` (for example `./scripts/npm install`).
+This script allows you to run the same commands inside the same environment and versions than the service, without relying on what is installed on the host.
+
 ```bash
 $ npm install
 ```
