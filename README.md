@@ -56,6 +56,22 @@ Create a `.env` file from the template `.env.template` file.
 
 Generate public and private key pair for jwt authentication:
 
+### With docker
+
+Run this command:
+```bash
+./scripts/generate-jwt-keys
+```
+
+It will output something like this. You only need to add it to your `.env` file.
+```
+To setup the JWT keys, please add the following values to your .env file:
+JWT_PUBLIC_KEY_BASE64="(long base64 content)"
+JWT_PRIVATE_KEY_BASE64="(long base64 content)"
+```
+
+### Without docker
+
 ```bash
 $ ssh-keygen -t rsa -b 2048 -m PEM -f jwtRS256.key
 # Don't add passphrase
