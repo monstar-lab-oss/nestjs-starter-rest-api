@@ -133,13 +133,7 @@ $ docker compose up
 
 Learn more about Docker conventions [here](https://github.com/monstar-lab-group/nodejs-backend/blob/master/architecture/docker-ready.md). (WIP - Currently this is an internal org link.)
 
-Note: If you are running docker on M1 Mac and want to use `mysqldb`, then update the `docker-compose.yml` file with platform information:
-
-```bash
-mysqldb:
-    image: mysql:8
-    platform: linux/x86_64
-```
+Apple M1 users please append `MYSQL_PLATFORM=linux/amd64` to your `.env` file. This is a workaround as MySQL docker images still doesn't support arm64 operating systems.
 
 ## Test
 

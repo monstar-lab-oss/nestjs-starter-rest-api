@@ -30,6 +30,7 @@ services:
 
   mysqldb:
     image: mysql:8
+    platform: ${MYSQL_PLATFORM}
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - 3306:3306
