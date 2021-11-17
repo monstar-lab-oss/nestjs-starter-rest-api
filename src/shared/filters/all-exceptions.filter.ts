@@ -5,12 +5,12 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { Request, Response } from 'express';
 
 import { REQUEST_ID_TOKEN_HEADER } from '../constants';
+import { BaseApiException } from '../exceptions/base-api.exception';
 import { AppLogger } from '../logger/logger.service';
-import { BaseApiError } from '../errors/base-api-error';
 import { createRequestContext } from '../request-context/util';
 
 @Catch()
@@ -43,7 +43,7 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
     let localizedMessage: string;
 
     // TODO : Refactor the below cases into a switch case and tidy up error response creation.
-    if (exception instanceof BaseApiError) {
+    if (exception instanceof BaseApiException) {
       statusCode = exception.getStatus();
       errorName = exception.constructor.name;
       message = exception.message;
