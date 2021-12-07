@@ -1,4 +1,6 @@
-FROM node:14 as builder
+# lts-gallium refers to v16
+# Using this instead of node:16 to avoid dependabot updates
+FROM node:lts-gallium as builder
 
 WORKDIR /usr/src/app
 
@@ -14,7 +16,7 @@ RUN npm run build
 
 RUN npm prune
 
-FROM node:14
+FROM node:lts-gallium
 
 ARG APP_ENV=development
 ENV NODE_ENV=${APP_ENV}
