@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, Min } from 'class-validator';
 
 export class PaginationParamsDto {
   @ApiPropertyOptional({
@@ -9,6 +9,7 @@ export class PaginationParamsDto {
   })
   @IsNumber()
   @IsOptional()
+  @Min(1)
   @Transform(({ value }) => parseInt(value, 10), { toClassOnly: true })
   limit = 100;
 
@@ -18,6 +19,7 @@ export class PaginationParamsDto {
   })
   @IsNumber()
   @IsOptional()
+  @Min(0)
   @Transform(({ value }) => parseInt(value, 10), { toClassOnly: true })
   offset = 0;
 }
