@@ -9,7 +9,7 @@ export class PaginationParamsDto {
   })
   @IsNumber()
   @IsOptional()
-  @Min(1)
+  @Min(0)
   @Transform(({ value }) => parseInt(value, 10), { toClassOnly: true })
   limit = 100;
 
