@@ -172,6 +172,7 @@ $ npm run migration:revert
 - [Tanveer Hassan](https://github.com/war1oc)
 - [Saad Bin Amjad](https://github.com/Saad-Amjad)
 - [Sivan Payyadakath](https://github.com/sivanpayyadakath)
+- [Sébastien Caparros](https://github.com/Seb-C)
 
 ## External Links
 
