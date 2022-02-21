@@ -65,7 +65,7 @@
     "swagger-ui-express": "4.1.6",
     "typeorm": "^0.2.37",
     "uuid": "^8.3.2",
-    "winston": "^3.3.3"
+    "winston": "^3.6.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
