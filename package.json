@@ -63,7 +63,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.3.0",
     "swagger-ui-express": "4.1.6",
-    "typeorm": "^0.2.37",
+    "typeorm": "^0.2.43",
     "uuid": "^8.3.2",
     "winston": "^3.6.0"
   },
