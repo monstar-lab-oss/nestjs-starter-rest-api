@@ -7,7 +7,7 @@ import { Action } from './../../shared/acl/action.constant';
 import { Actor } from './../../shared/acl/actor.constant';
 
 @Injectable()
-export class UserAclService extends BaseAclService {
+export class UserAclService extends BaseAclService<User> {
   constructor() {
     super();
     // Admin can do all action
