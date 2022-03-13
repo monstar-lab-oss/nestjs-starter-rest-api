@@ -1,8 +1,8 @@
+import { ROLE } from './../../auth/constants/role.constant';
 import { AclRule, RuleCallback } from './acl-rule.constant';
 import { Action } from './action.constant';
-import { ROLE } from './../../auth/constants/role.constant';
-import { Resource } from './resource.constant';
 import { Actor } from './actor.constant';
+import { Resource } from './resource.constant';
 
 export class BaseAclService {
   /**

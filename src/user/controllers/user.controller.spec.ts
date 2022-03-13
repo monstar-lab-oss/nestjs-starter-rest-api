@@ -1,15 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { UserController } from './user.controller';
-
-import { UserService } from '../services/user.service';
-
-import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
-import { UserOutput } from '../dtos/user-output.dto';
 import { ROLE } from '../../auth/constants/role.constant';
-import { UpdateUserInput } from '../dtos/user-update-input.dto';
+import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 import { AppLogger } from '../../shared/logger/logger.service';
 import { RequestContext } from '../../shared/request-context/request-context.dto';
+import { UserOutput } from '../dtos/user-output.dto';
+import { UpdateUserInput } from '../dtos/user-update-input.dto';
+import { UserService } from '../services/user.service';
+import { UserController } from './user.controller';
 
 describe('UserController', () => {
   let controller: UserController;

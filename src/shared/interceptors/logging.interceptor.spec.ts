@@ -1,8 +1,8 @@
-import { LoggingInterceptor } from './logging.interceptor';
 import { ExecutionContext } from '@nestjs/common';
 
 import { AppLogger } from '../logger/logger.service';
 import * as utils from '../request-context/util';
+import { LoggingInterceptor } from './logging.interceptor';
 
 describe('LoggingInterceptor', () => {
   let loggingInterceptor: LoggingInterceptor;

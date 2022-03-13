@@ -2,7 +2,6 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { User } from '../../user/entities/user.entity';
-
 import { Article } from '../entities/article.entity';
 import { ArticleRepository } from './article.repository';
 

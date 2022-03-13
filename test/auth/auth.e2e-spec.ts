@@ -1,19 +1,19 @@
-import * as request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { AppModule } from './../../src/app.module';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import * as request from 'supertest';
 
-import {
-  closeDBAfterTest,
-  seedAdminUser,
-  createDBEntities,
-  resetDBBeforeTest,
-} from './../test-utils';
-import { RegisterInput } from '../../src/auth/dtos/auth-register-input.dto';
+import { ROLE } from '../../src/auth/constants/role.constant';
 import { LoginInput } from '../../src/auth/dtos/auth-login-input.dto';
 import { RefreshTokenInput } from '../../src/auth/dtos/auth-refresh-token-input.dto';
+import { RegisterInput } from '../../src/auth/dtos/auth-register-input.dto';
 import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
-import { ROLE } from '../../src/auth/constants/role.constant';
+import { AppModule } from './../../src/app.module';
+import {
+  closeDBAfterTest,
+  createDBEntities,
+  resetDBBeforeTest,
+  seedAdminUser,
+} from './../test-utils';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;

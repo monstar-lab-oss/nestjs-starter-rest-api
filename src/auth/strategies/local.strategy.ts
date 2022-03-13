@@ -1,13 +1,13 @@
-import { Strategy } from 'passport-local';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
+import { Strategy } from 'passport-local';
 
-import { AuthService } from '../services/auth.service';
-import { STRATEGY_LOCAL } from '../constants/strategy.constant';
-import { UserAccessTokenClaims } from '../dtos/auth-token-output.dto';
 import { AppLogger } from '../../shared/logger/logger.service';
 import { createRequestContext } from '../../shared/request-context/util';
+import { STRATEGY_LOCAL } from '../constants/strategy.constant';
+import { UserAccessTokenClaims } from '../dtos/auth-token-output.dto';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, STRATEGY_LOCAL) {

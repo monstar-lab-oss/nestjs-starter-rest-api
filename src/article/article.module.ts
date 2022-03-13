@@ -6,8 +6,8 @@ import { SharedModule } from '../shared/shared.module';
 import { UserModule } from '../user/user.module';
 import { ArticleController } from './controllers/article.controller';
 import { ArticleRepository } from './repositories/article.repository';
-import { ArticleAclService } from './services/article-acl.service';
 import { ArticleService } from './services/article.service';
+import { ArticleAclService } from './services/article-acl.service';
 
 @Module({
   imports: [
