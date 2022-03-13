@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { v4 as uuidv4, validate } from 'uuid';
+
 import { REQUEST_ID_TOKEN_HEADER } from '../../constants';
 
 export const RequestIdMiddleware = (

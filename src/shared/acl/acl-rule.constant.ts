@@ -1,7 +1,7 @@
-import { Action } from './action.constant';
-import { Resource } from './resource.constant';
 import { ROLE } from './../../auth/constants/role.constant';
+import { Action } from './action.constant';
 import { Actor } from './actor.constant';
+import { Resource } from './resource.constant';
 
 /**
  * Custom rule callback definition

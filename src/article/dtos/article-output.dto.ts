@@ -1,6 +1,5 @@
-import { Expose, Type } from 'class-transformer';
-
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose, Type } from 'class-transformer';
 
 import { AuthorOutput } from './author-output.dto';
 

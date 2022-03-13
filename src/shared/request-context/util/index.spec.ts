@@ -1,11 +1,11 @@
 import { Request } from 'express';
 
 import { UserAccessTokenClaims } from '../../../auth/dtos/auth-token-output.dto';
-import { createRequestContext } from '.';
 import {
   FORWARDED_FOR_TOKEN_HEADER,
   REQUEST_ID_TOKEN_HEADER,
 } from '../../constants';
+import { createRequestContext } from '.';
 
 describe('createRequestContext function', () => {
   const user = new UserAccessTokenClaims();

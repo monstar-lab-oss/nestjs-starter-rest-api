@@ -1,11 +1,12 @@
-import {
-  IsNotEmpty,
-  MaxLength,
-  Length,
-  IsString,
-  IsEmail,
-} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  Length,
+  MaxLength,
+} from 'class-validator';
+
 import { ROLE } from '../constants/role.constant';
 
 export class RegisterInput {

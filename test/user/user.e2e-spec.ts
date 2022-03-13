@@ -1,17 +1,16 @@
-import { Test } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 
 import { AppModule } from '../../src/app.module';
-
+import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
+import { UserOutput } from '../../src/user/dtos/user-output.dto';
 import {
-  resetDBBeforeTest,
-  createDBEntities,
   closeDBAfterTest,
+  createDBEntities,
+  resetDBBeforeTest,
   seedAdminUser,
 } from '../test-utils';
-import { UserOutput } from '../../src/user/dtos/user-output.dto';
-import { AuthTokenOutput } from '../../src/auth/dtos/auth-token-output.dto';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;

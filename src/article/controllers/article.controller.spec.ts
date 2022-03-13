@@ -1,17 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { ArticleController } from './article.controller';
-
-import { ArticleService } from '../services/article.service';
+import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 import { AppLogger } from '../../shared/logger/logger.service';
 import { RequestContext } from '../../shared/request-context/request-context.dto';
+import { User } from '../../user/entities/user.entity';
 import {
   CreateArticleInput,
   UpdateArticleInput,
 } from '../dtos/article-input.dto';
 import { ArticleOutput } from '../dtos/article-output.dto';
-import { User } from '../../user/entities/user.entity';
-import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
+import { ArticleService } from '../services/article.service';
+import { ArticleController } from './article.controller';
 
 describe('ArticleController', () => {
   let controller: ArticleController;
