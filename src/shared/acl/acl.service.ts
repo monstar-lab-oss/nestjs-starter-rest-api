@@ -2,13 +2,12 @@ import { ROLE } from './../../auth/constants/role.constant';
 import { AclRule, RuleCallback } from './acl-rule.constant';
 import { Action } from './action.constant';
 import { Actor } from './actor.constant';
-import { Resource } from './resource.constant';
 
-export class BaseAclService {
+export class BaseAclService<Resource> {
   /**
    * ACL rules
    */
-  protected aclRules: AclRule[] = [];
+  protected aclRules: AclRule<Resource>[] = [];
 
   /**
    * Set ACL rule for a role
@@ -16,7 +15,7 @@ export class BaseAclService {
   protected canDo(
     role: ROLE,
     actions: Action[],
-    ruleCallback?: RuleCallback,
+    ruleCallback?: RuleCallback<Resource>,
   ): void {
     ruleCallback
       ? this.aclRules.push({ role, actions, ruleCallback })

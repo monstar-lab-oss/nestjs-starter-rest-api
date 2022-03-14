@@ -5,8 +5,16 @@ import { BaseAclService } from './acl.service';
 import { RuleCallback } from './acl-rule.constant';
 import { Action } from './action.constant';
 
-class MockAclService extends BaseAclService {
-  public canDo(role: ROLE, actions: Action[], ruleCallback?: RuleCallback) {
+class MockResource {
+  id: number;
+}
+
+class MockAclService extends BaseAclService<MockResource> {
+  public canDo(
+    role: ROLE,
+    actions: Action[],
+    ruleCallback?: RuleCallback<MockResource>,
+  ) {
     super.canDo(role, actions, ruleCallback);
   }
 

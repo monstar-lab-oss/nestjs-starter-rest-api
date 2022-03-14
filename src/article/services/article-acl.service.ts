@@ -7,7 +7,7 @@ import { Actor } from '../../shared/acl/actor.constant';
 import { Article } from '../entities/article.entity';
 
 @Injectable()
-export class ArticleAclService extends BaseAclService {
+export class ArticleAclService extends BaseAclService<Article> {
   constructor() {
     super();
     this.canDo(ROLE.ADMIN, [Action.Manage]);
