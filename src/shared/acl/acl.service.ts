@@ -3,11 +3,11 @@ import { AclRule, RuleCallback } from './acl-rule.constant';
 import { Action } from './action.constant';
 import { Actor } from './actor.constant';
 
-export class BaseAclService<T> {
+export class BaseAclService<Resource> {
   /**
    * ACL rules
    */
-  protected aclRules: AclRule<T>[] = [];
+  protected aclRules: AclRule<Resource>[] = [];
 
   /**
    * Set ACL rule for a role
@@ -15,7 +15,7 @@ export class BaseAclService<T> {
   protected canDo(
     role: ROLE,
     actions: Action[],
-    ruleCallback?: RuleCallback<T>,
+    ruleCallback?: RuleCallback<Resource>,
   ): void {
     ruleCallback
       ? this.aclRules.push({ role, actions, ruleCallback })
@@ -27,7 +27,7 @@ export class BaseAclService<T> {
    */
   public forActor = (actor: Actor): any => {
     return {
-      canDoAction: (action: Action, resource?: T) => {
+      canDoAction: (action: Action, resource?: Resource) => {
         let canDoAction = false;
 
         actor.roles.forEach((actorRole) => {

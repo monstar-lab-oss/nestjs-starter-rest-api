@@ -5,12 +5,15 @@ import { Actor } from './actor.constant';
 /**
  * Custom rule callback definition
  */
-export type RuleCallback<T> = (resource: T, actor: Actor) => boolean;
+export type RuleCallback<Resource> = (
+  resource: Resource,
+  actor: Actor,
+) => boolean;
 
 /**
  * ACL rule format
  */
-export type AclRule<T> = {
+export type AclRule<Resource> = {
   //if rule for particular role or for all role
   role: ROLE;
 
@@ -18,5 +21,5 @@ export type AclRule<T> = {
   actions: Action[];
 
   //specific rule there or otherwise true
-  ruleCallback?: RuleCallback<T>;
+  ruleCallback?: RuleCallback<Resource>;
 };
