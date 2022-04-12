@@ -51,7 +51,7 @@
     "@nestjs/platform-express": "^8.0.6",
     "@nestjs/swagger": "^5.0.9",
     "@nestjs/typeorm": "^8.0.2",
-    "@types/uuid": "^8.3.1",
+    "@types/uuid": "^8.3.4",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
