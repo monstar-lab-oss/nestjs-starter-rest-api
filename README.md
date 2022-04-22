@@ -73,8 +73,9 @@ JWT_PRIVATE_KEY_BASE64="(long base64 content)"
 ### Without docker
 
 ```bash
-$ ssh-keygen -t rsa -b 2048 -m PEM -f jwtRS256.key
-# Don't add passphrase
+# Creating without passpharse
+$ ssh-keygen -t rsa -b 2048 -m PEM -f jwtRS256.key -N ""
+
 $ openssl rsa -in jwtRS256.key -pubout -outform PEM -out jwtRS256.key.pub
 ```
 
