@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { plainToClass } from 'class-transformer';
@@ -59,6 +63,14 @@ export class AuthService {
     input: RegisterInput,
   ): Promise<RegisterOutput> {
     this.logger.log(ctx, `${this.register.name} was called`);
+
+    // check for existing records
+    if (await this.userService.findByUsername(ctx, input.username)) {
+      throw new BadRequestException('The username has already been taken.');
+    }
+    if (await this.userService.findByEmail(ctx, input.email)) {
+      throw new BadRequestException('The email has already been taken.');
+    }
 
     // TODO : Setting default role as USER here. Will add option to change this later via ADMIN users.
     input.roles = [ROLE.USER];
