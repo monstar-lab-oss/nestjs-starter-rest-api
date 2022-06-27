@@ -66,10 +66,10 @@ export class AuthService {
 
     // check for existing records
     if (await this.userService.findByUsername(ctx, input.username)) {
-      throw new BadRequestException('The username has already been taken.');
+      throw new BadRequestException(['The username has already been taken.']);
     }
     if (await this.userService.findByEmail(ctx, input.email)) {
-      throw new BadRequestException('The email has already been taken.');
+      throw new BadRequestException(['The email has already been taken.']);
     }
 
     // TODO : Setting default role as USER here. Will add option to change this later via ADMIN users.
