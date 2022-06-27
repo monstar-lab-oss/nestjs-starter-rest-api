@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -54,6 +54,8 @@ describe('AuthService', () => {
     findById: jest.fn(),
     createUser: jest.fn(),
     validateUsernamePassword: jest.fn(),
+    findByUsername: jest.fn(),
+    findByEmail: jest.fn(),
   };
 
   const mockedJwtService = {
@@ -144,6 +146,16 @@ describe('AuthService', () => {
 
       expect(mockedUserService.createUser).toBeCalledWith(ctx, registerInput);
       expect(result).toEqual(userOutput);
+    });
+
+    it('should throw bad request exception for existing username', async () => {
+      jest
+        .spyOn(mockedUserService, 'findByUsername')
+        .mockImplementation(() => true);
+
+      await expect(service.register(ctx, registerInput)).rejects.toThrowError(
+        BadRequestException,
+      );
     });
   });
 
