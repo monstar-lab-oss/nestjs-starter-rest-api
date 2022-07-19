@@ -21,7 +21,7 @@ describe('AllExceptionsFilter', () => {
   let mockResponse: any;
 
   const mockConfigService = {
-    get: (key) => 'development',
+    get: () => 'development',
   };
   const mockedLogger = {
     warn: jest.fn().mockReturnThis(),
@@ -180,7 +180,7 @@ describe('AllExceptionsFilter', () => {
 
     const dateSpy = jest
       .spyOn(global, 'Date')
-      .mockImplementation(() => (mockDate as unknown) as string);
+      .mockImplementation(() => mockDate as unknown as string);
 
     filter.catch(mockException1, mockContext);
     expect(mockResponse.status).toBeCalledWith(HttpStatus.NOT_FOUND);
