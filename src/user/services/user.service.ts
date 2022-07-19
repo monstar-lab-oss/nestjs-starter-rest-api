@@ -112,11 +112,17 @@ export class UserService {
     });
   }
 
-  async findByEmail(ctx: RequestContext, email: string): Promise<UserOutput> {
-    this.logger.log(ctx, `${this.findByEmail.name} was called`);
+  async findByUsernameOrEmail(
+    ctx: RequestContext,
+    username: string,
+    email: string,
+  ): Promise<UserOutput> {
+    this.logger.log(ctx, `${this.findByUsernameOrEmail.name} was called`);
 
     this.logger.log(ctx, `calling ${UserRepository.name}.findOne`);
-    const user = await this.repository.findOne({ email });
+    const user = await this.repository.findOne({
+      where: [{ username }, { email }],
+    });
 
     return plainToClass(UserOutput, user, {
       excludeExtraneousValues: true,

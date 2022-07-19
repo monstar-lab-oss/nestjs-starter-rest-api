@@ -285,22 +285,26 @@ describe('UserService', () => {
     });
   });
 
-  describe('findByEmail', () => {
+  describe('findByUsernameOrEmail', () => {
     beforeEach(() => {
       jest
         .spyOn(mockedRepository, 'findOne')
         .mockImplementation(async () => user);
     });
 
-    it('should find user from DB using given email', async () => {
-      await service.findByEmail(ctx, user.email);
+    it('should find user from DB using given username and email', async () => {
+      await service.findByUsernameOrEmail(ctx, user.username, user.email);
       expect(mockedRepository.findOne).toBeCalledWith({
-        email: user.email,
+        where: [{ username: user.username }, { email: user.email }],
       });
     });
 
     it('should return serialized user', async () => {
-      const result = await service.findByEmail(ctx, user.email);
+      const result = await service.findByUsernameOrEmail(
+        ctx,
+        user.username,
+        user.email,
+      );
 
       expect(result).toEqual({
         id: user.id,

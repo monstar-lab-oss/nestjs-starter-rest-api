@@ -55,7 +55,7 @@ describe('AuthService', () => {
     createUser: jest.fn(),
     validateUsernamePassword: jest.fn(),
     findByUsername: jest.fn(),
-    findByEmail: jest.fn(),
+    findByUsernameOrEmail: jest.fn(),
   };
 
   const mockedJwtService = {
@@ -150,7 +150,7 @@ describe('AuthService', () => {
 
     it('should throw bad request exception for existing username', async () => {
       jest
-        .spyOn(mockedUserService, 'findByUsername')
+        .spyOn(mockedUserService, 'findByUsernameOrEmail')
         .mockImplementation(() => true);
 
       await expect(service.register(ctx, registerInput)).rejects.toThrowError(
