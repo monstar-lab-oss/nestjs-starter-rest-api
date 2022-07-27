@@ -103,7 +103,7 @@ We can run the project with or without docker.
 
 To run the server without Docker we need this pre-requisite:
 
-- MySQL server running
+- Postgres server running
 
 Commands:
 
@@ -132,8 +132,6 @@ $ docker compose up
 ```
 
 Learn more about Docker conventions [here](https://github.com/monstar-lab-group/nodejs-backend/blob/master/architecture/docker-ready.md). (WIP - Currently this is an internal org link.)
-
-Apple M1 users please append `MYSQL_PLATFORM=linux/amd64` to your `.env` file. This is a workaround as MySQL docker images still doesn't support arm64 operating systems.
 
 ## Test
 

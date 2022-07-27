@@ -15,14 +15,14 @@ import { AppLoggerModule } from './logger/logger.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        type: 'mysql',
+        type: 'postgres',
         host: configService.get<string>('database.host'),
         port: configService.get<number | undefined>('database.port'),
         database: configService.get<string>('database.name'),
         username: configService.get<string>('database.user'),
         password: configService.get<string>('database.pass'),
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        // Timezone configured on the MySQL server.
+        // Timezone configured on the Postgres server.
         // This is used to typecast server date/time values to JavaScript Date object and vice versa.
         timezone: 'Z',
         synchronize: false,
