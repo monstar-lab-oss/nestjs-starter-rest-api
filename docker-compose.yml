@@ -15,7 +15,7 @@ services:
     environment:
       APP_ENV: ${APP_ENV}
       APP_PORT: ${APP_PORT}
-      DB_HOST: mysqldb
+      DB_HOST: pgsqldb
       DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
@@ -26,27 +26,26 @@ services:
       JWT_PRIVATE_KEY_BASE64: ${JWT_PRIVATE_KEY_BASE64}
       DEFAULT_ADMIN_USER_PASSWORD: ${DEFAULT_ADMIN_USER_PASSWORD}
     depends_on:
-      - mysqldb
+      - pgsqldb
 
-  mysqldb:
-    image: mysql:8
-    platform: ${MYSQL_PLATFORM}
-    command: --default-authentication-plugin=mysql_native_password
-    ports:
-      - 3306:3306
-    volumes:
-      - mysqldata:/var/lib/mysql
+  pgsqldb:
+    image: postgres:14.3
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: example_db
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASS}"
+      POSTGRES_DB: "${DB_NAME}"
+    ports:
+      - 5432:5432
+    volumes:
+      - pgsqldata:/var/lib/postgresql/data
 
   adminer:
     image: adminer
     ports:
       - 8080:8080
     depends_on:
-      - mysqldb
+      - pgsqldb
 
 volumes:
   node_modules:
-  mysqldata:
+  pgsqldata:

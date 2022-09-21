@@ -11,7 +11,7 @@ jobs:
       APP_ENV: test
       APP_PORT: 3000
       DB_HOST: localhost
-      DB_PORT: 3306
+      DB_PORT: 5432
       DB_NAME: example_db
       DB_USER: root
       DB_PASS: example
@@ -22,15 +22,15 @@ jobs:
       DEFAULT_ADMIN_USER_PASSWORD: example_admin_pass
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 12
+          node-version: 16
       - run: npm ci
       - name: Run unit tests
         run: npm test
       - name: Build the docker-compose stack
-        run: docker-compose -f docker-compose.yml up -d mysqldb
+        run: docker-compose -f docker-compose.yml up -d pgsqldb
       - name: Check running containers
         run: docker ps -a
       - name: Run e2e tests

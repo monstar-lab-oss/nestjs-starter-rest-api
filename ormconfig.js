@@ -1,5 +1,5 @@
 module.exports = {
-  type: 'mysql',
+  type: 'postgres',
   host: process.env.DB_HOST,
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : null,
   username: process.env.DB_USER,
@@ -12,7 +12,7 @@ module.exports = {
     entitiesDir: 'src',
     migrationsDir: 'migrations',
   },
-  // Timezone configured on the MySQL server.
+  // Timezone configured on the Postgres server.
   // This is used to typecast server date/time values to JavaScript Date object and vice versa.
   timezone: 'Z',
   synchronize: false,

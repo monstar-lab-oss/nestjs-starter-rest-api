@@ -21,11 +21,12 @@ export const resetDBBeforeTest = async (): Promise<void> => {
   console.log(`Dropping ${TEST_DB_NAME} database and recreating it`);
   const connection = await createConnection({
     name: TEST_DB_CONNECTION_NAME,
-    type: 'mysql',
+    type: 'postgres',
     host: 'localhost',
-    port: 3306,
+    port: 5432,
     username: 'root',
     password: 'example',
+    database: 'postgres',
   });
 
   await connection.query(`drop database if exists ${TEST_DB_NAME}`);
@@ -38,9 +39,9 @@ export const createDBEntities = async (): Promise<void> => {
   console.log(`Creating entities in ${TEST_DB_NAME} database`);
   await createConnection({
     name: TEST_DB_CONNECTION_NAME,
-    type: 'mysql',
+    type: 'postgres',
     host: 'localhost',
-    port: 3306,
+    port: 5432,
     username: 'root',
     password: 'example',
     database: TEST_DB_NAME,
