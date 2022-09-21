@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
 import { User } from '../../user/entities/user.entity';
 import { Article } from '../entities/article.entity';
@@ -8,9 +9,23 @@ import { ArticleRepository } from './article.repository';
 describe('ArticleRepository', () => {
   let repository: ArticleRepository;
 
+  let dataSource: {
+    createEntityManager: jest.Mock;
+  };
+
   beforeEach(async () => {
+    dataSource = {
+      createEntityManager: jest.fn(),
+    };
+
     const moduleRef: TestingModule = await Test.createTestingModule({
-      providers: [ArticleRepository],
+      providers: [
+        ArticleRepository,
+        {
+          provide: DataSource,
+          useValue: dataSource,
+        },
+      ],
     }).compile();
 
     repository = moduleRef.get<ArticleRepository>(ArticleRepository);
@@ -26,7 +41,7 @@ describe('ArticleRepository', () => {
 
       jest.spyOn(repository, 'findOne').mockResolvedValue(new Article());
       repository.getById(id);
-      expect(repository.findOne).toHaveBeenCalledWith(id);
+      expect(repository.findOne).toHaveBeenCalledWith({ where: { id } });
     });
 
     it('should return article if found', async () => {

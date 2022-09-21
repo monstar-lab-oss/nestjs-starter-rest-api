@@ -139,7 +139,9 @@ describe('UserService', () => {
 
     it('should find user from DB using given id', async () => {
       await service.findById(ctx, user.id);
-      expect(mockedRepository.findOne).toBeCalledWith(user.id);
+      expect(mockedRepository.findOne).toBeCalledWith({
+        where: { id: user.id },
+      });
     });
 
     it('should return serialized user', async () => {
@@ -260,7 +262,9 @@ describe('UserService', () => {
     it('should find user from DB using given username', async () => {
       await service.findByUsername(ctx, user.username);
       expect(mockedRepository.findOne).toBeCalledWith({
-        username: user.username,
+        where: {
+          username: user.username,
+        },
       });
     });
 
