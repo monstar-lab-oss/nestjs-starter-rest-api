@@ -149,8 +149,11 @@ $ npm run test:cov
 ## Migrations
 
 ```bash
+# using docker
+$ docker compose exec app npm run migration:run
+
 # generate migration (replace CreateUsers with name of the migration)
-$ npm run migration:generate -- -n CreateUsers
+$ npm run migration:generate --name=CreateUsers
 
 # run migration
 $ npm run migration:run
