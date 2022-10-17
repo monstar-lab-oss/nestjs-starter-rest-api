@@ -44,7 +44,7 @@ export class UserService {
     this.logger.log(ctx, `${this.validateUsernamePassword.name} was called`);
 
     this.logger.log(ctx, `calling ${UserRepository.name}.findOne`);
-    const user = await this.repository.findOne({ username });
+    const user = await this.repository.findOne({ where: { username } });
     if (!user) throw new UnauthorizedException();
 
     const match = await compare(pass, user.password);
@@ -80,7 +80,7 @@ export class UserService {
     this.logger.log(ctx, `${this.findById.name} was called`);
 
     this.logger.log(ctx, `calling ${UserRepository.name}.findOne`);
-    const user = await this.repository.findOne(id);
+    const user = await this.repository.findOne({ where: { id } });
 
     return plainToClass(UserOutput, user, {
       excludeExtraneousValues: true,
@@ -105,7 +105,7 @@ export class UserService {
     this.logger.log(ctx, `${this.findByUsername.name} was called`);
 
     this.logger.log(ctx, `calling ${UserRepository.name}.findOne`);
-    const user = await this.repository.findOne({ username });
+    const user = await this.repository.findOne({ where: { username } });
 
     return plainToClass(UserOutput, user, {
       excludeExtraneousValues: true,
