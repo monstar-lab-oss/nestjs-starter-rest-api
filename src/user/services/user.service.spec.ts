@@ -24,6 +24,7 @@ describe('UserService', () => {
     id: 6,
     username: 'jhon',
     name: 'Jhon doe',
+    email: 'randomUser@random.com',
     roles: [ROLE.USER],
   };
 
@@ -68,7 +69,7 @@ describe('UserService', () => {
         password: 'plain-password',
         roles: [ROLE.USER],
         isAccountDisabled: false,
-        email: 'randomUser@random.com',
+        email: user.email,
       };
 
       await service.createUser(ctx, userInput);
@@ -82,7 +83,7 @@ describe('UserService', () => {
         password: 'plain-password',
         roles: [ROLE.USER],
         isAccountDisabled: false,
-        email: 'randomUser@random.com',
+        email: user.email,
       };
 
       await service.createUser(ctx, userInput);
@@ -93,7 +94,7 @@ describe('UserService', () => {
         password: 'hashed-password',
         roles: [ROLE.USER],
         isAccountDisabled: false,
-        email: 'randomUser@random.com',
+        email: user.email,
       });
     });
 
@@ -109,7 +110,7 @@ describe('UserService', () => {
         password: 'plain-password',
         roles: [ROLE.USER],
         isAccountDisabled: false,
-        email: 'randomUser@random.com',
+        email: user.email,
       };
 
       const result = await service.createUser(ctx, userInput);
@@ -120,7 +121,7 @@ describe('UserService', () => {
         username: userInput.username,
         roles: [ROLE.USER],
         isAccountDisabled: false,
-        email: 'randomUser@random.com',
+        email: userInput.email,
       });
       expect(result).not.toHaveProperty('password');
     });
@@ -151,6 +152,7 @@ describe('UserService', () => {
         id: user.id,
         name: user.name,
         username: user.username,
+        email: user.email,
         roles: [ROLE.USER],
       });
     });
@@ -179,6 +181,7 @@ describe('UserService', () => {
         id: user.id,
         name: user.name,
         username: user.username,
+        email: user.email,
         roles: [ROLE.USER],
       });
     });
@@ -237,6 +240,7 @@ describe('UserService', () => {
         id: user.id,
         name: user.name,
         username: user.username,
+        email: user.email,
         roles: [ROLE.USER],
       });
     });
@@ -275,6 +279,42 @@ describe('UserService', () => {
         id: user.id,
         name: user.name,
         username: user.username,
+        email: user.email,
+        roles: [ROLE.USER],
+      });
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+  });
+
+  describe('findByUsernameOrEmail', () => {
+    beforeEach(() => {
+      jest
+        .spyOn(mockedRepository, 'findOne')
+        .mockImplementation(async () => user);
+    });
+
+    it('should find user from DB using given username and email', async () => {
+      await service.findByUsernameOrEmail(ctx, user.username, user.email);
+      expect(mockedRepository.findOne).toBeCalledWith({
+        where: [{ username: user.username }, { email: user.email }],
+      });
+    });
+
+    it('should return serialized user', async () => {
+      const result = await service.findByUsernameOrEmail(
+        ctx,
+        user.username,
+        user.email,
+      );
+
+      expect(result).toEqual({
+        id: user.id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
         roles: [ROLE.USER],
       });
     });
