@@ -180,7 +180,7 @@ describe('AllExceptionsFilter', () => {
 
     const dateSpy = jest
       .spyOn(global, 'Date')
-      .mockImplementation(() => (mockDate as unknown) as string);
+      .mockImplementation(() => mockDate);
 
     filter.catch(mockException1, mockContext);
     expect(mockResponse.status).toBeCalledWith(HttpStatus.NOT_FOUND);
