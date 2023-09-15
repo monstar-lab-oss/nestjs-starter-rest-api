@@ -1,5 +1,5 @@
-import * as Joi from '@hapi/joi';
 import { ConfigModuleOptions } from '@nestjs/config/dist/interfaces';
+import * as Joi from 'joi';
 
 import configuration from './configuration';
 
