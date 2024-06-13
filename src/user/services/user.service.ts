@@ -130,7 +130,7 @@ export class UserService {
     // merges the input (2nd line) to the found user (1st line)
     const updatedUser: User = {
       ...user,
-      ...plainToClass(User, input),
+      ...input,
     };
 
     this.logger.log(ctx, `calling ${UserRepository.name}.save`);

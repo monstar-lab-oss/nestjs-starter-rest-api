@@ -51,7 +51,7 @@ export class AuthService {
   login(ctx: RequestContext): AuthTokenOutput {
     this.logger.log(ctx, `${this.login.name} was called`);
 
-    return this.getAuthToken(ctx, ctx.user);
+    return this.getAuthToken(ctx, ctx.user!);
   }
 
   async register(
@@ -73,7 +73,7 @@ export class AuthService {
   async refreshToken(ctx: RequestContext): Promise<AuthTokenOutput> {
     this.logger.log(ctx, `${this.refreshToken.name} was called`);
 
-    const user = await this.userService.findById(ctx, ctx.user.id);
+    const user = await this.userService.findById(ctx, ctx.user!.id);
     if (!user) {
       throw new UnauthorizedException('Invalid user id');
     }

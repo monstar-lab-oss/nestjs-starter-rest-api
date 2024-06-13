@@ -10,6 +10,8 @@ import { User } from '../entities/user.entity';
 import { UserRepository } from '../repositories/user.repository';
 import { UserService } from './user.service';
 
+jest.mock('bcrypt');
+
 describe('UserService', () => {
   let service: UserService;
 
@@ -187,7 +189,7 @@ describe('UserService', () => {
       mockedRepository.getById.mockRejectedValue(new NotFoundException());
       try {
         await service.getUserById(ctx, 100);
-      } catch (error) {
+      } catch (error: any) {
         expect(error.constructor).toBe(NotFoundException);
       }
     });
@@ -341,7 +343,7 @@ describe('UserService', () => {
 
       try {
         await service.updateUser(ctx, userId, input);
-      } catch (error) {
+      } catch (error: any) {
         expect(error).toBeInstanceOf(NotFoundException);
       }
     });

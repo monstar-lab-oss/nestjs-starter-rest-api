@@ -1,15 +1,30 @@
 import {
-    Body, ClassSerializerInterceptor, Controller, Get, HttpStatus, Param, Patch, Query, UseGuards,
-    UseInterceptors
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Patch,
+  Query,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { ROLE } from '../../auth/constants/role.constant';
 import { Roles } from '../../auth/decorators/role.decorator';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import {
-    BaseApiErrorResponse, BaseApiResponse, SwaggerBaseApiResponse
+  BaseApiErrorResponse,
+  BaseApiResponse,
+  SwaggerBaseApiResponse,
 } from '../../shared/dtos/base-api-response.dto';
 import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 import { AppLogger } from '../../shared/logger/logger.service';
@@ -28,6 +43,7 @@ export class UserController {
   ) {
     this.logger.setContext(UserController.name);
   }
+
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @UseInterceptors(ClassSerializerInterceptor)
@@ -48,7 +64,7 @@ export class UserController {
   ): Promise<BaseApiResponse<UserOutput>> {
     this.logger.log(ctx, `${this.getMyProfile.name} was called`);
 
-    const user = await this.userService.findById(ctx, ctx.user.id);
+    const user = await this.userService.findById(ctx, ctx.user!.id);
     return { data: user, meta: {} };
   }
 

@@ -19,7 +19,7 @@ describe('AuthService', () => {
 
   const accessTokenClaims: UserAccessTokenClaims = {
     id: 6,
-    username: 'jhon',
+    username: 'john',
     roles: [ROLE.USER],
   };
 
@@ -35,9 +35,7 @@ describe('AuthService', () => {
   const currentDate = new Date().toString();
 
   const userOutput: UserOutput = {
-    username: 'jhon',
-    name: 'Jhon doe',
-    roles: [ROLE.USER],
+    name: 'John doe',
     isAccountDisabled: false,
     email: 'randomUser@random.com',
     createdAt: currentDate,

@@ -78,10 +78,10 @@ describe('UserRepository', () => {
     });
 
     it('should throw NotFoundError when user not found', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(undefined);
+      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
       try {
         await repository.getById(1);
-      } catch (error) {
+      } catch (error: any) {
         expect(error.constructor).toBe(NotFoundException);
       }
     });

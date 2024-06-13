@@ -85,7 +85,7 @@ describe('ArticleController', () => {
 
       try {
         await controller.createArticle(ctx, input);
-      } catch (error) {
+      } catch (error: any) {
         expect(error.message).toEqual('rejected');
       }
     });

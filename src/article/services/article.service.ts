@@ -35,7 +35,7 @@ export class ArticleService {
 
     const article = plainToClass(Article, input);
 
-    const actor: Actor = ctx.user;
+    const actor: Actor = ctx.user!;
 
     const user = await this.userService.getUserById(ctx, actor.id);
 
@@ -63,7 +63,7 @@ export class ArticleService {
   ): Promise<{ articles: ArticleOutput[]; count: number }> {
     this.logger.log(ctx, `${this.getArticles.name} was called`);
 
-    const actor: Actor = ctx.user;
+    const actor: Actor = ctx.user!;
 
     const isAllowed = this.aclService.forActor(actor).canDoAction(Action.List);
     if (!isAllowed) {
@@ -90,7 +90,7 @@ export class ArticleService {
   ): Promise<ArticleOutput> {
     this.logger.log(ctx, `${this.getArticleById.name} was called`);
 
-    const actor: Actor = ctx.user;
+    const actor: Actor = ctx.user!;
 
     this.logger.log(ctx, `calling ${ArticleRepository.name}.getById`);
     const article = await this.repository.getById(id);
@@ -117,7 +117,7 @@ export class ArticleService {
     this.logger.log(ctx, `calling ${ArticleRepository.name}.getById`);
     const article = await this.repository.getById(articleId);
 
-    const actor: Actor = ctx.user;
+    const actor: Actor = ctx.user!;
 
     const isAllowed = this.aclService
       .forActor(actor)
@@ -128,7 +128,7 @@ export class ArticleService {
 
     const updatedArticle: Article = {
       ...article,
-      ...plainToClass(Article, input),
+      ...input,
     };
 
     this.logger.log(ctx, `calling ${ArticleRepository.name}.save`);
@@ -145,7 +145,7 @@ export class ArticleService {
     this.logger.log(ctx, `calling ${ArticleRepository.name}.getById`);
     const article = await this.repository.getById(id);
 
-    const actor: Actor = ctx.user;
+    const actor: Actor = ctx.user!;
 
     const isAllowed = this.aclService
       .forActor(actor)

@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { Article } from '../../article/entities/article.entity';
 import { ROLE } from './../../auth/constants/role.constant';
 import { BaseAclService } from './acl.service';
 import { RuleCallback } from './acl-rule.constant';
@@ -49,15 +50,16 @@ describe('AclService', () => {
     });
 
     it('should add acl rule with custom rule', () => {
-      const customRuleCallback = () => true;
-      service.canDo(ROLE.USER, [Action.Read], customRuleCallback);
+      const ruleCallback = jest.fn();
+
+      service.canDo(ROLE.USER, [Action.Read], ruleCallback);
 
       const aclRules = service.getAclRules();
 
       expect(aclRules).toContainEqual({
         role: ROLE.USER,
         actions: [Action.Read],
-        ruleCallback: customRuleCallback,
+        ruleCallback,
       });
     });
   });
@@ -99,17 +101,19 @@ describe('AclService', () => {
     });
 
     it('should return true when ruleCallback is true', () => {
-      const customOwnerRule = () => true;
+      const customOwnerRule = jest.fn();
+      customOwnerRule.mockReturnValue(true);
       service.canDo(ROLE.USER, [Action.Manage], customOwnerRule);
       const userAcl = service.forActor(user);
-      expect(userAcl.canDoAction(Action.Read)).toBeTruthy();
+      expect(userAcl.canDoAction(Action.Read, new Article())).toBeTruthy();
     });
 
     it('should return false when ruleCallback is false', () => {
-      const customOwnerRule = () => false;
+      const customOwnerRule = jest.fn();
+      customOwnerRule.mockReturnValue(false);
       service.canDo(ROLE.USER, [Action.Manage], customOwnerRule);
       const userAcl = service.forActor(user);
-      expect(userAcl.canDoAction(Action.Read)).toBeFalsy();
+      expect(userAcl.canDoAction(Action.Read, new Article())).toBeFalsy();
     });
   });
 });
