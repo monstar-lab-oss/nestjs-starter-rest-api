@@ -1,5 +1,5 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { createConnection, getConnection } from 'typeorm';
 
 import { ROLE } from '../src/auth/constants/role.constant';
@@ -10,6 +10,7 @@ import { CreateUserInput } from '../src/user/dtos/user-create-input.dto';
 import { UserOutput } from '../src/user/dtos/user-output.dto';
 import { UserService } from '../src/user/services/user.service';
 
+const TEST_DB_HOST = 'localhost';
 const TEST_DB_CONNECTION_NAME = 'e2e_test_connection';
 export const TEST_DB_NAME = 'e2e_test_db';
 
@@ -22,7 +23,7 @@ export const resetDBBeforeTest = async (): Promise<void> => {
   const connection = await createConnection({
     name: TEST_DB_CONNECTION_NAME,
     type: 'postgres',
-    host: 'localhost',
+    host: TEST_DB_HOST,
     port: 5432,
     username: 'root',
     password: 'example',
@@ -40,7 +41,7 @@ export const createDBEntities = async (): Promise<void> => {
   await createConnection({
     name: TEST_DB_CONNECTION_NAME,
     type: 'postgres',
-    host: 'localhost',
+    host: TEST_DB_HOST,
     port: 5432,
     username: 'root',
     password: 'example',

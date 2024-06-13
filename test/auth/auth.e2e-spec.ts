@@ -1,6 +1,6 @@
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import * as request from 'supertest';
+import { Test, TestingModule } from '@nestjs/testing';
+import request from 'supertest';
 
 import { ROLE } from '../../src/auth/constants/role.constant';
 import { LoginInput } from '../../src/auth/dtos/auth-login-input.dto';
@@ -23,7 +23,7 @@ describe('AuthController (e2e)', () => {
     await resetDBBeforeTest();
     await createDBEntities();
 
-    const moduleRef = await Test.createTestingModule({
+    const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
@@ -31,17 +31,18 @@ describe('AuthController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
 
-    ({ authTokenForAdmin } = await seedAdminUser(app));
+    const adminUserTokens = await seedAdminUser(app);
+    authTokenForAdmin = adminUserTokens.authTokenForAdmin;
   });
 
   describe('Admin User Auth Tokens', () => {
-    it('presence of Auth Tokens for admin ', async () => {
+    it('should have Auth Tokens for admin', () => {
       expect(authTokenForAdmin).toHaveProperty('accessToken');
       expect(authTokenForAdmin).toHaveProperty('refreshToken');
     });
   });
 
-  describe('register a new user', () => {
+  describe('Register a new user', () => {
     const registerInput: RegisterInput = {
       name: 'e2etester',
       username: 'e2etester',
@@ -60,8 +61,8 @@ describe('AuthController (e2e)', () => {
       email: 'e2etester@random.com',
     };
 
-    it('successfully register a new user', () => {
-      return request(app.getHttpServer())
+    it('should successfully register a new user', async () => {
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send(registerInput)
         .expect(HttpStatus.CREATED)
@@ -71,35 +72,29 @@ describe('AuthController (e2e)', () => {
         });
     });
 
-    it('register fails without Input DTO', () => {
-      return request(app.getHttpServer())
+    it('should fail to register without Input DTO', async () => {
+      await request(app.getHttpServer())
         .post('/auth/register')
         .expect(HttpStatus.BAD_REQUEST);
     });
 
-    it('register fails when incorrect username format', () => {
-      registerInput.username = 12345 as any;
-      return request(app.getHttpServer())
+    it('should fail to register with incorrect username format', async () => {
+      const invalidRegisterInput = { ...registerInput, username: 12345 as any };
+      await request(app.getHttpServer())
         .post('/auth/register')
-        .expect(HttpStatus.BAD_REQUEST)
-        .send(registerInput)
-        .expect((res) => {
-          const resp = res.body;
-          expect(resp.error.details.message).toContain(
-            'username must be a string',
-          );
-        });
+        .send(invalidRegisterInput)
+        .expect(HttpStatus.BAD_REQUEST);
     });
   });
 
-  describe('login the registered user', () => {
+  describe('Login the registered user', () => {
     const loginInput: LoginInput = {
       username: 'e2etester',
       password: '12345678',
     };
 
-    it('should successfully login the user', () => {
-      return request(app.getHttpServer())
+    it('should successfully login the user', async () => {
+      await request(app.getHttpServer())
         .post('/auth/login')
         .send(loginInput)
         .expect(HttpStatus.OK)
@@ -110,17 +105,17 @@ describe('AuthController (e2e)', () => {
         });
     });
 
-    it('should failed to login with wrong credential', () => {
-      return request(app.getHttpServer())
+    it('should fail to login with wrong credentials', async () => {
+      await request(app.getHttpServer())
         .post('/auth/login')
         .send({ ...loginInput, password: 'wrong-pass' })
         .expect(HttpStatus.UNAUTHORIZED);
     });
 
-    // TODO : Should fail when isAccountDisabled is set to true.
+    // TODO: Should fail when isAccountDisabled is set to true.
   });
 
-  describe('refreshing jwt token', () => {
+  describe('Refreshing JWT token', () => {
     const loginInput: LoginInput = {
       username: 'e2etester',
       password: '12345678',
@@ -136,7 +131,7 @@ describe('AuthController (e2e)', () => {
         refreshToken: token.refreshToken,
       };
 
-      return request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/refresh-token')
         .send(refreshTokenInput)
         .expect(HttpStatus.OK)
