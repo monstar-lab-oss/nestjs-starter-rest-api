@@ -58,10 +58,10 @@ describe('ArticleRepository', () => {
     });
 
     it('should throw NotFoundError when article not found', async () => {
-      jest.spyOn(repository, 'findOne').mockResolvedValue(undefined);
+      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
       try {
         await repository.getById(1);
-      } catch (error) {
+      } catch (error: any) {
         expect(error.constructor).toBe(NotFoundException);
       }
     });

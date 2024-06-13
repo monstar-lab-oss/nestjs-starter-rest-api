@@ -176,7 +176,7 @@ describe('ArticleService', () => {
 
       try {
         await service.getArticleById(ctx, id);
-      } catch (error) {
+      } catch (error: any) {
         expect(error.message).toEqual('error');
       }
     });
@@ -262,7 +262,7 @@ describe('ArticleService', () => {
 
       try {
         await service.updateArticle(ctx, articleId, input);
-      } catch (error) {
+      } catch (error: any) {
         expect(error.constructor).toEqual(UnauthorizedException);
         expect(mockedRepository.save).not.toHaveBeenCalled();
       }
@@ -295,7 +295,7 @@ describe('ArticleService', () => {
       mockedRepository.getById.mockRejectedValue(new NotFoundException());
       try {
         await service.deleteArticle(ctx, articleId);
-      } catch (error) {
+      } catch (error: any) {
         expect(error).toBeInstanceOf(NotFoundException);
       }
     });
@@ -320,7 +320,7 @@ describe('ArticleService', () => {
 
       try {
         await service.deleteArticle(ctx, articleId);
-      } catch (error) {
+      } catch (error: any) {
         expect(error.constructor).toEqual(UnauthorizedException);
         expect(mockedRepository.save).not.toHaveBeenCalled();
       }

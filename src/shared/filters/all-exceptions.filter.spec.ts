@@ -21,7 +21,7 @@ describe('AllExceptionsFilter', () => {
   let mockResponse: any;
 
   const mockConfigService = {
-    get: (key) => 'development',
+    get: () => 'development',
   };
   const mockedLogger = {
     warn: jest.fn().mockReturnThis(),

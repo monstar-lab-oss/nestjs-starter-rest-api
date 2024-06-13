@@ -128,7 +128,7 @@ export class ArticleService {
 
     const updatedArticle: Article = {
       ...article,
-      ...plainToClass(Article, input),
+      ...input,
     };
 
     this.logger.log(ctx, `calling ${ArticleRepository.name}.save`);

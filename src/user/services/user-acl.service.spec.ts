@@ -20,7 +20,7 @@ describe('UserAclService', () => {
   });
 
   describe('for admin user', () => {
-    let userAcl;
+    let userAcl: any;
     beforeEach(async () => {
       const user = {
         id: 6,
@@ -49,8 +49,8 @@ describe('UserAclService', () => {
   });
 
   describe('for user role', () => {
-    let user;
-    let userAcl;
+    let user: any;
+    let userAcl: any;
 
     beforeEach(async () => {
       user = {
