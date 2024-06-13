@@ -9,10 +9,9 @@ export const RequestIdMiddleware = (
   next: () => void,
 ): void => {
   /** set request id, if not being set yet */
-  if (
-    !req.headers[REQUEST_ID_TOKEN_HEADER] ||
-    !validate(req.header(REQUEST_ID_TOKEN_HEADER))
-  ) {
+  const requestIdToken = req.header(REQUEST_ID_TOKEN_HEADER) || '';
+
+  if (!requestIdToken || !validate(requestIdToken)) {
     req.headers[REQUEST_ID_TOKEN_HEADER] = uuidv4();
   }
 

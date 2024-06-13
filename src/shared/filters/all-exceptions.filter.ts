@@ -34,20 +34,22 @@ export class AllExceptionsFilter<T> implements ExceptionFilter {
     const requestContext = createRequestContext(req);
 
     let stack: any;
-    let statusCode: HttpStatus;
-    let errorName: string;
-    let message: string;
-    let details: string | Record<string, any>;
+    let statusCode: HttpStatus | undefined = undefined;
+    let errorName: string | undefined = undefined;
+    let message: string | undefined = undefined;
+    let details: string | Record<string, any> | undefined = undefined;
     // TODO : Based on language value in header, return a localized message.
     const acceptedLanguage = 'ja';
-    let localizedMessage: string;
+    let localizedMessage: string | undefined = undefined;
 
     // TODO : Refactor the below cases into a switch case and tidy up error response creation.
     if (exception instanceof BaseApiException) {
       statusCode = exception.getStatus();
       errorName = exception.constructor.name;
       message = exception.message;
-      localizedMessage = exception.localizedMessage[acceptedLanguage];
+      localizedMessage = exception.localizedMessage
+        ? exception.localizedMessage[acceptedLanguage]
+        : undefined;
       details = exception.details || exception.getResponse();
     } else if (exception instanceof HttpException) {
       statusCode = exception.getStatus();

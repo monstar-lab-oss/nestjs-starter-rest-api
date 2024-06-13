@@ -1,7 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder,SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 import { VALIDATION_PIPE_OPTIONS } from './shared/constants';
@@ -28,6 +28,6 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('port');
-  await app.listen(port);
+  await app.listen(port || 3000);
 }
 bootstrap();

@@ -50,9 +50,16 @@ export class BaseAclService<Resource> {
               aclRule.actions.includes(Action.Manage);
 
             //check for custom `ruleCallback` callback
-            canDoAction =
-              hasActionPermission &&
-              (!aclRule.ruleCallback || aclRule.ruleCallback(resource, actor));
+            if (!aclRule.ruleCallback) {
+              canDoAction = hasActionPermission;
+            } else {
+              if (!resource) {
+                throw new Error('Resource is required for ruleCallback');
+              }
+
+              canDoAction =
+                hasActionPermission && aclRule.ruleCallback(resource, actor);
+            }
           });
         });
 

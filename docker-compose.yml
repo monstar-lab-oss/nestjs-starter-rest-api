@@ -10,8 +10,8 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./:/usr/src/app
-      - node_modules:/usr/src/app/node_modules/
+      - ./:/usr/src/app:cached
+      - node_modules:/usr/src/app/node_modules
     environment:
       APP_ENV: ${APP_ENV}
       APP_PORT: ${APP_PORT}
@@ -29,7 +29,7 @@ services:
       - pgsqldb
 
   pgsqldb:
-    image: postgres:14.3
+    image: postgres:16.3
     environment:
       POSTGRES_USER: "${DB_USER}"
       POSTGRES_PASSWORD: "${DB_PASS}"

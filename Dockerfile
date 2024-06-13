@@ -1,32 +1,30 @@
-# lts-gallium refers to v16
-# Using this instead of node:16 to avoid dependabot updates
-FROM node:lts-gallium as builder
+# Development Dockerfile
+FROM node:20.14.0-bookworm-slim
+
+# Install additional tools for development
+RUN apt-get update && apt-get install -y \
+  vim \
+  curl \
+  wget \
+  git \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
 
+# Copy and install dependencies
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install
 
+# Copy the rest of the application files
 COPY . .
 
+# Set the environment variables
 ARG APP_ENV=development
 ENV NODE_ENV=${APP_ENV}
 
-RUN npm run build
-
-RUN npm prune
-
-FROM node:lts-gallium
-
-ARG APP_ENV=development
-ENV NODE_ENV=${APP_ENV}
-
-WORKDIR /usr/src/app
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/package*.json ./
-COPY --from=builder /usr/src/app/dist ./dist
-
+# Expose the application port
 EXPOSE 3000
 
-USER node
-CMD [ "npm", "run", "start:prod" ]
+# Set the default command to run the application with nodemon
+CMD ["npm", "start:dev"]

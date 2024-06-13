@@ -3,13 +3,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![Build Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/build/badge.svg)
 ![Tests Badge](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/workflows/tests/badge.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=monstar-lab-oss_nestjs-starter-rest-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=monstar-lab-oss_nestjs-starter-rest-api)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=monstar-lab-oss_nestjs-starter-rest-api&metric=coverage)](https://sonarcloud.io/dashboard?id=monstar-lab-oss_nestjs-starter-rest-api)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=monstar-lab-oss_nestjs-starter-rest-api&metric=code_smells)](https://sonarcloud.io/dashboard?id=monstar-lab-oss_nestjs-starter-rest-api)
 
 This starter kit has the following outline:
 
-- Monolithic Project.
+- Monolithic Project
 - REST API
 
 This is a Github Template Repository, so it can be easily [used as a starter template](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template) for other repositories.
@@ -32,6 +29,7 @@ One of our main principals has been to keep the starter kit as lightweight as po
 | Request Validation       | class-validator    | Done     |
 | Pagination               | SQL offset & limit | Done     |
 | Docker Ready             | Dockerfile         | Done     |
+| Devcontainer             | -                  | Done     |
 | Auto-generated OpenAPI   | -                  | Done     |
 | Auto-generated ChangeLog | -                  | WIP      |
 
