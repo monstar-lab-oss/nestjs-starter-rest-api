@@ -105,6 +105,7 @@ export class ArticleController {
   })
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async getArticle(
     @ReqContext() ctx: RequestContext,
     @Param('id') id: number,
@@ -148,6 +149,7 @@ export class ArticleController {
   })
   @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async deleteArticle(
     @ReqContext() ctx: RequestContext,
     @Param('id') id: number,

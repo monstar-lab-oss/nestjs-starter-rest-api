@@ -10,7 +10,7 @@ import { CreateUserInput } from '../src/user/dtos/user-create-input.dto';
 import { UserOutput } from '../src/user/dtos/user-output.dto';
 import { UserService } from '../src/user/services/user.service';
 
-const TEST_DB_HOST = 'localhost';
+const TEST_DB_HOST = process.env.TEST_DB_HOST || 'localhost';
 const TEST_DB_CONNECTION_NAME = 'e2e_test_connection';
 export const TEST_DB_NAME = 'e2e_test_db';
 

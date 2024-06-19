@@ -83,6 +83,7 @@ export class UserController {
   })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(ROLE.ADMIN, ROLE.USER)
+  @ApiBearerAuth()
   async getUsers(
     @ReqContext() ctx: RequestContext,
     @Query() query: PaginationParamsDto,
