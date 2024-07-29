@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:20.14.0-bookworm-slim as builder
+FROM node:20.16.0-bookworm-slim as builder
 
 WORKDIR /usr/src/app
 
@@ -19,7 +19,7 @@ RUN npm run build
 RUN npm prune --production
 
 # Stage 2: Create the production image
-FROM node:20.14.0-bookworm-slim
+FROM node:20.16.0-bookworm-slim
 
 WORKDIR /usr/src/app
 
