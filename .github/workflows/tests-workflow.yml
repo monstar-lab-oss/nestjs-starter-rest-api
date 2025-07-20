@@ -39,8 +39,8 @@ jobs:
       - run: npm ci
       - name: Run unit tests
         run: npm test
-      - name: Build the docker-compose stack
-        run: docker-compose -f docker-compose.yml up -d pgsqldb
+      - name: Build the docker compose stack
+        run: docker compose -f docker-compose.yml up -d pgsqldb
       - name: Check running containers
         run: docker ps -a
       - name: Run e2e tests
