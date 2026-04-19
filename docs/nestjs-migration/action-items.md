@@ -10,7 +10,7 @@ Update all `@nestjs/*` packages in `package.json`:
 - `@nestjs/config` ^3 -> ^4
 - `@nestjs/jwt` ^10 -> ^11
 - `@nestjs/passport` ^10 -> ^11
-- `@nestjs/swagger` ^7 -> ^8 (check if v8 exists, otherwise keep ^7)
+- `@nestjs/swagger` ^7 -> ^11 (aligns with NestJS 11 peer deps; latest is 11.3.0)
 - `@nestjs/typeorm` ^10 -> ^11
 - `@nestjs/cli` ^10 -> ^11 (devDependency)
 - `@nestjs/schematics` ^10 -> ^11 (devDependency)
