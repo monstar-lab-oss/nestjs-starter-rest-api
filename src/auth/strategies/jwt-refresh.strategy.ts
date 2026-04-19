@@ -14,7 +14,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
   constructor(private readonly configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
-      secretOrKey: configService.get<string>('jwt.publicKey'),
+      secretOrKey: configService.getOrThrow<string>('jwt.publicKey'),
       algorithms: ['RS256'],
     });
   }

@@ -9,11 +9,8 @@ export class BaseApiResponse<T> {
 }
 
 type ApiPropertyType =
-  | string
-  | Record<string, any>
   | Type<unknown>
-  | [new (...args: any[]) => any]
-  | undefined;
+  | [new (...args: any[]) => any];
 
 export function SwaggerBaseApiResponse<T extends ApiPropertyType>(
   type: T,
