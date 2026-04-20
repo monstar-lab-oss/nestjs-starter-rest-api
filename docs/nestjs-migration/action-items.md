@@ -39,6 +39,8 @@ Currently `main.ts` does not type the app as `NestExpressApplication`. Consider 
 const app = await NestFactory.create<NestExpressApplication>(AppModule);
 ```
 
+**Verified — no action needed.** Only two `@Query()` usages in the codebase (article/user list endpoints), both binding to `PaginationParamsDto` which has flat fields (`limit`, `offset`). No nested query patterns, no direct `req.query` access. Flat params parse identically under the new `simple` and old `qs` parsers. Since we don't need `app.set('query parser', 'extended')`, typing the app as `NestExpressApplication` is also unnecessary.
+
 ## 4. Express v5 - Wildcard route syntax
 
 Express v5 requires named wildcards (`*splat`) instead of bare `*`.
@@ -58,6 +60,8 @@ Previously `process.env` took precedence; now internal config takes precedence.
 
 - **Check**: Review `src/shared/configs/configuration.ts` and `module-options.ts` to verify that the config namespace values and `.env` values don't conflict in unexpected ways.
 - The `ignoreEnvVars` option is deprecated; use `validatePredefined` instead (project currently doesn't use `ignoreEnvVars`, so no action needed).
+
+**Verified — no impact.** Internal config and env vars use separate namespaces (lowercase/dotted vs. `UPPER_SNAKE`), so the three priority tiers never collide for the same key. Every `configService.get(...)` call in the codebase reads from the internal-config namespace only (`port`, `env`, `database.*`, `jwt.*`, `defaultAdminUserPassword`). No code change needed.
 
 ## 6. Reflector `getAllAndOverride` return type change
 
@@ -108,8 +112,8 @@ These migration guide items do not apply:
 |---|--------|----------|--------|
 | 1 | Upgrade `@nestjs/*` packages to v11 | Required | ✅ Done |
 | 2 | Upgrade `@types/express` to v5, check `swagger-ui-express` compat | Required | ✅ Done |
-| 3 | Decide on query parser setting in `main.ts` | Review needed | ⏳ Pending |
-| 5 | Review config priority change impact | Review needed | ⏳ Pending |
+| 3 | Decide on query parser setting in `main.ts` | Review needed | ✅ No action — only flat query params used |
+| 5 | Review config priority change impact | Review needed | ✅ No impact — no namespace collision |
 | 6 | Verify `getAllAndOverride` types compile | Verify after upgrade | ✅ Build passes (2 unrelated TS fixes — see below) |
 | 7 | Run tests to check module resolution changes | Verify after upgrade | ✅ 98 unit + 30 e2e tests pass |
 
