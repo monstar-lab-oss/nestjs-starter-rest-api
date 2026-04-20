@@ -10,7 +10,7 @@ Update all `@nestjs/*` packages in `package.json`:
 - `@nestjs/config` ^3 -> ^4
 - `@nestjs/jwt` ^10 -> ^11
 - `@nestjs/passport` ^10 -> ^11
-- `@nestjs/swagger` ^7 -> ^8 (check if v8 exists, otherwise keep ^7)
+- `@nestjs/swagger` ^7 -> ^11 (aligns with NestJS 11 peer deps; latest is 11.3.0)
 - `@nestjs/typeorm` ^10 -> ^11
 - `@nestjs/cli` ^10 -> ^11 (devDependency)
 - `@nestjs/schematics` ^10 -> ^11 (devDependency)
@@ -39,6 +39,8 @@ Currently `main.ts` does not type the app as `NestExpressApplication`. Consider 
 const app = await NestFactory.create<NestExpressApplication>(AppModule);
 ```
 
+**Verified — no action needed.** Only two `@Query()` usages in the codebase (article/user list endpoints), both binding to `PaginationParamsDto` which has flat fields (`limit`, `offset`). No nested query patterns, no direct `req.query` access. Flat params parse identically under the new `simple` and old `qs` parsers. Since we don't need `app.set('query parser', 'extended')`, typing the app as `NestExpressApplication` is also unnecessary.
+
 ## 4. Express v5 - Wildcard route syntax
 
 Express v5 requires named wildcards (`*splat`) instead of bare `*`.
@@ -58,6 +60,8 @@ Previously `process.env` took precedence; now internal config takes precedence.
 
 - **Check**: Review `src/shared/configs/configuration.ts` and `module-options.ts` to verify that the config namespace values and `.env` values don't conflict in unexpected ways.
 - The `ignoreEnvVars` option is deprecated; use `validatePredefined` instead (project currently doesn't use `ignoreEnvVars`, so no action needed).
+
+**Verified — no impact.** Internal config and env vars use separate namespaces (lowercase/dotted vs. `UPPER_SNAKE`), so the three priority tiers never collide for the same key. Every `configService.get(...)` call in the codebase reads from the internal-config namespace only (`port`, `env`, `database.*`, `jwt.*`, `defaultAdminUserPassword`). No code change needed.
 
 ## 6. Reflector `getAllAndOverride` return type change
 
@@ -104,11 +108,31 @@ These migration guide items do not apply:
 
 ## Summary of required actions
 
-| # | Action | Priority |
-|---|--------|----------|
-| 1 | Upgrade `@nestjs/*` packages to v11 | Required |
-| 2 | Upgrade `@types/express` to v5, check `swagger-ui-express` compat | Required |
-| 3 | Decide on query parser setting in `main.ts` | Review needed |
-| 5 | Review config priority change impact | Review needed |
-| 6 | Verify `getAllAndOverride` types compile | Verify after upgrade |
-| 7 | Run tests to check module resolution changes | Verify after upgrade |
+| # | Action | Priority | Status |
+|---|--------|----------|--------|
+| 1 | Upgrade `@nestjs/*` packages to v11 | Required | ✅ Done |
+| 2 | Upgrade `@types/express` to v5, check `swagger-ui-express` compat | Required | ✅ Done |
+| 3 | Decide on query parser setting in `main.ts` | Review needed | ✅ No action — only flat query params used |
+| 5 | Review config priority change impact | Review needed | ✅ No impact — no namespace collision |
+| 6 | Verify `getAllAndOverride` types compile | Verify after upgrade | ✅ Build passes (2 unrelated TS fixes — see below) |
+| 7 | Run tests to check module resolution changes | Verify after upgrade | ✅ 98 unit + 30 e2e tests pass |
+
+## Notable changes after migration
+
+Actual code changes required to get the build passing after the v11 upgrade:
+
+### JWT strategies — `ConfigService.get` → `getOrThrow`
+
+**Files**: `src/auth/strategies/jwt-auth.strategy.ts`, `src/auth/strategies/jwt-refresh.strategy.ts`
+
+`passport-jwt`'s `secretOrKey` option is typed as `string | Buffer` and no longer accepts `undefined`. `ConfigService.get<string>(key)` returns `string | undefined`, so the `secretOrKey` assignment fails type-check.
+
+Switched to `configService.getOrThrow<string>('jwt.publicKey')`, which returns `string` and throws at bootstrap if the key is missing. This is a semantic change — the app will now fail loudly at startup if `jwt.publicKey` isn't configured, rather than silently registering a broken strategy.
+
+### Swagger `ApiProperty({ type })` — narrowed `ApiPropertyType` union
+
+**File**: `src/shared/dtos/base-api-response.dto.ts`
+
+`@nestjs/swagger` v11 tightened the `type` field's accepted union. The local `ApiPropertyType` union was over-broad (included `string`, `Record<string, any>`, `undefined`), which caused TS to either reject `string` outright or match against the wrong `ApiProperty` overload (the enum one, which requires `enumName`).
+
+Narrowed the union to match actual caller usage — only `Type<unknown>` and `[new (...args: any[]) => any]`. All 11 call sites (`SwaggerBaseApiResponse(SomeClass)` or `SwaggerBaseApiResponse([SomeClass])`) continue to work; the removed branches were dead code.
