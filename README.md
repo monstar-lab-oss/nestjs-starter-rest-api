@@ -1,10 +1,10 @@
-## NestJS Starter Kit [v2]
+## NestJS Starter Kit
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![build](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/actions/workflows/build-workflow.yml/badge.svg?branch=master&event=push)](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/actions/workflows/build-workflow.yml)
 [![tests](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/actions/workflows/tests-workflow.yml/badge.svg?branch=master&event=push)](https://github.com/monstar-lab-oss/nestjs-starter-rest-api/actions/workflows/tests-workflow.yml)
 
-This starter kit has the following outline:
+This NestJS 11 starter kit has the following outline:
 
 - Monolithic Project
 - REST API
@@ -20,7 +20,7 @@ To view sample implementations based on this starter kit, please visit the [nest
 One of our main principals has been to keep the starter kit as lightweight as possible. With that in mind, here are some of the features that we have added in this starter kit.
 
 | Feature                  | Info               | Progress |
-|--------------------------|--------------------|----------|
+| ------------------------ | ------------------ | -------- |
 | Authentication           | JWT                | Done     |
 | Authorization            | RBAC (Role based)  | Done     |
 | ORM Integration          | TypeORM            | Done     |
@@ -57,11 +57,13 @@ Generate public and private key pair for jwt authentication:
 ### With docker
 
 Run this command:
+
 ```bash
 ./scripts/generate-jwt-keys
 ```
 
 It will output something like this. You only need to add it to your `.env` file.
+
 ```
 To setup the JWT keys, please add the following values to your .env file:
 JWT_PUBLIC_KEY_BASE64="(long base64 content)"
