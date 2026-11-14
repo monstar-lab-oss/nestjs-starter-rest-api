@@ -15,12 +15,12 @@ jobs:
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 26.13.1
+          node-version-file: '.tool-versions'
           cache: 'npm'
       - run: npm ci
       - name: Run test cov

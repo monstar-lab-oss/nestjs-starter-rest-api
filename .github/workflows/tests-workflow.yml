@@ -25,10 +25,10 @@ jobs:
       DEFAULT_ADMIN_USER_PASSWORD: example_admin_pass
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 26.13.1
+          node-version-file: '.tool-versions'
           cache: 'npm'
       - run: npm ci
       - name: Run unit tests
