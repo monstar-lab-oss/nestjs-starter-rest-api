@@ -15,16 +15,17 @@ jobs:
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-      - uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v6 # pnpm version comes from package.json "devEngines.packageManager"
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20.19.6
-          cache: 'npm'
-      - run: npm ci
+          node-version-file: '.tool-versions'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
       - name: Run test cov
-        run: npm run test:cov
+        run: pnpm test:cov
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

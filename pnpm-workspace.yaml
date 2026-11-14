@@ -1,0 +1,16 @@
+# pnpm settings for this (single-package) project.
+# See https://pnpm.io/settings
+
+# Dependency lifecycle scripts are blocked by default (strictDepBuilds).
+# Explicitly approve or deny every package that ships a build script.
+allowBuilds:
+  # Native module: needs its install script to select/build the binary.
+  bcrypt: true
+  # Only prints an Open Collective donation message.
+  '@nestjs/core': false
+  # Usage telemetry pulled in by swagger-ui-dist.
+  '@scarf/scarf': false
+
+# Fail the install (instead of warning) when the running Node.js does not
+# satisfy "engines.node" in package.json.
+engineStrict: true

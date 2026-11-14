@@ -394,3 +394,8 @@ documentation
 test-report.xml
 tsconfig.build.tsbuildinfo
 .nvmrc
+
+# Only pnpm is used in this project
+package-lock.json
+npm-shrinkwrap.json
+yarn.lock

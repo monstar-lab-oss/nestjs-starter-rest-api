@@ -43,11 +43,18 @@ If you would like to use a more feature rich starter kit, with more awesome feat
 
 ## Installation
 
-Note: when using docker, all the `npm` commands can also be performed using `./scripts/npm` (for example `./scripts/npm install`).
+Prerequisites:
+
+- Node.js 26 LTS (see `.tool-versions`)
+- pnpm 12 (the exact version is pinned in `devEngines.packageManager` in `package.json`). Install it with `npm install -g pnpm@12` or the [standalone installer](https://pnpm.io/installation).
+
+This project only supports pnpm. `npm install`, `npm run …` and `yarn` will fail on purpose, and pnpm refuses to install on a Node.js version older than the one in `engines.node`.
+
+Note: when using docker, all the `pnpm` commands can also be performed using `./scripts/pnpm` (for example `./scripts/pnpm install`).
 This script allows you to run the same commands inside the same environment and versions than the service, without relying on what is installed on the host.
 
 ```bash
-$ npm install
+$ pnpm install
 ```
 
 Create a `.env` file from the template `.env.template` file.
@@ -109,13 +116,13 @@ Commands:
 
 ```bash
 # development
-$ npm run start
+$ pnpm start
 
 # watch mode
-$ npm run start:dev
+$ pnpm start:dev
 
 # production mode
-$ npm run start:prod
+$ pnpm start:prod
 ```
 
 ### Docker
@@ -137,29 +144,29 @@ Learn more about Docker conventions [here](https://github.com/monstar-lab-group/
 
 ```bash
 # unit tests
-$ npm run test
+$ pnpm test
 
 # e2e tests
-$ npm run test:e2e
+$ pnpm test:e2e
 
 # test coverage
-$ npm run test:cov
+$ pnpm test:cov
 ```
 
 ## Migrations
 
 ```bash
 # using docker
-$ docker compose exec app npm run migration:run
+$ docker compose exec app pnpm migration:run
 
 # generate migration (replace CreateUsers with name of the migration)
-$ npm run migration:generate --name=CreateUsers
+$ pnpm migration:generate migrations/CreateUsers
 
 # run migration
-$ npm run migration:run
+$ pnpm migration:run
 
 # revert migration
-$ npm run migration:revert
+$ pnpm migration:revert
 ```
 
 ## Architecture
@@ -174,6 +181,7 @@ $ npm run migration:revert
 - [Saad Bin Amjad](https://github.com/Saad-Amjad)
 - [Sivan Payyadakath](https://github.com/sivanpayyadakath)
 - [Sébastien Caparros](https://github.com/Seb-C)
+- [Arpit Anand](https://github.com/thearpitanand)
 
 ## External Links
 

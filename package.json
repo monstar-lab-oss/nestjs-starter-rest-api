@@ -4,14 +4,27 @@
   "version": "1.0.0",
   "description": "NestJS Starter REST API Repository",
   "license": "MIT",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.18.0",
+      "onFail": "error"
+    }
+  },
+  "engines": {
+    "node": ">=26.13.0",
+    "pnpm": ">=12.18.0"
+  },
   "contributors": [
     "Yash Murty <yashmurty@gmail.com> (https://github.com/yashmurty)",
     "S M Asad Rahman<asad.rahman@monstar-lab.com> (https://github.com/asad-mlbd)",
     "Tanveer Hassan <mailtanveerhassan@gmail.com> (https://github.com/war1oc)",
     "Saad Bin Amjad <saadbinamjad@gmail.com> (https://github.com/Saad-Amjad)",
-    "Sivan Payyadakath <sivanp77@gmail.com > (https://github.com/sivanpayyadakath)"
+    "Sivan Payyadakath <sivanp77@gmail.com > (https://github.com/sivanpayyadakath)",
+    "Arpit Anand <arpitssanand@gmail.com> (https://github.com/thearpitanand)"
   ],
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -26,13 +39,13 @@
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/jest/bin/jest.js --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "typeorm": "typeorm-ts-node-commonjs -d ./ormconfig.ts",
-    "migration:generate": "ts-node node_modules/.bin/typeorm migration:generate -d ormconfig.ts migrations/$npm_config_name",
-    "migration:run": "ts-node node_modules/.bin/typeorm migration:run -d ormconfig.ts",
-    "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert -d ormconfig.ts",
-    "prepare": "husky install",
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d ormconfig.ts",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d ormconfig.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d ormconfig.ts",
+    "prepare": "husky",
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
@@ -54,6 +67,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
     "dotenv": "^16.6.1",
+    "express": "^5.1.0",
     "joi": "^17.13.3",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -76,7 +90,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/jest": "^29.5.14",
-    "@types/node": "^20.19.27",
+    "@types/node": "^26.6.6",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "@types/pg": "^8.16.0",
