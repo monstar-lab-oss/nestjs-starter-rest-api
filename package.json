@@ -33,13 +33,13 @@
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/jest/bin/jest.js --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand",
     "typeorm": "typeorm-ts-node-commonjs -d ./ormconfig.ts",
-    "migration:generate": "ts-node node_modules/.bin/typeorm migration:generate -d ormconfig.ts migrations/$npm_config_name",
-    "migration:run": "ts-node node_modules/.bin/typeorm migration:run -d ormconfig.ts",
-    "migration:revert": "ts-node node_modules/.bin/typeorm migration:revert -d ormconfig.ts",
-    "prepare": "husky install",
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d ormconfig.ts",
+    "migration:run": "typeorm-ts-node-commonjs migration:run -d ormconfig.ts",
+    "migration:revert": "typeorm-ts-node-commonjs migration:revert -d ormconfig.ts",
+    "prepare": "husky",
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
