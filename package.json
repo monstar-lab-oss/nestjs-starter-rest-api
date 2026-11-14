@@ -11,6 +11,10 @@
       "onFail": "error"
     }
   },
+  "engines": {
+    "node": ">=26.13.0",
+    "pnpm": ">=12.18.0"
+  },
   "contributors": [
     "Yash Murty <yashmurty@gmail.com> (https://github.com/yashmurty)",
     "S M Asad Rahman<asad.rahman@monstar-lab.com> (https://github.com/asad-mlbd)",
@@ -19,6 +23,7 @@
     "Sivan Payyadakath <sivanp77@gmail.com > (https://github.com/sivanpayyadakath)"
   ],
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
