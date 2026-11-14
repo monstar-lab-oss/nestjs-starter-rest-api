@@ -98,6 +98,7 @@ NestJS 11 requires Node.js v20+.
 
 - **Current state**: Already using Node.js 20.19.6 in Dockerfiles and GitHub Actions workflows.
 - **Action**: No changes needed. Consider upgrading to Node.js 22 LTS in the future.
+- **Update (2026-11)**: Node.js 20 reached end of life on 2026-03-24. The project now runs on Node.js 26 LTS (26.13.1) and uses pnpm 12 instead of npm.
 
 ## 11. Not applicable to this project
 
