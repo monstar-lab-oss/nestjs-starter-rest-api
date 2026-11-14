@@ -20,7 +20,8 @@
     "S M Asad Rahman<asad.rahman@monstar-lab.com> (https://github.com/asad-mlbd)",
     "Tanveer Hassan <mailtanveerhassan@gmail.com> (https://github.com/war1oc)",
     "Saad Bin Amjad <saadbinamjad@gmail.com> (https://github.com/Saad-Amjad)",
-    "Sivan Payyadakath <sivanp77@gmail.com > (https://github.com/sivanpayyadakath)"
+    "Sivan Payyadakath <sivanp77@gmail.com > (https://github.com/sivanpayyadakath)",
+    "Arpit Anand <arpitssanand@gmail.com> (https://github.com/thearpitanand)"
   ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",

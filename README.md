@@ -181,6 +181,7 @@ $ pnpm migration:revert
 - [Saad Bin Amjad](https://github.com/Saad-Amjad)
 - [Sivan Payyadakath](https://github.com/sivanpayyadakath)
 - [Sébastien Caparros](https://github.com/Seb-C)
+- [Arpit Anand](https://github.com/thearpitanand)
 
 ## External Links
 
