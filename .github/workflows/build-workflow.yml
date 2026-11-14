@@ -13,10 +13,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6 # pnpm version comes from package.json "devEngines.packageManager"
       - uses: actions/setup-node@v7
         with:
           node-version-file: '.tool-versions'
-          cache: 'npm'
-      - run: npm ci
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
       - name: Run build step
-        run: npm run build
+        run: pnpm build

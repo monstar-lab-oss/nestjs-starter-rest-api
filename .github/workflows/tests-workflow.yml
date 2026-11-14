@@ -26,16 +26,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6 # pnpm version comes from package.json "devEngines.packageManager"
       - uses: actions/setup-node@v7
         with:
           node-version-file: '.tool-versions'
-          cache: 'npm'
-      - run: npm ci
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
       - name: Run unit tests
-        run: npm test
+        run: pnpm test
       - name: Build the docker compose stack
         run: docker compose -f docker-compose.yml up -d pgsqldb
       - name: Check running containers
         run: docker ps -a
       - name: Run e2e tests
-        run: sleep 5 && npm run test:e2e
+        run: sleep 5 && pnpm test:e2e
