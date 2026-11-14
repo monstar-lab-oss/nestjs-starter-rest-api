@@ -1,11 +1,16 @@
 # Stage 1: Build the application
-FROM node:26.13.1-trixie-slim as builder
+FROM node:26.13.1-trixie-slim AS builder
+
+# Node.js 25+ no longer bundles Corepack, so install pnpm explicitly.
+# Keep this in sync with "devEngines.packageManager" in package.json.
+ARG PNPM_VERSION=12.18.0
+RUN npm install -g pnpm@${PNPM_VERSION}
 
 WORKDIR /usr/src/app
 
 # Install dependencies
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the application files
 COPY . .
@@ -13,10 +18,10 @@ COPY . .
 # Build the application
 ARG APP_ENV=production
 ENV NODE_ENV=${APP_ENV}
-RUN npm run build
+RUN pnpm build
 
 # Prune development dependencies
-RUN npm prune --production
+RUN pnpm prune --prod --ignore-scripts
 
 # Stage 2: Create the production image
 FROM node:26.13.1-trixie-slim
@@ -25,7 +30,7 @@ WORKDIR /usr/src/app
 
 # Copy only the necessary files from the builder stage
 COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/package*.json ./
+COPY --from=builder /usr/src/app/package.json ./
 COPY --from=builder /usr/src/app/dist ./dist
 
 # Set the environment variables
@@ -38,5 +43,5 @@ EXPOSE 3000
 # Use a non-root user for security
 USER node
 
-# Set the default command to run the application
-CMD [ "npm", "run", "start:prod" ]
+# Run node directly so the runtime image does not need pnpm
+CMD [ "node", "dist/src/main" ]
