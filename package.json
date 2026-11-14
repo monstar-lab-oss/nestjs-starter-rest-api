@@ -4,6 +4,13 @@
   "version": "1.0.0",
   "description": "NestJS Starter REST API Repository",
   "license": "MIT",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.18.0",
+      "onFail": "error"
+    }
+  },
   "contributors": [
     "Yash Murty <yashmurty@gmail.com> (https://github.com/yashmurty)",
     "S M Asad Rahman<asad.rahman@monstar-lab.com> (https://github.com/asad-mlbd)",
