@@ -1,5 +1,5 @@
 # Development Dockerfile
-FROM node:20.19.6-bookworm-slim
+FROM node:26.13.1-trixie-slim
 
 # Install additional tools for development
 RUN apt-get update && apt-get install -y \

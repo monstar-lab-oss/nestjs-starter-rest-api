@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - uses: actions/setup-node@v4
         with:
-          node-version: 20.19.6
+          node-version: 26.13.1
           cache: 'npm'
       - run: npm ci
       - name: Run test cov
